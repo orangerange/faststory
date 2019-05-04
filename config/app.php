@@ -258,9 +258,9 @@ return [
 //            'password' => 'secret',
 //            'database' => 'my_app',
 			'host' => env('DB_HOST', 'localhost'),
-			'username' => env('DB_USERNAME', ''),
+			'username' => env('DB_USERNAME', 'root'),
 			'password' => env('DB_PASSWORD', ''),
-			'database' => env('DB_SCHEMA', ''),
+			'database' => env('DB_SCHEMA', 'faststory'),
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
              */

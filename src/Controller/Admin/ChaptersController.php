@@ -19,6 +19,7 @@ use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 use RuntimeException;
+use Cake\Datasource\ConnectionManager;
 use App\Controller\AppController;
 
 /**
@@ -36,76 +37,123 @@ class ChaptersController extends AppController
     {
         parent::initialize();
 		$this->Chapters = TableRegistry::get('Chapters');
+		$this->Contents = TableRegistry::get('Contents');
+		$this->Characters = TableRegistry::get('Characters');
+		$this->Phrases = TableRegistry::get('Phrases');
     }
 
-	public function index() {
-		$characters = $this->Characters->find('all');
-		$this->set(compact('characters'));
+	public function index($content_id = null) {
+		if (preg_match("/^[0-9]+$/", $content_id)) {
+			if (!$content = $this->Contents->findById($content_id)->first()) {
+				die('存在しない');
+			}
+			$chapters = $this->Chapters->find('all')->where(['Chapters.content_id'=>$content_id])->contain('Phrases')->toArray();
+		} else {
+			die('存在しない');
+		}
+		$this->set(compact('chapters', 'content_id', 'content'));
 	}
 
-	public function input($content_id=null, $no=null) {
-		$contents = $this->Contents->find('list');
-		$character =$this->Characters->newEntity();
-		if($this->request->is('post')) {
-			$character = $this->Characters->patchEntity($character, $this->request->data);
-			if($this->Characters->save($character)) {
-				$this->Flash->success(__('新規登録しました'));
-			} else {
-				$this->Flash->error(__('新規登録に失敗しました'));
+	public function input($content_id=null) {
+		$chapterNo = $this->Chapters->getLastChapterNo($content_id);
+		if (preg_match("/^[0-9]+$/", $content_id)) {
+			if (!$content = $this->Contents->findById($content_id)->first()) {
+				die('存在しない');
 			}
+			$content_name = $content['name'];
+			$characters = $this->Characters->find('list')->where(['content_id'=>$content_id]);
+			if($this->request->is('post')) {
+				$this->request->data['content_id'] = $content_id;
+				$this->request->data['no'] = $this->Chapters->getLastChapterNo($content_id);
+				$result = $this->Phrases->unsetEmptyDatum($this->request->data['phrases']);
+				$this->request->data['phrases'] = $result['datum'];
+				$openFlg = $result['open_flg'];
+				$openFlg = array();
+				$chapter = $this->Chapters->newEntity($this->request->data, ['associated' => ['Phrases']]);
+				$this->Chapters->save($chapter);
+			}
+			$this->set(compact('chapterNo', 'characters', 'openFlg', 'content_id', 'content_name'));
+		} else {
+			die('存在しない');
 		}
-		$this->set(compact('contents'));
-		$this->set(compact('character'));
 	}
 
 	public function edit($id) {
-		$contents = $this->Contents->find('list');
-		$nameColor   = Configure::read('name_color');
 		if (preg_match("/^[0-9]+$/", $id)) {
-			if (!$character = $this->Characters->get($id)) {
+			if (!$chapter = $this->Chapters->findById($id)) {
 				die('存在しない');
-			};
+			}
+			$chapterNo = $chapter['no'];
+			$content_id = $chapter['content_id'];
+			$content_name = $chapter['content']['name'];
+			$characters = $this->Characters->find('list')->where(['content_id'=>$chapter['content_id']]);
+			$phraseNum = count($chapter['phrases']);
+			$openFlg = array();
+			for($i=0; $i<$phraseNum; $i++) {
+				$openFlg[$i] = true;
+			}
 			if ($this->request->is(['patch', 'post', 'put'])) {
-				$data = $this->request->data;
-				$character = $this->Characters->patchEntity($character, $data);
-				// 削除チェックボックスがチェックされている時
-				if (!empty($this->request->data['picture_delete'])) {
-					try {
-						$dir = realpath(ROOT . "/" . $this->request->data['dir_before']);
-						$del_file = new File($dir . "/" . $this->request->data['picture_before']);
-						// ファイル削除処理実行
-						if ($del_file->delete()) {
-							$character->picture = null;
-							$character->dir= null;
-							$character->type = null;
-							$character->size = 0;
-						} else {
-							$character['picture'] = $this->request->data['picture_before'];
-							throw new RuntimeException('ファイルの削除ができませんでした.');
+				for($i=0; $i<$phraseNum; $i++) {
+					// 削除チェックボックスがチェックされている時
+					if (!empty($this->request->data['phrases'][$i]['picture_delete'])) {
+						try {
+							$dir = realpath(ROOT . "/" . $this->request->data['phrases'][$i]['dir_before']);
+							$del_file = new File($dir . "/" . $this->request->data['phrases'][$i]['picture_before']);
+							// ファイル削除処理実行
+							if ($del_file->delete()) {
+								$this->request->data['phrases'][$i]['picture'] = null;
+								$this->request->data['phrases'][$i]['dir']= null;
+								$this->request->data['phrases'][$i]['type'] = null;
+								$this->request->data['phrases'][$i]['size'] = 0;
+								$this->request->data['phrases'][$i]['picture_before'] = null;
+								$this->request->data['phrases'][$i]['dir_before']= null;
+							} else {
+								$this->request->data['phrases'][$i]['picture'] = $this->request->data['phrases'][$i]['picture_before'];
+								throw new RuntimeException('ファイルの削除ができませんでした.');
+							}
+						} catch (RuntimeException $e) {
+							$this->Flash->error(__($e->getMessage()));
 						}
-					} catch (RuntimeException $e) {
-						$this->Flash->error(__($e->getMessage()));
+					}
+					// 新しいファイルが入力されたとき
+					if (!empty($this->request->data['phrases'][$i]['picture']['name'])) {
+						// 古いファイルがあるとき
+						if (isset($this->request->data['phrases'][$i]['dir_before'])) {
+							$dir = realpath(ROOT . "/" . $this->request->data['phrases'][$i]['dir_before']);
+							$del_file = new File($dir . "/" . $this->request->data['phrases'][$i]['picture_before']);
+							// ファイル削除処理実行
+							$del_file->delete();
+						}
 					}
 				}
-				// 新しいファイルが入力されたとき
-				if (!empty($this->request->data['picture']['name'])) {
-					// 古いファイルがあるとき
-					if (isset($this->request->data['dir_before'])) {
-						$dir = realpath(ROOT . "/" . $this->request->data['dir_before']);
-						$del_file = new File($dir . "/" . $this->request->data['picture_before']);
-						// ファイル削除処理実行
-						$del_file->delete();
+				$result = $this->Phrases->unsetEmptyDatum($this->request->data['phrases']);
+				$this->request->data['phrases'] = $result['datum'];
+				$openFlg = $result['open_flg'];
+				//更新処理により削除されるレコードのID
+				$deleteIds = $result['delete_ids'];
+				$chapter = $this->Chapters->patchEntity($chapter, $this->request->data);
+
+				$connection = ConnectionManager::get('default');
+				// トランザクション開始
+				$connection->begin();
+				try {
+					//最初に、更新で消えるphrasesレコードをを全て物理削除
+					if (!empty($deleteIds)) {
+						$this->Phrases->deleteByIds($deleteIds);
 					}
-				}
-				if ($this->Characters->save($character)) {
-					$this->Flash->success(__('更新しました'));
-				} else {
-					$this->Flash->error(__('更新に失敗しました'));
+					if ($this->Chapters->save($chapter)) {
+						$this->Flash->success(__('更新しました'));
+					} else {
+						$this->Flash->error(__('更新に失敗しました'));
+					}
+					$connection->commit();
+				} catch(\Exception $e) {
+					echo $e->getMessage();
+					 // ロールバック
+					 $connection->rollback();
 				}
 			}
-			$this->set(compact('contents'));
-			$this->set(compact('character'));
-			$this->set(compact('nameColor'));
+			$this->set(compact('openFlg', 'characters', 'chapter', 'chapterNo', 'content_id', 'content_name'));
 		} else {
 			die('存在しない');
 		}
@@ -125,13 +173,10 @@ class ChaptersController extends AppController
 	public function delete($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
 			die('削除');
-//			$content = $this->Characters->get($id);
-//			$this->Characters->delete($id);
 		} else {
 			die('存在しない');
 		}
 		$this->render(false,false);
 	}
-	
 
 }

@@ -19,6 +19,7 @@ use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 use RuntimeException;
+use Exception;
 use App\Controller\AppController;
 
 /**
@@ -61,7 +62,7 @@ class CharactersController extends AppController
 	public function edit($id) {
 		$contents = $this->Contents->find('list');
 		if (preg_match("/^[0-9]+$/", $id)) {
-			if (!$character = $this->Characters->get($id)) {
+			if (!$character = $this->Characters->findById($id)->first()) {
 				die('存在しない');
 			};
 			if ($this->request->is(['patch', 'post', 'put'])) {
@@ -70,7 +71,7 @@ class CharactersController extends AppController
 				// 削除チェックボックスがチェックされている時
 				if (!empty($this->request->data['picture_delete'])) {
 					try {
-						$dir = realpath(ROOT . "/" . $this->request->data['dir_before']);
+						$dir = realpath(ROOT . "/". $this->request->data['dir_before']);
 						$del_file = new File($dir . "/" . $this->request->data['picture_before']);
 						// ファイル削除処理実行
 						if ($del_file->delete()) {

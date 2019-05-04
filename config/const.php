@@ -19,4 +19,5 @@ return array(
 			'5' => 'purple',
 		)
 	),
+	define('PHRASE_MUX_NUM', 50),
 );

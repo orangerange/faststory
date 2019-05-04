@@ -30,5 +30,7 @@ class Chapter extends Entity
         'content_id' => true,
         'no' => true,
 		'title' => true,
+		'contents' => true,
+		'phrases' => true,
     ];
 }

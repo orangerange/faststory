@@ -56,11 +56,11 @@ class ChaptersController extends AppController
             $chapter = $this->Chapters->patchEntity($chapter, $this->request->getData());
             if ($this->Chapters->save($chapter)) {
                 $this->Flash->success(__('The chapter has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
         }
+
         $contents = $this->Chapters->Contents->find('list', ['limit' => 200]);
         $this->set(compact('chapter', 'contents'));
     }

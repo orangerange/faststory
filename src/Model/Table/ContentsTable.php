@@ -35,8 +35,10 @@ class ContentsTable extends Table
 
         $this->setTable('contents');
         $this->setDisplayField('name');
-
         $this->addBehavior('Timestamp');
+		$this->hasMany('Chapters', [
+            'foreignKey' => 'content_id'
+        ]);
     }
 
     /**

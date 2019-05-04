@@ -31,6 +31,7 @@ class ContentsController extends AppController
     }
 
 	public function index() {
+		//ini_set('default_charset', 'euc-jp');
 		$contents = $this->Contents->find('all');
 		$this->set(compact('contents'));
 	}
@@ -51,7 +52,7 @@ class ContentsController extends AppController
 
 	public function edit($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
-			if(!$content = $this->Contents->get($id)) {
+			if(!$content = $this->Contents->findById($id)->first()) {
 				die('存在しない');
 			};
 			if($this->request->is(['patch', 'post', 'put'])) {

@@ -37,17 +37,16 @@ class PhrasesTable extends Table
 
         $this->setTable('phrases');
 
-        $this->belongsTo('Contents', [
-            'foreignKey' => 'content_id',
-            'joinType' => 'INNER'
-        ]);
         $this->belongsTo('Chapters', [
             'foreignKey' => 'chapter_id',
-            'joinType' => 'INNER'
+//            'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Characters', [
-            'foreignKey' => 'character_id',
-            'joinType' => 'LEFT'
+		$this->addBehavior('Josegonzalez/Upload.Upload', [
+            'picture' => [
+				'nameCallback' => function ($data, $settings) {
+                    return uniqid().'-'.strtolower($data['name']);
+                }
+			]
         ]);
     }
 
@@ -59,22 +58,9 @@ class PhrasesTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator
-            ->integer('id')
-            ->requirePresence('id', 'create')
-            ->notEmpty('id');
-
-        $validator
-            ->scalar('sentence')
-            ->maxLength('sentence', 1000)
-            ->requirePresence('sentence', 'create')
-            ->notEmpty('sentence');
-
-        $validator
-            ->scalar('picture')
-            ->requirePresence('picture', 'create')
-            ->notEmpty('picture');
-
+		$validator
+			->allowEmpty('picture');
+		;
         return $validator;
     }
 
@@ -87,10 +73,42 @@ class PhrasesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['content_id'], 'Contents'));
-        $rules->add($rules->existsIn(['chapter_id'], 'Chapters'));
-        $rules->add($rules->existsIn(['character_id'], 'Characters'));
-
+//        $rules->add($rules->existsIn(['content_id'], 'Contents'));
+//        $rules->add($rules->existsIn(['chapter_id'], 'Chapters'));
+//        $rules->add($rules->existsIn(['character_id'], 'Characters'));
         return $rules;
     }
+
+	public function isEmpty($data) {
+		
+		return  empty($data['sentence']) && empty($data['picture']['name']) && empty($data['dir_before']);
+	}
+
+	public function unsetEmptyDatum($datum) {
+		$result = array();
+		$openFlg = array();
+		$deleteIds = array();
+		$i = 0;
+		foreach($datum as $key => $data) {
+			if (!$this->isEmpty($data)) {
+				$data['no'] = $i;
+				$result[] = $data;
+				$openFlg[] = true;
+				$i ++;
+			} else {
+				if (!empty($data['id'])) {
+					$deleteIds[] = $data['id'];
+				}
+			}
+		}
+		return array('datum'=>$result, 'open_flg'=>$openFlg, 'delete_ids'=>$deleteIds);
+	}
+
+	public function deleteByChapterId($cahpterId) {
+		$this->deleteAll(['chapter_id'=>$cahpterId]);
+	}
+
+	public function deleteByIds($ids) {
+		$this->deleteAll(['id in'=>$ids]);
+	}
 }

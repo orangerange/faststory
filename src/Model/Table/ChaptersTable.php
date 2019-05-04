@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -21,64 +22,64 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Chapter[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Chapter findOrCreate($search, callable $callback = null, $options = [])
  */
-class ChaptersTable extends Table
-{
+class ChaptersTable extends Table {
 
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config) {
+		parent::initialize($config);
 
-        $this->setTable('chapters');
-        $this->setDisplayField('title');
+		$this->setTable('chapters');
+		$this->setDisplayField('title');
 
-        $this->belongsTo('Contents', [
-            'foreignKey' => 'content_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->hasMany('Phrases', [
-            'foreignKey' => 'chapter_id'
-        ]);
-    }
+		$this->belongsTo('Contents', [
+			'foreignKey' => 'content_id',
+			'joinType' => 'INNER'
+		]);
+		$this->hasMany('Phrases', [
+			'foreignKey' => 'chapter_id'
+		]);
+	}
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->requirePresence('id', 'create')
-            ->notEmpty('id');
+	/**
+	 * Default validation rules.
+	 *
+	 * @param \Cake\Validation\Validator $validator Validator instance.
+	 * @return \Cake\Validation\Validator
+	 */
+	public function validationDefault(Validator $validator) {
+		$validator
+				->scalar('title')
+				->maxLength('title', 256)
+				->requirePresence('title', 'create')
+				->notEmpty('title')
+		;
+		return $validator;
+	}
 
-        $validator
-            ->scalar('title')
-            ->maxLength('title', 256)
-            ->requirePresence('title', 'create')
-            ->notEmpty('title');
+	/**
+	 * Returns a rules checker object that will be used for validating
+	 * application integrity.
+	 *
+	 * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+	 * @return \Cake\ORM\RulesChecker
+	 */
+	public function buildRules(RulesChecker $rules) {
+		$rules->add($rules->existsIn(['content_id'], 'Contents'));
+		return $rules;
+	}
 
-        return $validator;
-    }
+	public function getLastChapterNo($content_id) {
+		$result = $this->find()->where(['content_id' => $content_id])->first();
+		return isset($result->no) ? $result->no + 1 : 1;
+	}
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['content_id'], 'Contents'));
+	public function findById($id) {
+		return $this->find()->where(['Chapters.id' => $id])->contain(['Phrases', 'Contents'])->first();
+	}
 
-        return $rules;
-    }
 }

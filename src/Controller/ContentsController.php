@@ -25,7 +25,6 @@ class ContentsController extends AppController
 {
 
 	public function index() {
-		
 	}
     /**
      * Displays a view

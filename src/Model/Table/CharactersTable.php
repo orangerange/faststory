@@ -38,7 +38,11 @@ class CharactersTable extends Table
         $this->addBehavior('Timestamp');
 		// Upload Plugin
         $this->addBehavior('Josegonzalez/Upload.Upload', [
-            'picture' => []
+            'picture' => [
+				'nameCallback' => function ($data, $settings) {
+                    return uniqid().'-'.strtolower($data['name']);
+                }
+			]
         ]);
     }
 
@@ -55,7 +59,7 @@ class CharactersTable extends Table
 				->notEmpty('name_color')
 				->allowEmpty('picture')
 		;
-
 		return $validator;
     }
+
 }
