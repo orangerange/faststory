@@ -1,112 +1,85 @@
 <?php
+/**
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link      https://cakephp.org CakePHP(tm) Project
+ * @since     0.2.9
+ * @license   https://opensource.org/licenses/mit-license.php MIT License
+ */
 namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
+use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 use App\Controller\AppController;
+use Cake\Http\Exception\NotFoundException;
+
+// メール送信
+use Cake\Mailer\Email;
 
 /**
- * Chapters Controller
+ * Static content controller
  *
- * @property \App\Model\Table\ChaptersTable $Chapters
+ * This controller will render views from Template/Pages/
  *
- * @method \App\Model\Entity\Chapter[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
 class ChaptersController extends AppController
 {
+	public $helpers = array('Display');
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
+	public function initialize()
     {
-        $this->paginate = [
-            'contain' => ['Contents']
-        ];
-        $chapters = $this->paginate($this->Chapters);
-
-        $this->set(compact('chapters'));
+        parent::initialize();
+		$this->loadModel('Contents');
+		$this->loadModel('Characters');
+		$this->loadModel('Phrases');
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Chapter id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $chapter = $this->Chapters->get($id, [
-            'contain' => ['Contents', 'Phrases']
-        ]);
+	public function index($content_id = null) {
+		if (preg_match("/^[0-9]+$/", $content_id)) {
+			if (!$content = $this->Contents->findById($content_id)->first()) {
+				throw new NotFoundException(NotFoundMessage);
+			}
+			$chapters = $this->Chapters->find('all')->where(['Chapters.content_id'=>$content_id])->contain('Phrases')->toArray();
+		} else {
+			throw new NotFoundException(NotFoundMessage);
+		}
+		$this->set(compact('chapter', 'content_id', 'content'));
+	}
+		
+	public function display($id) {
+		if (preg_match("/^[0-9]+$/", $id)) {
+			if (!$chapter = $this->Chapters->findById($id)) {
+				throw new NotFoundException(NotFoundMessage);
+			}
+			$this->set(compact('chapter'));
+			$this->set('chapterId', $id);
+		} else {
+			throw new NotFoundException(NotFoundMessage);
+		}
+		$this->render('display');
+	}
 
-        $this->set('chapter', $chapter);
-    }
+	public function sendMail() {
+		// メール送信処理
+        $email = new Email("default");
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $chapter = $this->Chapters->newEntity();
-        if ($this->request->is('post')) {
-            $chapter = $this->Chapters->patchEntity($chapter, $this->request->getData());
-            if ($this->Chapters->save($chapter)) {
-                $this->Flash->success(__('The chapter has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
-        }
+        // 入力者へのメール
+        $email->setFrom(["from@example.com"=>"送信元名"])
+              ->setTo("goforthamdseekglory@yahoo.co.jp")
+//              ->setCc("cc@example.com")
+//              ->setBcc("bcc@example.com")
+              ->setSubject("お問合せありがとうございます。")
+              ->send("お問い合わせの本文です");
+		
+	}
 
-        $contents = $this->Chapters->Contents->find('list', ['limit' => 200]);
-        $this->set(compact('chapter', 'contents'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Chapter id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $chapter = $this->Chapters->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $chapter = $this->Chapters->patchEntity($chapter, $this->request->getData());
-            if ($this->Chapters->save($chapter)) {
-                $this->Flash->success(__('The chapter has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
-        }
-        $contents = $this->Chapters->Contents->find('list', ['limit' => 200]);
-        $this->set(compact('chapter', 'contents'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Chapter id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $chapter = $this->Chapters->get($id);
-        if ($this->Chapters->delete($chapter)) {
-            $this->Flash->success(__('The chapter has been deleted.'));
-        } else {
-            $this->Flash->error(__('The chapter could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
 }

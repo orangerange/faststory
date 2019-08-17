@@ -33,8 +33,11 @@ class Character extends Entity
         'dir' => true,
         'type' => true,
         'size' => true,
+        'html' => true,
+        'css' => true,
         'created' => true,
-        'updated' => true,
-        'deleted' => true
+        'modified' => true,
+        'deleted' => true,
+        'character_parts' => true,
     ];
 }

@@ -39,7 +39,7 @@ class ContentsController extends AppController
 	public function input() {
 		$content =$this->Contents->newEntity();
 		if($this->request->is('post')) {
-			$content = $this->Contents->patchEntity($content, $this->request->data);
+			$content = $this->Contents->patchEntity($content, $this->request->getData());
 			if($this->Contents->save($content)) {
 				$this->Flash->success(__('新規登録しました'));
 				return $this->redirect(['action' => 'index']);
@@ -56,7 +56,7 @@ class ContentsController extends AppController
 				die('存在しない');
 			};
 			if($this->request->is(['patch', 'post', 'put'])) {
-				$content = $this->Contents->patchEntity($content, $this->request->data);
+				$content = $this->Contents->patchEntity($content, $this->request->getData());
 				if ($this->Contents->save($content)) {
 					$this->Flash->success(__('更新しました'));
 					return $this->redirect(['action' => 'index']);

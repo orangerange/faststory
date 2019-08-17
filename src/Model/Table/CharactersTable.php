@@ -44,7 +44,11 @@ class CharactersTable extends Table
                 }
 			]
         ]);
-    }
+
+		$this->hasMany('CharacterParts', [
+			'foreignKey' => 'character_id'
+		]);
+	}
 
     /**
      * Default validation rules.
@@ -62,4 +66,7 @@ class CharactersTable extends Table
 		return $validator;
     }
 
+	public function findById($id) {
+		return $this->find()->where(['Characters.id' => $id])->contain(['CharacterParts'])->first();
+	}
 }

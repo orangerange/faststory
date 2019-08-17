@@ -74,12 +74,19 @@ class ChaptersTable extends Table {
 	}
 
 	public function getLastChapterNo($content_id) {
-		$result = $this->find()->where(['content_id' => $content_id])->first();
+		$result = $this->find()->where(['content_id' => $content_id])->order(['no' => 'DESC'])->first();
 		return isset($result->no) ? $result->no + 1 : 1;
 	}
 
 	public function findById($id) {
-		return $this->find()->where(['Chapters.id' => $id])->contain(['Phrases', 'Contents'])->first();
+		return $this->find()->where(['Chapters.id' => $id])->contain(['Phrases.Characters', 'Contents'])->first();
+	}
+
+	public function deleteById($id) {
+		if (!$this->deleteAll(['id'=>$id])) {
+			return false;
+		}
+		return true;
 	}
 
 }

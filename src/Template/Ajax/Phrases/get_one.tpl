@@ -1,0 +1,1 @@
+{$this->element('phrase/_display', ['character'=>$phrase.character,'sentence'=>$phrase.sentence, 'num'=>$num])}

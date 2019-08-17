@@ -20,9 +20,6 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\Event\Event;
-use Cake\ORM\TableRegistry;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
 use RuntimeException;
 use App\Utils\AppUtility;
 
@@ -34,6 +31,7 @@ use App\Utils\AppUtility;
  *
  * @link https://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
+use Cake\Routing\Router;
 class AppController extends Controller
 {
 
@@ -49,6 +47,7 @@ class AppController extends Controller
 	
 	// viewClassにSmartyViewを指定
 	public $viewClass = 'App\View\SmartyView';
+	public $helpers = array('Display', 'Config');
 
     public function initialize()
     {
@@ -58,14 +57,18 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-		$config = Configure::read();
-		$this->set(compact('config'));
+//		$config = Configure::read();
+//		$this->set(compact('config'));
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
-    }
+		$url = Router::url();
+		if (preg_match('/^\/admin/', $url)) {
+			$this->viewBuilder()->setLayout('admin/default');
+		}
+	}
 
 	public function fileUpload ($file = null,$dir = null, $limitFileSize = 1024 * 1024){
         try {

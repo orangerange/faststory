@@ -8,12 +8,13 @@
         <meta http-equiv="Content-Style-Type" content="text/css">
         <meta name="description" content="">
         <meta name="keywords" content="" />
-        {$this -> Html -> script('jquery-1.8.3')}
-        {$this->Html->css('faststory')}
-        {$this->Fetch('script')}
+        {$this->Html->css('display')}
         <title></title>
     </head>
     <body>
         {$this->fetch('content')}
+        {$this -> Html-> script('vue')}
+{*        {$this->Html->script('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')}*}
+        {$this->Fetch('script')}
     </body>
 </html>

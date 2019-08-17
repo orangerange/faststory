@@ -40,7 +40,7 @@ class PhrasesController extends AppController
         $phrase = $this->Phrases->get($id, [
             'contain' => ['Contents', 'Chapters', 'Characters']
         ]);
-
+        $this->set('chapterId', $id);
         $this->set('phrase', $phrase);
     }
 

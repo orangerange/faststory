@@ -11,4 +11,7 @@ class DisplayHelper extends Helper {
 		
 		return $path;
     }
+	public function css($content) {
+		return '<style type="text/css">' . $content . '</style>';
+	}
 }

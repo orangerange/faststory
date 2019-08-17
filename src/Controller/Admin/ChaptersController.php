@@ -15,12 +15,12 @@
 namespace App\Controller\Admin;
 
 use Cake\ORM\TableRegistry;
-use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 use RuntimeException;
-use Cake\Datasource\ConnectionManager;
 use App\Controller\AppController;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Static content controller
@@ -36,56 +36,55 @@ class ChaptersController extends AppController
 	public function initialize()
     {
         parent::initialize();
-		$this->Chapters = TableRegistry::get('Chapters');
-		$this->Contents = TableRegistry::get('Contents');
-		$this->Characters = TableRegistry::get('Characters');
-		$this->Phrases = TableRegistry::get('Phrases');
+		$this->loadModel('Contents');
+		$this->loadModel('Characters');
+		$this->loadModel('Phrases');
     }
 
-	public function index($content_id = null) {
-		if (preg_match("/^[0-9]+$/", $content_id)) {
-			if (!$content = $this->Contents->findById($content_id)->first()) {
-				die('存在しない');
+	public function index($contentId = null) {
+		if (preg_match("/^[0-9]+$/", $contentId)) {
+			if (!$content = $this->Contents->findById($contentId)->first()) {
+				throw new NotFoundException(NotFoundMessage);
 			}
-			$chapters = $this->Chapters->find('all')->where(['Chapters.content_id'=>$content_id])->contain('Phrases')->toArray();
+			$chapters = $this->Chapters->find('all')->where(['Chapters.content_id'=>$contentId])->contain('Phrases')->toArray();
 		} else {
-			die('存在しない');
+			throw new NotFoundException(NotFoundMessage);
 		}
-		$this->set(compact('chapters', 'content_id', 'content'));
+		$this->set(compact('chapters', 'contentId', 'content'));
 	}
 
-	public function input($content_id=null) {
-		$chapterNo = $this->Chapters->getLastChapterNo($content_id);
-		if (preg_match("/^[0-9]+$/", $content_id)) {
-			if (!$content = $this->Contents->findById($content_id)->first()) {
-				die('存在しない');
+	public function input($contentId=null) {
+		$chapterNo = $this->Chapters->getLastChapterNo($contentId);
+		if (preg_match("/^[0-9]+$/", $contentId)) {
+			if (!$content = $this->Contents->findById($contentId)->first()) {
+				throw new NotFoundException(NotFoundMessage);
 			}
 			$content_name = $content['name'];
-			$characters = $this->Characters->find('list')->where(['content_id'=>$content_id]);
+			$characters = $this->Characters->find('list')->where(['content_id'=>$contentId]);
 			if($this->request->is('post')) {
-				$this->request->data['content_id'] = $content_id;
-				$this->request->data['no'] = $this->Chapters->getLastChapterNo($content_id);
-				$result = $this->Phrases->unsetEmptyDatum($this->request->data['phrases']);
+				$this->request->data['content_id'] = $contentId;
+				$this->request->data['no'] = $chapterNo;
+				$result = $this->Phrases->unsetEmptyDatum($this->request->getData('phrases'));
 				$this->request->data['phrases'] = $result['datum'];
 				$openFlg = $result['open_flg'];
 				$openFlg = array();
-				$chapter = $this->Chapters->newEntity($this->request->data, ['associated' => ['Phrases']]);
+				$chapter = $this->Chapters->newEntity($this->request->getData(), ['associated' => ['Phrases']]);var_dump($chapter);
 				$this->Chapters->save($chapter);
 			}
-			$this->set(compact('chapterNo', 'characters', 'openFlg', 'content_id', 'content_name'));
+			$this->set(compact('chapterNo', 'characters', 'openFlg', 'contentId', 'content_name'));
 		} else {
-			die('存在しない');
+			throw new NotFoundException(NotFoundMessage);
 		}
 	}
 
 	public function edit($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
 			if (!$chapter = $this->Chapters->findById($id)) {
-				die('存在しない');
+				throw new NotFoundException(NotFoundMessage);
 			}
 			$chapterNo = $chapter['no'];
-			$content_id = $chapter['content_id'];
-			$content_name = $chapter['content']['name'];
+			$contentId = $chapter['content_id'];
+			$contentName = $chapter['content']['name'];
 			$characters = $this->Characters->find('list')->where(['content_id'=>$chapter['content_id']]);
 			$phraseNum = count($chapter['phrases']);
 			$openFlg = array();
@@ -93,22 +92,26 @@ class ChaptersController extends AppController
 				$openFlg[$i] = true;
 			}
 			if ($this->request->is(['patch', 'post', 'put'])) {
-				for($i=0; $i<$phraseNum; $i++) {
+				$result = $this->Phrases->unsetEmptyDatum($this->request->getData('phrases'));
+				$this->request->data['phrases'] = $result['datum'];
+				$openFlg = $result['open_flg'];
+				//更新処理により削除されるレコードのID
+				$deleteIds = $result['delete_ids'];
+				$chapter = $this->Chapters->patchEntity($chapter, $this->request->getData());
+				for($i=0; $i< $phraseNum; $i++) {
 					// 削除チェックボックスがチェックされている時
 					if (!empty($this->request->data['phrases'][$i]['picture_delete'])) {
 						try {
-							$dir = realpath(ROOT . "/" . $this->request->data['phrases'][$i]['dir_before']);
+							$dir = realpath(ROOT . "/" . $this->request->getData()['phrases'][$i]['dir_before']);
 							$del_file = new File($dir . "/" . $this->request->data['phrases'][$i]['picture_before']);
 							// ファイル削除処理実行
 							if ($del_file->delete()) {
-								$this->request->data['phrases'][$i]['picture'] = null;
-								$this->request->data['phrases'][$i]['dir']= null;
-								$this->request->data['phrases'][$i]['type'] = null;
-								$this->request->data['phrases'][$i]['size'] = 0;
-								$this->request->data['phrases'][$i]['picture_before'] = null;
-								$this->request->data['phrases'][$i]['dir_before']= null;
+								$chapter['phrases'][$i]['picture'] = null;
+								$chapter['phrases'][$i]['dir']= null;
+								$chapter['phrases'][$i]['type'] = null;
+								$chapter['phrases'][$i]['size'] = 0;
 							} else {
-								$this->request->data['phrases'][$i]['picture'] = $this->request->data['phrases'][$i]['picture_before'];
+								$chapter['phrases'][$i]['picture'] = $chapter['phrases'][$i]['picture_before'];
 								throw new RuntimeException('ファイルの削除ができませんでした.');
 							}
 						} catch (RuntimeException $e) {
@@ -126,21 +129,13 @@ class ChaptersController extends AppController
 						}
 					}
 				}
-				$result = $this->Phrases->unsetEmptyDatum($this->request->data['phrases']);
-				$this->request->data['phrases'] = $result['datum'];
-				$openFlg = $result['open_flg'];
-				//更新処理により削除されるレコードのID
-				$deleteIds = $result['delete_ids'];
-				$chapter = $this->Chapters->patchEntity($chapter, $this->request->data);
 
 				$connection = ConnectionManager::get('default');
 				// トランザクション開始
 				$connection->begin();
 				try {
 					//最初に、更新で消えるphrasesレコードをを全て物理削除
-					if (!empty($deleteIds)) {
-						$this->Phrases->deleteByIds($deleteIds);
-					}
+					$this->Phrases->deleteByChapterId($id);
 					if ($this->Chapters->save($chapter)) {
 						$this->Flash->success(__('更新しました'));
 					} else {
@@ -153,9 +148,9 @@ class ChaptersController extends AppController
 					 $connection->rollback();
 				}
 			}
-			$this->set(compact('openFlg', 'characters', 'chapter', 'chapterNo', 'content_id', 'content_name'));
+			$this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum'));
 		} else {
-			die('存在しない');
+			throw new NotFoundException(NotFoundMessage);
 		}
 		$this->set('editFlg', true);
 		$this->render('input');
@@ -166,17 +161,36 @@ class ChaptersController extends AppController
 			$character = $this->Characters->get($id);
 			$this->set(compact('character'));
 		} else{
-			die('存在しない');
+			throw new NotFoundException(NotFoundMessage);
 		}
 	}
 
-	public function delete($id) {
-		if (preg_match("/^[0-9]+$/", $id)) {
-			die('削除');
+	public function delete() {
+		if ($this->request->is('post')) {
+			$contentId = $this->request->data('content_id');
+			$chapterId = $this->request->data('chapter_id');
+			$connection = ConnectionManager::get('default');
+			// トランザクション開始
+			$connection->begin();
+			try {
+				if (!$this->Chapters->deleteById($chapterId)) {
+					throw new NotFoundException(NotFoundMessage);
+				};
+				if (!$this->Phrases->deleteByChapterId($chapterId)) {
+					throw new NotFoundException(NotFoundMessage);
+				};
+				$connection->commit();
+				$this->Flash->success(__('削除しました'));
+				return $this->redirect(['controller' => 'chapters', 'action' => 'index', $contentId]);
+			} catch (\Exception $e) {
+				echo $e->getMessage();
+				// ロールバック
+				$connection->rollback();
+			}
 		} else {
-			die('存在しない');
+			throw new NotFoundException(NotFoundMessage);
 		}
-		$this->render(false,false);
+		$this->render(false, false);
 	}
 
 }

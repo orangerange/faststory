@@ -37,6 +37,9 @@ class PhrasesTable extends Table
 
         $this->setTable('phrases');
 
+		$this->belongsTo('Characters', [
+			'foreignKey' => 'character_id'
+		]);
         $this->belongsTo('Chapters', [
             'foreignKey' => 'chapter_id',
 //            'joinType' => 'INNER'
@@ -88,7 +91,7 @@ class PhrasesTable extends Table
 		$result = array();
 		$openFlg = array();
 		$deleteIds = array();
-		$i = 0;
+		$i = 1;
 		foreach($datum as $key => $data) {
 			if (!$this->isEmpty($data)) {
 				$data['no'] = $i;
@@ -105,10 +108,22 @@ class PhrasesTable extends Table
 	}
 
 	public function deleteByChapterId($cahpterId) {
-		$this->deleteAll(['chapter_id'=>$cahpterId]);
+		if (!$this->deleteAll(['chapter_id'=>$cahpterId])) {
+			return false;
+		}
+		return true;
 	}
 
 	public function deleteByIds($ids) {
-		$this->deleteAll(['id in'=>$ids]);
+		if (!$this->deleteAll(['id in'=>$ids])) {
+			return false;
+		}
+		return true;
+	}
+	public function getOneByChapterId($chapterId, $no) {
+		return $this->find()->where(['chapter_id' => $chapterId, 'no' => $no])->first();
+	}
+	public function findFiratByChapterId($chapterId) {
+		return $this->find()->where(['chapter_id' => $chapterId])->contain(['Characters'])->order(['no' => 'ASC'])->first();
 	}
 }

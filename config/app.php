@@ -80,7 +80,7 @@ return [
      * enable timestamping regardless of debug value.
      */
     'Asset' => [
-        //'timestamp' => true,
+        'timestamp' => true,
     ],
 
     /**
@@ -196,12 +196,16 @@ return [
      */
     'EmailTransport' => [
         'default' => [
-            'className' => 'Mail',
+			'transport' => 'default',
+            'from' => 'goforthandseekglory@yahoo.co.jp',
+            //'charset' => 'utf-8',
+            //'headerCharset' => 'utf-8',
+            'className' => 'Smtp',
             /*
              * The following keys are used in SMTP transports:
              */
             'host' => 'localhost',
-            'port' => 25,
+            'port' => 587,
             'timeout' => 30,
             'username' => null,
             'password' => null,

@@ -61,7 +61,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 
 	// 管理トップ用　↓追加
     $routes->connect('/admin', ['controller' => 'Contents', 'action' => 'index', 'prefix' => 'admin']);
-
+	//ajax
     /**
      * Connect catchall routes for all controllers.
      *
@@ -82,6 +82,15 @@ Router::scope('/', function (RouteBuilder $routes) {
 });
 // 管理者画面(admin)
 Router::prefix('admin', function (RouteBuilder $routes) {
+    // 標準のフォールバックルートを接続
+    $routes->fallbacks(DashedRoute::class);
+});
+// Ajax
+Router::prefix('ajax', function (RouteBuilder $routes) {
+    // 標準のフォールバックルートを接続
+    $routes->fallbacks(DashedRoute::class);
+});
+Router::prefix('admin_ajax', function (RouteBuilder $routes) {
     // 標準のフォールバックルートを接続
     $routes->fallbacks(DashedRoute::class);
 });
