@@ -1,6 +1,18 @@
 <?php
 use Cake\Core\Configure;
 return array(
+	Configure::write('prefix_type',
+		array(
+			'1' => '接頭辞',
+			'2' => '接尾辞',
+		)
+	),
+	Configure::write('prefix_type_key',
+		array(
+			'prefix' => '1',
+			'suffix' => '2',
+		)
+	),
 	Configure::write('name_color',
 		array(
 			'1' => '青',
@@ -21,6 +33,7 @@ return array(
 	),
 	Configure::write('parts',
 		array(
+			'0' => '帽子',
 			'1' => '髪の毛',
 			'2' => '顔',
 			'3' => '眼鏡',
@@ -29,6 +42,7 @@ return array(
 	),
 	Configure::write('parts_class',
 		array(
+			'0' => 'hat',
 			'1' => 'hair',
 			'2' => 'head',
 			'3' => 'glasses',

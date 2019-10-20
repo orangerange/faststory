@@ -52,12 +52,23 @@ class PartsTable extends Table
 		}
 	}
 
-	public function formatData($data) {
-		$partsNo = $this->findNextPartsNoByPartsCategoryNo($data->parts_category_no);
-		$class = Configure::read('parts_class')[$data->parts_category_no];
-		$replacement = $class . '_' . $partsNo;
-		$data->html = preg_replace('/' . $class . '_\d/', $replacement, $data->html);
-		$data->css = preg_replace('/' . $class . '_\d/', $replacement, $data->css);
+	public function moldSetData($data) {
+		if (isset($data->parts_category_no)) {
+			$partsNo = $this->findNextPartsNoByPartsCategoryNo($data->parts_category_no);
+			$class = Configure::read('parts_class')[$data->parts_category_no];
+			$replacement = $class . '_' . $partsNo;
+			$data->html = preg_replace('/' . $class . '_\d/', $replacement, $data->html);
+			$data->css = preg_replace('/' . $class . '_\d/', $replacement, $data->css);
+		}
+
+		return $data;
+	}
+	public function moldGetData($data) {
+		$data['html'] = str_replace('　', '', $data['html']);
+		$data['css'] = str_replace('　', '', $data['css']);
+		if (isset($data['parts_category_no'])) {
+			$data['parts_no'] = $this->findNextPartsNoByPartsCategoryNo($data['parts_category_no']);
+		}
 		return $data;
 	}
 }

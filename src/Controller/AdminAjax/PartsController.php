@@ -44,7 +44,8 @@ class PartsController extends AppController
 		$class = Configure::read('parts_class')[$partsCategoryNo];
 		$partsNo = $this->Parts->findNextPartsNoByPartsCategoryNo($partsCategoryNo);
 		$html = '<div class="' . $class . ' ' . $class . '_' . $partsNo . '"></div>';
-
-		echo $html;
+		$css = '.' . $class . '_' . $partsNo . '{}';
+		$result = array('html'=>$html, 'css'=>$css);
+		echo json_encode($result);
 	}
 }

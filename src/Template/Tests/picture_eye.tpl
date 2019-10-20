@@ -16,7 +16,6 @@
     }
     .eyes > div:before {
       content: "●";
-      /*animation: lookAround 5s ease-in-out alternate infinite;*/
       position: absolute;
       top: 20%;
       left: 35%;
@@ -39,6 +38,5 @@
 {/literal}
 <div class="eyes eyes_1 row">
     <div class="eye--right"></div>
-    <div class="nose"></div>
     <div class="eye--left"></div>
 </div>

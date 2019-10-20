@@ -37,6 +37,7 @@
                             {if $character->html}
                                 {$character->html}
                             {else}
+                                <div class='hat'></div>
                                 <div class='hair'></div>
                                 <div class='head'></div>
                             {/if}

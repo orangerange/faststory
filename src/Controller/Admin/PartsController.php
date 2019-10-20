@@ -51,13 +51,13 @@ class PartsController extends AppController
 				if (!$part = $this->Parts->findById($id)) {
 					throw new NotFoundException(NotFoundMessage);
 				}
-				$part = $this->Parts->formatData($part);
+				$part = $this->Parts->moldSetData($part);
 			} else {
 				throw new NotFoundException(NotFoundMessage);
 			}
 		}
 		if ($this->request->is(['post'])) {
-			$data = $this->request->getData();
+			$data= $this->Parts->moldGetData($this->request->getData());
 			$part = $this->Parts->newEntity($data);
 			if($this->Parts->save($part)) {
 				$this->Flash->success(__('新規登録しました'));
@@ -75,7 +75,8 @@ class PartsController extends AppController
 				throw new NotFoundException(NotFoundMessage);
 			}
 			if ($this->request->is(['patch', 'post', 'put'])) {
-				$part = $this->Parts->patchEntity($part, $this->request->getData());
+			$data= $this->Parts->moldGetData($this->request->getData());
+				$part = $this->Parts->patchEntity($part, $data);
 				if ($this->Parts->save($part)) {
 					$this->Flash->success(__('更新しました'));
 				} else {

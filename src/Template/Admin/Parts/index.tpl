@@ -11,20 +11,23 @@
             <tr>
                 {assign var='partName' value=$this->Config->read("parts.`$part->parts_category_no`")}
                 <th>{$partName|escape}</th>
-                <td><button onClick="location.href='/admin/parts/input/{$part->id|escape}'">複製</button></td>
+                {* <td><button onClick="location.href='/admin/parts/input/{$part->id|escape}'">複製</button></td> *}
             </tr>
             <tr>
             {/if}
             <td>
-                <div class='character_box'>
-                    <div class='css'>
+                <div class='css'>
+                    {strip}
                         {$this->Display->css($part->css)}
-                    </div>
-                    <div class='html'>
-                        {$part->html}
-                    </div>
+                    {/strip}
+                </div>
+                <div class='character_box'>
+                    {strip}
+                    {$part->html}
+                    {/strip}
                 </div>
                 <button class="slide">↕</button>
+                <button onClick="location.href='/admin/parts/input/{$part->id|escape}'">複製</button>
                 <div class="edit" style="display:none">
                     {$this->Form->create($part, ['url' => [
                         'controller' => 'Parts',
@@ -34,9 +37,9 @@
                         )
                     }
                     <span>HTML</span>
-                    {$this->Form->input('html', ['type'=>'textarea', 'label'=>false, 'class'=>'html'])}
+                    {$this->Form->input('html', ['type'=>'textarea', 'label'=>false, 'class'=>'html_input'])}
                     <span>CSS</span>
-                    {$this->Form->input('css', ['type'=>'textarea', 'label'=>false, 'class'=>'css'])}
+                    {$this->Form->input('css', ['type'=>'textarea', 'label'=>false, 'class'=>'css_input'])}
                     {$this->Form->button('更新')}
                     {$this->Form->end()}
                 </div>

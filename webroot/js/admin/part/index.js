@@ -7,11 +7,11 @@ $(function () {
            $(this).parent().children('.edit').slideDown();
         }
     })
-    $(document).on('change', '.html', function(){
-        $(this).closest('td').find('.html').html($(this).val());
+    $(document).on('change', '.html_input', function(){
+        $(this).closest('td').find('.character_box').html($(this).val().replace('　', ''));
     })
 
-    $(document).on('change', '.css', function(){
-         $(this).closest('td').find('style').html($(this).val());
+    $(document).on('change', '.css_input', function(){
+         $(this).closest('td').find('style').html($(this).val().replace('　', ''));
     })
 })

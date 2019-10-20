@@ -11,13 +11,11 @@
     <tr>
         <th>表示</th>
         <td>
+            <div class='css'>
+                {$this->Display->css($part->css)}
+            </div>
             <div class='character_box'>
-                <div class='css'>
-                    {$this->Display->css($part->css)}
-                </div>
-                <div class='html'>
-                    {$part->html}
-                </div>
+                {$part->html}
             </div>
         </td>
     </tr>
