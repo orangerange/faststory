@@ -30,7 +30,7 @@ class IndexController extends AppController
 {
 
 	public function index() {
-		
+		phpinfo();
 	}
     /**
      * Displays a view
@@ -41,7 +41,7 @@ class IndexController extends AppController
      * @throws \Cake\Http\Exception\NotFoundException When the view file could not
      *   be found or \Cake\View\Exception\MissingTemplateException in debug mode.
      */
-    public function display(...$path)
+    public function display($path)
     {
         $count = count($path);
         if (!$count) {

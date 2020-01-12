@@ -43,25 +43,25 @@ class ChaptersController extends AppController
 		$this->loadModel('Phrases');
     }
 
-	public function index($content_id = null) {
-		if (preg_match("/^[0-9]+$/", $content_id)) {
-			if (!$content = $this->Contents->findById($content_id)->first()) {
+	public function index($prefix= null) {
+		if (isset($prefix)) {
+			if (!$content = $this->Contents->exists(['prefix'=>$prefix])) {
 				throw new NotFoundException(NotFoundMessage);
 			}
-			$chapters = $this->Chapters->find('all')->where(['Chapters.content_id'=>$content_id])->contain('Phrases')->toArray();
+			$chapters = $this->Chapters->find('all')->where(['Contents.prefix'=>$prefix])->contain('Contents', 'Phrases')->toArray();
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
-		$this->set(compact('chapter', 'content_id', 'content'));
+		$this->set(compact('chapters', 'content_id', 'content'));
 	}
 		
-	public function display($id) {
-		if (preg_match("/^[0-9]+$/", $id)) {
-			if (!$chapter = $this->Chapters->findById($id)) {
+	public function display($prefix=null, $no) {
+		if (isset($prefix) && preg_match("/^[0-9]+$/", $no)) {
+			if (!$chapter = $this->Chapters->findByPrefixAndNo($prefix, $no)) {
 				throw new NotFoundException(NotFoundMessage);
 			}
 			$this->set(compact('chapter'));
-			$this->set('chapterId', $id);
+//			$this->set('chapterId', $id);
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}

@@ -27,6 +27,7 @@ class Content extends Entity
     protected $_accessible = [
         'id' => true,
         'name' => true,
+        'prefix' => true,
         'created' => true,
         'updated' => true,
         'deleted' => true

@@ -1,6 +1,5 @@
 {$this->Flash->render()}
 <h1>{$content->name|escape}チャプター一覧</h1>
-<div><a href='/admin/chapters/input/{$content_id|escape}'>次のチャプターを登録</a></div>
 <table>
     <thead>
         <tr>
@@ -13,7 +12,7 @@
             <tr>
                 <td>{$chapter->no}</td>
                 <td>{$chapter->title|escape}</td>
-                <td><a href='/admin/chapters/edit/{$chapter->id}'>編集</a></td> 
+                <td><a href='/chapters/display/{$chapter->content->prefix|escape}/{$chapter->no|escape}'>この章を読む</a></td> 
             </tr>
         {/foreach}
     </tbody>
