@@ -1,7 +1,7 @@
 {$this->Flash->render()}
 {$this->Html->script('admin/part/input.js', ['block'=>'script'])}
-<div><a href='/admin/parts/index'>パーツ一覧</a></div>
-<h1>パーツ登録</h1>
+<div><a href='/admin/parts/index/{$templateId|escape}/{$objectType|escape}'>パーツ一覧</a></div>
+<h1>パーツ{if $editFlg}個別編集{else}登録{/if}({if $template}{$template->name}{else}{$config->object_type[$objectType]}{/if})</h1>
 <div>
     {$this->Form->create($part, [
         'enctype' => 'multipart/form-data']
@@ -9,19 +9,36 @@
     }
 <table>
     <tr>
+        <th>基本z-index</th>
+        <td>
+            <div class='z_index'>{$part->part_category->z_index|escape}</div>
+        </td>
+    </tr>
+    <tr>
         <th>表示</th>
         <td>
             <div class='css'>
                 {$this->Display->css($part->css)}
             </div>
-            <div class='character_box'>
-                {$part->html}
-            </div>
+            {if $template}
+                <div class='phrase_object'>
+                    <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                        {$part->html}
+                    </div>
+                </div>
+            {else}
+                <div class='character_box html_show'>
+                    <div class='character'>
+                        {$part->html}
+                    </div>
+                </div>
+            {/if}
         </td>
     </tr>
     <tr>
         <th>種類</th>
-        <td>{$this->Form->input('parts_category_no',['options'=>$this->Config->read('parts'), 'label'=>false, 'empty'=>'-', 'class'=>'parts_category_no'])}</td>
+{*        <td>{$this->Form->input('parts_category_no',['options'=>$this->Config->read('parts'), 'label'=>false, 'empty'=>'-', 'class'=>'parts_category_no'])}</td>*}
+        <td>{$this->Form->input('parts_category_no',['options'=>$partCategories, 'label'=>false, 'empty'=>'-', 'class'=>'parts_category_no'])}</td>
     </tr>
     <tr>
         <th>HTML</th>

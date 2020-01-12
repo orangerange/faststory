@@ -29,18 +29,24 @@ class PartsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+    public function initialize(array $config) {
+		parent::initialize($config);
 
-        $this->setTable('parts');
-        $this->setDisplayField('html');
-        $this->setDisplayField('css');
-        $this->addBehavior('Timestamp');
-    }
+		$this->setTable('parts');
+		$this->belongsTo('PartCategories', [
+			'foreignKey' => 'parts_category_no'
+		]);
+		$this->setDisplayField('html');
+		$this->setDisplayField('css');
+		$this->addBehavior('Timestamp');
+	}
 
 	public function findById($id) {
 		return $this->find()->where(['Parts.id' => $id])->first();
+	}
+
+	public function findForCopy($partsCategoryNo, $partsNo) {
+		return $this->find()->where(['Parts.parts_category_no' => $partsCategoryNo, 'Parts.parts_no' => $partsNo])->contain('PartCategories')->first();
 	}
 
 	public function findNextPartsNoByPartsCategoryNo($partsCategoryNo) {
@@ -52,10 +58,30 @@ class PartsTable extends Table
 		}
 	}
 
-	public function moldSetData($data) {
+	public function findByType($templateId = 0, $objectType = 0) {
+		$conditions = array();
+		if (!empty($templateId)) {
+			$conditions = array(
+				'PartCategories.template_id' => $templateId
+			);
+		} else {
+			$conditions = array(
+				'PartCategories.object_type' => $objectType
+			);
+		}
+		$result = $this->find()
+				->contain('PartCategories')
+				->where($conditions)
+				->order('PartCategories.sort_no')
+				->order('Parts.id')
+				->all();
+		return $result;
+	}
+
+	public function moldGetData($data) {
 		if (isset($data->parts_category_no)) {
 			$partsNo = $this->findNextPartsNoByPartsCategoryNo($data->parts_category_no);
-			$class = Configure::read('parts_class')[$data->parts_category_no];
+			$class = $data->class_name;
 			$replacement = $class . '_' . $partsNo;
 			$data->html = preg_replace('/' . $class . '_\d/', $replacement, $data->html);
 			$data->css = preg_replace('/' . $class . '_\d/', $replacement, $data->css);
@@ -63,12 +89,18 @@ class PartsTable extends Table
 
 		return $data;
 	}
-	public function moldGetData($data) {
+	public function moldSetData($data, $inputFlg=false) {
 		$data['html'] = str_replace('　', '', $data['html']);
 		$data['css'] = str_replace('　', '', $data['css']);
-		if (isset($data['parts_category_no'])) {
+		if (isset($data['parts_category_no']) && $inputFlg) {
 			$data['parts_no'] = $this->findNextPartsNoByPartsCategoryNo($data['parts_category_no']);
 		}
 		return $data;
+	}
+
+	public function addPreClassToCss($css, $preClass) {
+		$css = $preClass . ' ' . $css;
+		$css = str_replace('}', '} ' . $preClass, $css);
+		$css = rtrim($css, $preClass);
 	}
 }

@@ -53,7 +53,7 @@ class ContentsController extends AppController
 	public function edit($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
 			if(!$content = $this->Contents->findById($id)->first()) {
-				die('存在しない');
+				throw new NotFoundException(NotFoundMessage);
 			};
 			if($this->request->is(['patch', 'post', 'put'])) {
 				$content = $this->Contents->patchEntity($content, $this->request->getData());
@@ -66,7 +66,7 @@ class ContentsController extends AppController
 			}
 			$this->set(compact('content'));
 		} else{
-			die('存在しない');
+			throw new NotFoundException(NotFoundMessage);
 		}
 		$this->set('editFlg', true);
 		$this->render('input');

@@ -36,6 +36,7 @@ class CharactersController extends AppController
         parent::initialize();
 		$this->loadModel('Contents');
 		$this->loadModel('Parts');
+		$this->loadModel('PartCategories');
 		$this->loadModel('CharacterParts');
     }
 
@@ -47,15 +48,16 @@ class CharactersController extends AppController
 	public function input() {
 		$contents = $this->Contents->find('list')->order(['id'=>'ASC']);
 		$css = $this->Parts->find()->select('css')->order(['id'=>'ASC']);
+		$partCategories = $this->PartCategories->findByType(null, Configure::read('object_type_key.face'));
 		$parts = [];
 		$partsCss = [];
-		foreach(Configure::read('parts') as $_key=>$_value) {
-			$parts[$_key] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'html'])->where(['parts_category_no'=>$_key])->toArray();
-			$partsCss[$_key] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'css'])->where(['parts_category_no'=>$_key]);
+		foreach($partCategories as $_key=>$_value) {
+			$parts[$_value->id] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'html'])->where(['parts_category_no'=>$_value->id])->toArray();
+			$partsCss[$_value->id] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'css'])->where(['parts_category_no'=>$_value->id])->all();
 		}
 		$cssString = json_encode($partsCss);
 		if($this->request->is('post')) {
-			$data = $this->request->getData();
+			$data= $this->Characters->moldSetData($this->request->getData());
 			foreach ($data['character_parts'] as $_key => $_value) {
 				if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
 					unset($data['character_parts'][$_key]);
@@ -68,17 +70,18 @@ class CharactersController extends AppController
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('contents', 'parts', 'css', 'cssString'));
+		$this->set(compact('contents', 'partCategories', 'parts', 'css', 'cssString'));
 	}
 
 	public function edit($id) {
 		$contents = $this->Contents->find('list');
 		$css = $this->Parts->find()->select('css')->order(['id'=>'ASC']);
+		$partCategories = $this->PartCategories->findByType(null, Configure::read('object_type_key.face'));
 		$parts = [];
 		$partsCss = [];
-		foreach (Configure::read('parts') as $_key=>$_value) {
-			$parts[$_key] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'html'])->where(['parts_category_no'=>$_key])->toArray();
-			$partsCss[$_key] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'css'])->where(['parts_category_no'=>$_key]);
+		foreach($partCategories as $_key=>$_value) {
+			$parts[$_value->id] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'html'])->where(['parts_category_no'=>$_value->id])->toArray();
+			$partsCss[$_value->id] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'css'])->where(['parts_category_no'=>$_value->id]);
 		}
 		$cssString = json_encode($partsCss);
 		if (preg_match("/^[0-9]+$/", $id)) {
@@ -87,11 +90,9 @@ class CharactersController extends AppController
 			};
 			$partsSelected = $this->CharacterParts->findListByCharacterId($id)->toArray();
 
-			foreach ($character['character_parts'] as $_key=>$_value) {
-				$character['character_parts'][$_value['parts_category_no']]['parts_no'] = $_value['parts_no'];
-			}
+			$character = $this->Characters->moldGetData($character);
 			if ($this->request->is(['patch', 'post', 'put'])) {
-				$data = $this->request->getData();
+				$data= $this->Characters->moldSetData($this->request->getData());
 				foreach ($data['character_parts'] as $_key => $_value) {
 					if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
 						unset($data['character_parts'][$_key]);
@@ -134,7 +135,7 @@ class CharactersController extends AppController
 					$this->Flash->error(__('更新に失敗しました'));
 				}
 			}
-			$this->set(compact('contents', 'character', 'parts', 'partsSelected', 'css', 'cssString'));
+			$this->set(compact('contents', 'character', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString'));
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
@@ -153,9 +154,8 @@ class CharactersController extends AppController
 
 	public function delete($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
-			die('削除');
-//			$content = $this->Characters->get($id);
-//			$this->Characters->delete($id);
+			$content = $this->Characters->get($id);
+			$this->Characters->delete($id);
 		} else {
 			die('存在しない');
 		}

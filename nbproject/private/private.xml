@@ -3,14 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/sites/faststory/config/.env</file>
-            <file>file:/C:/sites/faststory/config/requirements.php</file>
-            <file>file:/C:/sites/faststory/webroot/index.php</file>
-            <file>file:/C:/sites/faststory/src/Controller/Admin/IndexController.php</file>
-            <file>file:/C:/sites/faststory/src/Template/Admin/Chapters/input.tpl</file>
-            <file>file:/C:/sites/faststory/config/routes.php</file>
-            <file>file:/C:/sites/faststory/src/Template/Element/Chapter/phrase_input.tpl</file>
-            <file>file:/C:/sites/faststory/src/Controller/TestsController.php</file>
+            <file>file:/C:/sites/faststory/src/Model/Table/ObjectPartsTable.php</file>
+            <file>file:/C:/sites/faststory/src/Controller/Admin/ObjectsController.php</file>
+            <file>file:/C:/sites/faststory/src/Model/Table/PhrasesTable.php</file>
+            <file>file:/C:/sites/faststory/src/Controller/Admin/PartsController.php</file>
+            <file>file:/C:/sites/faststory/src/Model/Entity/ObjectPart.php</file>
+            <file>file:/C:/sites/faststory/src/Template/Admin/Characters/input.tpl</file>
+            <file>file:/C:/sites/faststory/src/Model/Table/PartsTable.php</file>
+            <file>file:/C:/sites/faststory/webroot/css/admin.css</file>
+            <file>file:/C:/sites/faststory/src/Template/Admin/Objects/index.tpl</file>
+            <file>file:/C:/sites/faststory/src/Template/Admin/Objects/detail.tpl</file>
+            <file>file:/C:/sites/faststory/webroot/js/admin/character/input.js</file>
+            <file>file:/C:/sites/faststory/webroot/css/display.css</file>
+            <file>file:/C:/sites/faststory/src/Model/Entity/Phrase.php</file>
+            <file>file:/C:/sites/faststory/src/Controller/Admin/CharactersController.php</file>
+            <file>file:/C:/sites/faststory/src/Template/Admin/Objects/input.tpl</file>
+            <file>file:/C:/sites/faststory/src/Model/Table/ObjectsTable.php</file>
+            <file>file:/C:/sites/faststory/config/const.php</file>
+            <file>file:/C:/sites/faststory/src/Model/Table/CharactersTable.php</file>
+            <file>file:/C:/sites/faststory/src/Model/Entity/Object.php</file>
         </group>
     </open-files>
 </project-private>

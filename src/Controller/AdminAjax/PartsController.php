@@ -20,6 +20,7 @@ use Cake\Filesystem\File;
 use Cake\Core\Configure;
 use App\Controller\AppController;
 use Cake\Http\Exception\NotFoundException;
+use App\Utils\AppUtility;
 /**
  * Static content controller
  *
@@ -33,19 +34,25 @@ class PartsController extends AppController
 	public function initialize()
     {
         parent::initialize();
+		$this->loadModel('PartCategories');
     }
 
-	public function getBaseHtml() {
+	public function getBaseHtml($preClass = null) {
 		$this->autoRender = false;
-		if (!$this->request->is("ajax")) {
+		if (!$this->request->is('ajax')) {
 			throw new NotFoundException(NotFoundMessage);
 		}
 		$partsCategoryNo = $this->request->getData('parts_category_no');
-		$class = Configure::read('parts_class')[$partsCategoryNo];
+		$category = $this->PartCategories->find()->where(['id'=>$partsCategoryNo])->first();
+		$class = $category->class_name;
+		$zIndex = $category->z_index;
 		$partsNo = $this->Parts->findNextPartsNoByPartsCategoryNo($partsCategoryNo);
 		$html = '<div class="' . $class . ' ' . $class . '_' . $partsNo . '"></div>';
 		$css = '.' . $class . '_' . $partsNo . '{}';
-		$result = array('html'=>$html, 'css'=>$css);
+		if (isset($preClass)) {
+			$css = AppUtility::addPreClassToCss($css, $preClass);
+		}
+		$result = array('html'=>$html, 'css'=>$css, 'z_index'=>$zIndex);
 		echo json_encode($result);
 	}
 }

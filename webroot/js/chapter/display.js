@@ -54,7 +54,7 @@ var phrases = new Vue({
 //    },
     handleScroll: function(e) {
         var scroll = this.allHeight - this.displayHeight;
-        if(window.scrollY < scroll) {
+        if(window.scrollY +5 < scroll) {
             this.buttonShow = false;
         } else {
             this.buttonShow = true;

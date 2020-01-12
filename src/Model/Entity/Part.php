@@ -26,12 +26,14 @@ class Part extends Entity
      * @var array
      */
     protected $_accessible = [
-        'id' => true,
-        'html' => true,
-        'css' => true,
+		'id' => true,
+		'object_type' => true,
+		'template_id' => true,
+		'html' => true,
+		'css' => true,
 		'parts_category_no' => true,
 		'parts_no' => true,
 		'created' => true,
 		'modified' => true,
-    ];
+	];
 }

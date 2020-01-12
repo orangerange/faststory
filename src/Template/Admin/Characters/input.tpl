@@ -3,7 +3,7 @@
 {foreach from=$css item=_css}
     {$this->Display->css($_css.css)}
 {/foreach}
-<div><a href='/admin/parts'>パーツ一覧</a></div>
+<div><a href='/admin/parts/index/0/{$config->object_type_key['face']}'>パーツ一覧</a></div>
 <h1>キャラクター{if $editFlg}編集{else}登録{/if}</h1>
 {$this->Form->create($character,['enctype' => 'multipart/form-data'])}
 <table>
@@ -22,54 +22,111 @@
     <tr>
         <th>パーツ合成</th>
         <td>
-            <table colspan="{$this->Config->read('parts')|@count + 1}">
+            
+            <table colspan='{$partCategories|@count + 1}'>
                 <tr>
-                    {foreach from=$this->Config->read('parts') key=_key item=_value}
+                    {foreach from=$partCategories key=_key item=_value}
                         <td>
-                            <div class="character_box character_box_{$_key}">
-                                {$parts[$_key][$partsSelected[$_key]]}
+                            <div class='character_box character_box_{$_value->id}'>
+                                {$parts[$_value->id][$partsSelected[$_value->id]]}
                             </div>
-                            {$_value}
+                            {$_value->name}({$_value->z_index|escape})
                         </td>
                     {/foreach}
                     <td>
-                        <div class="character_box parts_sum">
+                        <div class='css css_sum'>
+                            {$this->Display->css($character->css, '.parts_sum')}
+                        </div>
+                        <div class='character_box parts_sum'>
                             {if $character->html}
                                 {$character->html}
                             {else}
-                                <div class='hat'></div>
-                                <div class='hair'></div>
-                                <div class='head'></div>
+                                {foreach from=$partCategories key=_key item=_value}
+                                    <div class='{$_value->class_name|escape}'></div>
+                                {/foreach}
                             {/if}
                         </div>
                         合成結果
                     </td>
-                    {$this->Form->input('html', ['type'=>hidden])}
-                    {$this->Form->input('css', ['type'=>hidden])}
+                    <td>
+                        {$this->Form->input('html', ['type'=>'textarea', 'label'=>false, 'class'=>'html_input'])}
+                         HTML
+                    </td>
+                    <td>
+                        {$this->Form->input('css', ['type'=>'textarea', 'label'=>false, 'class'=>'css_input'])}
+                         CSS
+                    </td>
                     {$this->Form->input('css_string', ['type'=>hidden, 'value'=>$cssString])}
                 </tr>
                 <tr>
-                    {foreach from=$this->Config->read('parts') key=_key item=_value}
-                        <td>
-                            {$this->Form->input('character_parts.'|cat:$_key|cat:'.parts_no', 
+                    {assign var='categoryIds' value=','|explode:''}
+                    {capture name='garbage'}{$categoryIds|@array_pop}{/capture}
+                    {foreach from=$partCategories key=_key item=_value name=partsLoop}
+                        {capture name="garbage"}{$categoryIds|@array_push:$_value->id}{/capture}
+                        <td class='parts_category_{$_value->id|escape}'>
+                            <input type='hidden' class='parts_category_no' value={$_value->id|escape}>
+                            <button class='parts_select' type='button'>選択</button>
+                            <button class='parts_clear' type='button'>クリア</button>
+                            <div class='popup' id='js-popup_{$_value->id|escape}'>
+                                <div class='popup-inner'>
+                                    <div class='close-btn' id='js-close-btn_{$_value->id|escape}'><i class='fas fa-times'></i></div>
+                                    <table>
+                                        <tr>
+                                            
+                                            {foreach from=$parts[{$_value->id|escape}] key=_partsNo item=_html}
+                                                <td>
+                                                    <input type='hidden' class='parts_category_no' value={$_value->id|escape}>
+                                                    <input type='hidden' class='parts_no' value={$_partsNo|escape}>
+                                                    <input type='hidden' class='parts_class' value={$_value->class_name|escape}>
+                                                    <div class='character_box'>
+                                                        {$_html}
+                                                    </div>
+                                                    <button type='button' class='parts_box_select'>決定</button>
+                                                </td>
+                                            {/foreach}
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class='black-background' id='js-black-bg_{$_value->id|escape}'></div>
+                            </div>
+                            {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.parts_no', 
                                                 [
-                                                    'div'=>false, 
-                                                    'class'=>'parts', 
-                                                    'type'=>'select',
-                                                    'options'=>$parts[$_key], 
-                                                    'label'=>false, 
-                                                    'empty'=>'-'
+                                                    'class'=>'parts parts_'|cat:$_value->id,
+                                                    'type'=>'hidden'
                                             ])}
-                            <input type='hidden' class='parts_class' value={$this->Config->read('parts_class.'|cat:$_key)}>
-                            {$this->Form->input('character_parts['|cat:$_key|cat:'][parts_category_no]', ['type'=>hidden, 'value'=>$_key, 'class'=>'parts_category_no'])}
+                            <input type='hidden' class='parts_class' value={$_value->class_name|escape}>
+                            {$this->Form->input('character_parts['|cat:$_value->id|cat:'][parts_category_no]', ['type'=>hidden, 'value'=>$_value->id, 'class'=>'parts_category_no'])}
                         </td>
                     {/foreach}
+                    {$this->Form->input('category_ids', ['type'=>hidden, 'value'=>$categoryIds|@json_encode, 'id'=>'category_ids'])}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    {foreach from=$partCategories key=_key item=_value name=partsCssLoop}
+                        <td class='parts_category_{$_key}'>
+                            {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.parts_css',
+                                                [
+                                                    'style'=>'width:100px',
+                                                    'class'=>'parts_css parts_css_'|cat:$_value->id, 
+                                                    'type'=>'textarea',
+                                                    'label'=>false
+                                            ])}
+                            <input type='hidden' class='parts_category_no' value={$_value->id|escape}>
+                            <button type='button' class='copy_character_parts'>複製</button>
+                            <button type='button' class='edit_character_parts'>編集</button>
+                        </td>
+                    {/foreach}
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </table>
         </td>
     </tr>
     {*{if $character->dir}
-    <image src="{$this->Display->imagePath($character)}">
+    <image src='{$this->Display->imagePath($character)}'>
     {$this->Form->input('picture_before',['type'=>'hidden','value'=>$character->picture])}
     {$this->Form->input('dir_before',['type'=>'hidden','value'=>$character->dir])}
     画像削除{$this->Form->checkbox('picture_delete')}
@@ -78,4 +135,10 @@
 </table>
 {$this->Form->button('登録')}
 {$this->Form->end()}
+<form id='parts_copy_form' target='_blank' method='post'>
+    <input type='hidden' class='base_css' name='base_css'>
+</form>
+<form id='parts_edit_form' target='_blank' method='post'>
+    <input type='hidden' class='base_css' name='base_css'>
+</form>
 <div><a href='/admin/characters/index'>一覧に戻る</a></div>

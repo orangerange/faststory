@@ -8,6 +8,7 @@
         <meta http-equiv="Content-Style-Type" content="text/css">
         <meta name="description" content="">
         <meta name="keywords" content="" />
+        {$this->Display->baseClassCss()}
         {$this->Html->css('display')}
         <title></title>
     </head>

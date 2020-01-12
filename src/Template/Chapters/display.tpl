@@ -3,7 +3,7 @@
 {capture name="garbage"}{$characterIds|@array_pop}{/capture}
 {foreach from=$chapter['phrases'] item=_phrase name=phraseLoop1}
     {if $_phrase->character->css && !$_phrase->character->id|in_array:$characterIds}
-        {$this->Display->css($_phrase->character->css)}
+        {$this->Display->css($_phrase->character->css, '.character_'|cat:$_phrase->character->id)}
     {/if}
     {capture name="garbage"}{$characterIds|@array_push:$_phrase->character->id}{/capture}
 {/foreach}

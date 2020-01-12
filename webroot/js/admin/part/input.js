@@ -1,6 +1,6 @@
 $(function () {
     $(document).on('change', '.html_input', function () {
-        $('.character_box').html($(this).val().replace('　', ''));
+        $('.html_show').html($(this).val().replace('　', ''));
     })
 
     $(document).on('change', '.css_input', function () {
@@ -16,10 +16,11 @@ $(function () {
             }).done(function (response) {
                 var result = JSON.parse(response);
                 var html = result.html;
-                var css = result.css; alert(html);
+                var css = result.css;
+                var z_index = result.z_index;
                 $('.html_input').val(html);
-                // $('.html').html(html);
-                $('.character_box').html(html);
+                $('.html_show').html(html);
+                $('.z_index').html(z_index);
                 $('.css_input').val(css);
                 $('.css').children('style').html(css);
             }).fail(function () {

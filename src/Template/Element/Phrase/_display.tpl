@@ -5,9 +5,9 @@
     {/if}
     {if $character->html && $character->css}
          {assign var='nameClass' value='character-name'}
-        <div class="character-image">
+        <div class="character-image character_{$character->id}">
             {if !$noCssFlg}
-                {$this->Display->css($character->css)}
+                {$this->Display->css($character->css, '.character_'|cat:$character->id)}
             {/if}
             {$character->html}
         </div>

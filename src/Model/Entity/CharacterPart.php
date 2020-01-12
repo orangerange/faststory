@@ -29,6 +29,7 @@ class CharacterPart extends Entity
         'character_id' => true,
         'parts_category_no' => true,
         'parts_no' => true,
+        'parts_css' => true,
         'created' => true,
         'modified' => true,
     ];

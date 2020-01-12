@@ -57,8 +57,8 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-//		$config = Configure::read();
-//		$this->set(compact('config'));
+		$config = (object)Configure::read();
+		$this->set(compact('config'));
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html

@@ -57,7 +57,7 @@ class CharactersTable extends Table
      * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator)
-    {
+        {
         $validator
 				->notEmpty('name')
 				->notEmpty('name_color')
@@ -68,5 +68,21 @@ class CharactersTable extends Table
 
 	public function findById($id) {
 		return $this->find()->where(['Characters.id' => $id])->contain(['CharacterParts'])->first();
+    }
+
+	public function moldGetData($data) {
+		$moldData = array();
+		foreach ($data['character_parts'] as $_key => $_value) {
+			$moldData['character_parts'][$_value['parts_category_no']] = $_value;
+		}
+		$data['character_parts'] = $moldData['character_parts'];
+
+		return $data;
+	}
+
+	public function moldSetData($data) {
+		$data['html'] = str_replace('　', '', $data['html']);
+		$data['css'] = str_replace('　', '', $data['css']);
+		return $data;
 	}
 }

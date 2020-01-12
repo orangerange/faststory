@@ -1,35 +1,40 @@
-
 @media screen and (min-width: 768px) {
-    .phrase_all{
-        position:relative;
+    .phrase_all {
+        position: relative;
         width: 700px;
-        padding:12px;
+        padding: 12px;
+    }
+    .phrase_image {
+        position: relative;
+        width: 700px;
+        height:350px;
+        padding: 12px;
     }
     .character-image {
-        position:absolute;
-        top:0px;
-        left:0px;
-        width:50px;
-        height:50px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
-        border:1.5px solid #fff;
-        box-shadow: 0px 0px 10px #ccc,inset 0px 0px 10px rgba(0, 0, 0, 0.8);
+        border: 1.5px solid #fff;
+        box-shadow: 0px 0px 10px #ccc, inset 0px 0px 10px rgba(0, 0, 0, 0.8);
     }
     .character-name {
-        margin-left:30px;
+        margin-left: 30px;
     }
     .phrase {
         /*薄黄色*/
-        background: #FFFFCC;
+        background: #ffffcc;
         /*width: 1000px;*/
         /*height: 200px;*/
-        /*margin-top:10%;*/ 
-        padding:20px 20px 20px;
+        /*margin-top:10%;*/
+        padding: 20px 20px 20px;
         border-radius: 30px;
     }
     .next_out {
         padding-left: 650px;
-        padding-bottom:40px;
+        padding-bottom: 40px;
         padding-top: 40px;
     }
     .next {
@@ -37,44 +42,57 @@
     }
 }
 @media screen and (max-width: 767px) {
-    .phrase_all{
-        position:relative;
+    .phrase_all {
+        position: relative;
         /*background: blue;*/
         width: 290px;
-        padding:7px;
+        padding: 7px;
+    }
+    .phrase_picture {
+        position: relative;
+        /*background: blue;*/
+        width: 290px;
+        height:135px;
+        padding: 7px;
     }
     .character-image {
-        position:absolute;
-        top:0px;
-        left:0px;
-        width:30px;
-        height:30px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
-        border:1.5px solid #fff;
-        box-shadow: 0px 0px 10px #ccc,inset 0px 0px 10px rgba(0, 0, 0, 0.8);
+        border: 1.5px solid #fff;
+        box-shadow: 0px 0px 10px #ccc, inset 0px 0px 10px rgba(0, 0, 0, 0.8);
     }
     .character-name {
-        margin-left:20px;
+        margin-left: 20px;
         font-size: 15px;
     }
     .phrase {
         /*薄黄色*/
-        background: #FFFFCC;
+        background: #ffffcc;
         /*width: 1000px;*/
         /*height: 200px;*/
-        /*margin-top:10%;*/ 
-        padding:10px 10px 10px;
+        /*margin-top:10%;*/
+        padding: 10px 10px 10px;
         border-radius: 20px;
         font-size: 15px;
     }
     .next_out {
         padding-left: 130px;
-        padding-bottom:40px;
-        padding-top:40px;
+        padding-bottom: 40px;
+        padding-top: 40px;
     }
     .next {
         bottom: 30px;
     }
+}
+.phrase_object {
+    /*薄水色*/
+    background: aliceblue;
+    width: 290px;
+    height:145px;
 }
 .next {
     position: fixed;
@@ -82,15 +100,52 @@
 
 .character_box {
     position: relative;
-    width:100px;
-    height:100px;
+    width: 100px;
+    height: 100px;
     background-color: #ffffe0;
+    z-index: -2;
 }
 .row {
-  display: flex;
+    display: flex;
 }
 
 .column {
-  display: flex;
-  flex-flow: column;
+    display: flex;
+    flex-flow: column;
 }
+/*.hat {
+    position: absolute;
+    z-index: 3;
+}
+.hair {
+    position: absolute;
+    z-index: 1;
+}
+.head {
+    position: absolute;
+    z-index: 2;
+}
+.eyes {
+    position: absolute;
+    z-index: 4;
+}
+.eyebrows {
+    position: absolute;
+    z-index: 4;
+}
+.nose {
+    position: absolute;
+    z-index: 4;
+}
+.cheeks {
+    position: absolute;
+    z-index: 4;
+}
+.mouths {
+    position: absolute;
+    z-index: 4;
+}
+.glasses {
+    position: absolute;
+    z-index: 5;
+}*/

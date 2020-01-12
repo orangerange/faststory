@@ -108,4 +108,12 @@ class AppUtility {
 		}
 	}
 
+	public function addPreClassToCss($css, $preClass=null) {
+		if (isset($preClass)) {
+			$css = $preClass . ' ' . $css;
+			$css = str_replace('}', '} ' . $preClass . ' ', $css);
+			$css = rtrim($css, $preClass);
+		}
+		return $css;
+	}
 }

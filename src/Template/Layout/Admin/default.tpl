@@ -9,8 +9,11 @@
         <meta name="description" content="">
         <meta name="keywords" content="" />
         {$this -> Html -> script('jquery-1.8.3')}
-         {$this->Fetch('script')}
+        {$this -> Html -> script('admin/common')}
+        {$this->Fetch('script')}
+        {$this->Display->baseClassCss()}
         {$this->Html->css('display')}
+        {$this->Html->css('admin')}
         <title></title>
     </head>
     <body>

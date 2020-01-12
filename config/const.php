@@ -38,6 +38,10 @@ return array(
 			'2' => '顔',
 			'3' => '眼鏡',
 			'4' => '目',
+			'5' => '眉毛',
+			'6' => '鼻',
+			'7' => '頬',
+			'8' => '口',
 		)
 	),
 	Configure::write('parts_class',
@@ -47,6 +51,22 @@ return array(
 			'2' => 'head',
 			'3' => 'glasses',
 			'4' => 'eyes',
+			'5' => 'eyebrows',
+			'6' => 'nose',
+			'7' => 'cheeks',
+			'8' => 'mouths',
+		)
+	),
+	Configure::write('object_type',
+		array(
+			'1'=>'顔',
+			'2'=>'胴体',
+		)
+	),
+	Configure::write('object_type_key',
+		array(
+			'face'=>'1',
+			'body'=>'2',
 		)
 	),
 	define('PHRASE_MUX_NUM', 50),
