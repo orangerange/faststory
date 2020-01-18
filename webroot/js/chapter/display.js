@@ -8,12 +8,10 @@ var phrases = new Vue({
       displayHeight: 0,
       buttonShow: true,
       loading:true,
-      chapterId:null,
       phraseNum:0,
   },
 
   mounted() {
-      this.chapterId = document.getElementById('chapter_id').value;
       this.phraseNum = document.getElementById('phrase_num').value;
       scrollTo(0, 0);
       this.allHeight= this.$refs.speak_1.clientHeight;
@@ -40,18 +38,6 @@ var phrases = new Vue({
                 scrollTo(0, scroll);
             }
         },
-//    getOnePhrase: function (e) {
-//        axios.post('/ajax/phrases/getOne', {
-//            no: this.no,
-//            chapter_id: this.chapterId,
-//        })
-//                .then(response => {
-//                    console.log(response.data);
-//                    this.phrases.push(response.data);
-//                    this.no++;
-//                });
-//
-//    },
     handleScroll: function(e) {
         var scroll = this.allHeight - this.displayHeight;
         if(window.scrollY +5 < scroll) {

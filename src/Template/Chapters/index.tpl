@@ -12,7 +12,7 @@
             <tr>
                 <td>{$chapter->no}</td>
                 <td>{$chapter->title|escape}</td>
-                <td><a href='/chapters/display/{$chapter->content->prefix|escape}/{$chapter->no|escape}'>この章を読む</a></td> 
+                <td><a href='/chapters/display/{$content->prefix|escape}/{$chapter->no|escape}'>この章を読む</a></td> 
             </tr>
         {/foreach}
     </tbody>

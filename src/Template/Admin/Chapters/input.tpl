@@ -5,6 +5,36 @@
         }
     </script>
 {/literal}
+<div class='popup' id='js-popup'>
+    <input type='hidden' id='phrase_no'>
+    <div class='popup-inner'>
+        <div class='close-btn' id='js-close-btn'><i class='fas fa-times'></i></div>
+        <table>
+            <tr>
+                {foreach from=$objects key=_key item=_value}
+                    <td>
+                        <div class='css css_object_{$_vslue->id|escape}'>
+                            {$this->Display->css($_value->css, '.object_'|cat:$_value->id)}
+                        </div>
+                        <input type='hidden' class='object_id' value={$_value->id|escape}>
+                        <input type='hidden' class='object_no' value='1'>
+                        <input type='hidden' class='width' value='{$_value->object_template->width|escape}'>
+                        <input type='hidden' class='height' value='{$_value->object_template->height|escape}'>
+                        <div class='phrase_object'>
+                            <div class='html_show object_input' style='width:{$_value->object_template->width|escape}%; height:{$_value->object_template->height|escape}%;'>
+                                <div class='object_{$_value->id|escape}'>
+                                    {$_value->html}
+                                </div>
+                            </div>
+                        </div>
+                        <button type='button' class='object_decide'>決定</button>
+                    </td>
+                {/foreach}
+            </tr>
+        </table>
+    </div>
+    <div class='black-background' id='js-black-bg'></div>
+</div>
 <div>
     {$this->Html->script('admin/chapter/input.js', ['block'=>'script'])}
     {$this->Flash->render()}
@@ -21,7 +51,7 @@
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}
     {*divタグを入れ子構造にする*}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
-        {$this->element('chapter/phrase_input', ['i'=>$i])}
+        {$this->element('admin/chapter/_phrase_input', ['i'=>$i])}
     {/for}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
     </div>

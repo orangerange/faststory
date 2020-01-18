@@ -39,6 +39,7 @@ class ChaptersController extends AppController
 		$this->loadModel('Contents');
 		$this->loadModel('Characters');
 		$this->loadModel('Phrases');
+		$this->loadModel('Objects');
     }
 
 	public function index($contentId = null) {
@@ -59,19 +60,20 @@ class ChaptersController extends AppController
 			if (!$content = $this->Contents->findById($contentId)->first()) {
 				throw new NotFoundException(NotFoundMessage);
 			}
-			$content_name = $content['name'];
+			$objects = $this->Objects->find('all')->contain('ObjectTemplates')->where(['Objects.content_id'=>$contentId])->order(['Objects.id'=>'ASC']);
+			$contentName = $content['name'];
 			$characters = $this->Characters->find('list')->where(['content_id'=>$contentId]);
 			if($this->request->is('post')) {
-				$this->request->data['content_id'] = $contentId;
-				$this->request->data['no'] = $chapterNo;
+				$this->request->withData('content_id', $contentId);
+				$this->request->withData('no', $chapterNo);
 				$result = $this->Phrases->unsetEmptyDatum($this->request->getData('phrases'));
-				$this->request->data['phrases'] = $result['datum'];
+				$this->request->withData('phrases', $result['datum']);
 				$openFlg = $result['open_flg'];
 				$openFlg = array();
-				$chapter = $this->Chapters->newEntity($this->request->getData(), ['associated' => ['Phrases']]);var_dump($chapter);
+				$chapter = $this->Chapters->newEntity($this->request->getData(), ['associated' => ['Phrases']]);
 				$this->Chapters->save($chapter);
 			}
-			$this->set(compact('chapterNo', 'characters', 'openFlg', 'contentId', 'content_name'));
+			$this->set(compact('chapterNo', 'characters', 'openFlg', 'contentId', 'contentName', 'objects'));
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
@@ -82,6 +84,7 @@ class ChaptersController extends AppController
 			if (!$chapter = $this->Chapters->findById($id)) {
 				throw new NotFoundException(NotFoundMessage);
 			}
+			$objects = $this->Objects->find('all')->contain('ObjectTemplates')->where(['Objects.content_id'=>$chapter->content_id])->order(['Objects.id'=>'ASC']);
 			$chapterNo = $chapter['no'];
 			$contentId = $chapter['content_id'];
 			$contentName = $chapter['content']['name'];
@@ -92,43 +95,45 @@ class ChaptersController extends AppController
 				$openFlg[$i] = true;
 			}
 			if ($this->request->is(['patch', 'post', 'put'])) {
-				$result = $this->Phrases->unsetEmptyDatum($this->request->getData('phrases'));
-				$this->request->data['phrases'] = $result['datum'];
+				$postData = $this->request->getData();
+				$result = $this->Phrases->unsetEmptyDatum($postData['phrases']);
+				$this->request->withData('phrases', $result['datum']);
+				$postData['phrases'] = $result['datum'];
 				$openFlg = $result['open_flg'];
 				//更新処理により削除されるレコードのID
 				$deleteIds = $result['delete_ids'];
-				$chapter = $this->Chapters->patchEntity($chapter, $this->request->getData());
-				for($i=0; $i< $phraseNum; $i++) {
-					// 削除チェックボックスがチェックされている時
-					if (!empty($this->request->data['phrases'][$i]['picture_delete'])) {
-						try {
-							$dir = realpath(ROOT . "/" . $this->request->getData()['phrases'][$i]['dir_before']);
-							$del_file = new File($dir . "/" . $this->request->data['phrases'][$i]['picture_before']);
-							// ファイル削除処理実行
-							if ($del_file->delete()) {
-								$chapter['phrases'][$i]['picture'] = null;
-								$chapter['phrases'][$i]['dir']= null;
-								$chapter['phrases'][$i]['type'] = null;
-								$chapter['phrases'][$i]['size'] = 0;
-							} else {
-								$chapter['phrases'][$i]['picture'] = $chapter['phrases'][$i]['picture_before'];
-								throw new RuntimeException('ファイルの削除ができませんでした.');
-							}
-						} catch (RuntimeException $e) {
-							$this->Flash->error(__($e->getMessage()));
-						}
-					}
-					// 新しいファイルが入力されたとき
-					if (!empty($this->request->data['phrases'][$i]['picture']['name'])) {
-						// 古いファイルがあるとき
-						if (isset($this->request->data['phrases'][$i]['dir_before'])) {
-							$dir = realpath(ROOT . "/" . $this->request->data['phrases'][$i]['dir_before']);
-							$del_file = new File($dir . "/" . $this->request->data['phrases'][$i]['picture_before']);
-							// ファイル削除処理実行
-							$del_file->delete();
-						}
-					}
-				}
+				$chapter = $this->Chapters->patchEntity($chapter, $postData);
+//				for($i=0; $i< $phraseNum; $i++) {
+//					// 削除チェックボックスがチェックされている時
+//					if (!empty($postData['phrases'][$i]['picture_delete'])) {
+//						try {
+//							$dir = realpath(ROOT . "/" . $this->request->getData()['phrases'][$i]['dir_before']);
+//							$del_file = new File($dir . "/" . $this->request->data['phrases'][$i]['picture_before']);
+//							// ファイル削除処理実行
+//							if ($del_file->delete()) {
+//								$chapter['phrases'][$i]['picture'] = null;
+//								$chapter['phrases'][$i]['dir']= null;
+//								$chapter['phrases'][$i]['type'] = null;
+//								$chapter['phrases'][$i]['size'] = 0;
+//							} else {
+//								$chapter['phrases'][$i]['picture'] = $chapter['phrases'][$i]['picture_before'];
+//								throw new RuntimeException('ファイルの削除ができませんでした.');
+//							}
+//						} catch (RuntimeException $e) {
+//							$this->Flash->error(__($e->getMessage()));
+//						}
+//					}
+//					// 新しいファイルが入力されたとき
+//					if (!empty($postData['phrases'][$i]['picture']['name'])) {
+//						// 古いファイルがあるとき
+//						if (isset($this->request->data['phrases'][$i]['dir_before'])) {
+//							$dir = realpath(ROOT . "/" . $this->request->data['phrases'][$i]['dir_before']);
+//							$del_file = new File($dir . "/" . $this->request->data['phrases'][$i]['picture_before']);
+//							// ファイル削除処理実行
+//							$del_file->delete();
+//						}
+//					}
+//				}
 
 				$connection = ConnectionManager::get('default');
 				// トランザクション開始
@@ -148,7 +153,7 @@ class ChaptersController extends AppController
 					 $connection->rollback();
 				}
 			}
-			$this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum'));
+			$this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects'));
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}

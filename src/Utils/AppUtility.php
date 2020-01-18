@@ -112,7 +112,7 @@ class AppUtility {
 		if (isset($preClass)) {
 			$css = $preClass . ' ' . $css;
 			$css = str_replace('}', '} ' . $preClass . ' ', $css);
-			$css = rtrim($css, $preClass);
+			$css = rtrim($css, ' ' . $preClass);
 		}
 		return $css;
 	}

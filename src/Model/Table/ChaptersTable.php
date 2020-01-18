@@ -78,6 +78,10 @@ class ChaptersTable extends Table {
 		return isset($result->no) ? $result->no + 1 : 1;
 	}
 
+	public function findById($id) {
+		return $this->find()->where(['Chapters.id' => $id])->contain(['Phrases.Characters', 'Contents'])->first();
+	}
+
 	public function findByPrefixAndNo($prefix, $no) {
 		return $this->find()->where(['Contents.prefix'=>$prefix, 'Chapters.no' => $no])->contain(['Phrases.Characters', 'Contents'])->first();
 	}

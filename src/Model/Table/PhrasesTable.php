@@ -84,7 +84,8 @@ class PhrasesTable extends Table
 
 	public function isEmpty($data) {
 		
-		return  empty($data['sentence']) && empty($data['picture']['name']) && empty($data['dir_before']);
+//		return  empty($data['sentence']) && empty($data['picture']['name']) && empty($data['dir_before']);
+		return  empty($data['sentence']) && empty($data['picture']['name']) && empty($data['html']) && empty($data['css']) && empty($data['js']);
 	}
 
 	public function unsetEmptyDatum($datum) {

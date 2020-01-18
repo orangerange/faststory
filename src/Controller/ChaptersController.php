@@ -45,41 +45,27 @@ class ChaptersController extends AppController
 
 	public function index($prefix= null) {
 		if (isset($prefix)) {
-			if (!$content = $this->Contents->exists(['prefix'=>$prefix])) {
+			if (!$this->Contents->exists(['prefix'=>$prefix])) {
 				throw new NotFoundException(NotFoundMessage);
 			}
-			$chapters = $this->Chapters->find('all')->where(['Contents.prefix'=>$prefix])->contain('Contents', 'Phrases')->toArray();
+			$content = $this->Contents->find('all')->where(['prefix'=>$prefix])->first();
+			$chapters = $this->Chapters->find('all')->where(['content_id'=>$content->id])->toArray();
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
 		$this->set(compact('chapters', 'content_id', 'content'));
 	}
-		
+
 	public function display($prefix=null, $no) {
 		if (isset($prefix) && preg_match("/^[0-9]+$/", $no)) {
 			if (!$chapter = $this->Chapters->findByPrefixAndNo($prefix, $no)) {
 				throw new NotFoundException(NotFoundMessage);
 			}
 			$this->set(compact('chapter'));
-//			$this->set('chapterId', $id);
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
 		$this->render('display');
-	}
-
-	public function sendMail() {
-		// メール送信処理
-        $email = new Email("default");
-
-        // 入力者へのメール
-        $email->setFrom(["from@example.com"=>"送信元名"])
-              ->setTo("goforthamdseekglory@yahoo.co.jp")
-//              ->setCc("cc@example.com")
-//              ->setBcc("bcc@example.com")
-              ->setSubject("お問合せありがとうございます。")
-              ->send("お問い合わせの本文です");
-		
 	}
 
 }

@@ -13,8 +13,8 @@
         </div>
     {/if}
     <div class="phrase">
-        {if $character}
-            <div class="{$nameClass}" style="color:{$character->name_color}"><b>{$character->name|escape}</b></div></br>
+        {if $character || $speakerName}
+            <div class="{$nameClass}" style="color:{if $speakerName}{$speakerColor}{else}{$character->name_color}{/if}"><b>{if $speakerName}{$speakerName|escape}{else}{$character->name|escape}{/if}</b></div></br>
         {/if}
         {$sentence|escape|nl2br}
     </div>

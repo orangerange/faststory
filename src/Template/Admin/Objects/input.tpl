@@ -70,8 +70,6 @@
                             <div class="phrase_object">
                                 <div class='object_input html_show html_show_{$_value->id}' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                                     {$parts[$_value->id][$partsSelected[$_value->id]]}
-{*                                    {$partsSelected[$_value->id]|@var_dump}*}
-{*                                    {$parts[$_value->id][1]}*}
                                 </div>
                             </div>
                             {$_value->name}({$_value->z_index|escape})
