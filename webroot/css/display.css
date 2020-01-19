@@ -26,11 +26,13 @@
     .phrase {
         /*薄黄色*/
         background: #ffffcc;
-        /*width: 1000px;*/
-        /*height: 200px;*/
-        /*margin-top:10%;*/
         padding: 20px 20px 20px;
         border-radius: 30px;
+        border:solid 1px black;
+    }
+    .phrase_object_display {
+        height: 350px;
+        border:solid 1px black;
     }
     .next_out {
         padding-left: 650px;
@@ -72,12 +74,14 @@
     .phrase {
         /*薄黄色*/
         background: #ffffcc;
-        /*width: 1000px;*/
-        /*height: 200px;*/
-        /*margin-top:10%;*/
         padding: 10px 10px 10px;
         border-radius: 20px;
         font-size: 15px;
+        border:solid 1px black;
+    }
+    .phrase_object_display {
+        height: 145px;
+        border:solid 1px black;
     }
     .next_out {
         padding-left: 130px;
@@ -113,39 +117,3 @@
     display: flex;
     flex-flow: column;
 }
-/*.hat {
-    position: absolute;
-    z-index: 3;
-}
-.hair {
-    position: absolute;
-    z-index: 1;
-}
-.head {
-    position: absolute;
-    z-index: 2;
-}
-.eyes {
-    position: absolute;
-    z-index: 4;
-}
-.eyebrows {
-    position: absolute;
-    z-index: 4;
-}
-.nose {
-    position: absolute;
-    z-index: 4;
-}
-.cheeks {
-    position: absolute;
-    z-index: 4;
-}
-.mouths {
-    position: absolute;
-    z-index: 4;
-}
-.glasses {
-    position: absolute;
-    z-index: 5;
-}*/
