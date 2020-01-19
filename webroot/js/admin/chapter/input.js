@@ -30,6 +30,18 @@ $(function () {
             $.each(columns, function (index, value) {
                 $('*[name="phrases[' + j + ']['+ value +']"]').val($('*[name="phrases[' + i + ']['+ value +']"]').val());
                 $('*[name="phrases[' + i + ']['+ value +']"]').val('');
+                if (value=='html') {
+                    if ($('*[name="phrases[' + j + ']['+ value +']"]').val()) {
+                        $('#html_show_' + j).html($('*[name="phrases[' + j + ']['+ value +']"]').val());
+                        $('#html_show_' + i).html('');
+                    }
+                }
+                if (value=='css') {
+                    if ($('*[name="phrases[' + i + ']['+ value +']"]').val()) {
+                        $('#css_show_' + j).children('style').html(($('*[name="phrases[' + j + ']['+ value +']"]').val()));
+                        $('#css_show_' + i).children('style').html('');
+                    }
+                }
             })
         }
     })
