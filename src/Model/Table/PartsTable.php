@@ -58,15 +58,11 @@ class PartsTable extends Table
 		}
 	}
 
-	public function findByType($templateId = 0, $objectType = 0) {
+	public function findByTemplateId($templateId = null) {
 		$conditions = array();
 		if (!empty($templateId)) {
 			$conditions = array(
-				'PartCategories.template_id' => $templateId
-			);
-		} else {
-			$conditions = array(
-				'PartCategories.object_type' => $objectType
+				'Parts.template_id' => $templateId
 			);
 		}
 		$result = $this->find()

@@ -74,10 +74,10 @@ $(function () {
         var height = $(this).closest('td').find('.height').val();
         
         var html_select = deleteSpace($(this).closest('td').find('.html_show').html());
-        html_select = wholeReplace(html_select , 'object_'+object_id, 'object_'+object_id + '_' + object_no)
+        html_select = wholeReplace(html_select , 'object_' +object_id, 'object_' + phrase_no + '_' +object_id + '_' + object_no)
         var css_select = deleteSpace($(this).closest('td').find('style').html());
-        css_select = wholeReplace(css_select , 'object_'+object_id, 'object_'+object_id + '_' + object_no);
-        var css_add = '.object_'+ object_id + '_' + object_no + '{position:relative; width:' + width + '%; height:' + height + '%;}';
+        css_select = wholeReplace(css_select , 'object_'+object_id, 'object_' + phrase_no + '_' + object_id + '_' + object_no);
+        var css_add = '.object_' + phrase_no + '_' + object_id + '_' + object_no + '{position:relative; width:' + width + '%; height:' + height + '%;}';
         var html_input = $('#phrases-'+phrase_no+'-html').val();
         var css_input = $('#phrases-'+phrase_no+'-css').val();
         var html = html_select + html_input;

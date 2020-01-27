@@ -1,7 +1,7 @@
 {$this->Flash->render()}
 {$this->Html->script('admin/part/index.js', ['block'=>'script'])}
-<h1>パーツ覧({if $template}{$template->name}{else}{$config->object_type[$objectType]}{/if})</h1>
-<div><a href='/admin/parts/input/0/0/{$templateId|escape}/{$objectType|escape}'>新規登録</a></div>
+<h1>パーツ一覧({$template['name']})</h1>
+<div><a href='/admin/parts/input/{$templateId|escape}/'>新規登録</a></div>
 <div><a href='/admin/characters/input'>キャラクター新規登録</a></div>
 <div><a href='/admin/contents/index'>作品一覧</a></div>
 <table>
@@ -20,31 +20,32 @@
                         {$this->Display->css($part->css)}
                     {/strip}
                 </div>
-                {*<div class='character_box'>
-                    {strip}
-                    {$part->html}
-                    {/strip}
-                </div>*}
-                {if $template}
-                    <div class='phrase_object'>
-                        <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
-                            {$part->html}
-                        </div>
-                    </div>
-                {else}
+                {if $template['class_name'] == 'face'}
                     <div class='character_box html_show'>
                         {strip}
                             {$part->html}
                         {/strip}
                     </div>
+                {elseif $template['class_name'] == 'body'}
+                    <div class='body_box html_show'>
+                        {strip}
+                            {$part->html}
+                        {/strip}
+                    </div>
+                {else}
+                    <div class='phrase_object'>
+                        <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                            {$part->html}
+                        </div>
+                    </div>
                 {/if}
                 <button class="slide">↕</button>
-                <button onClick="location.href='/admin/parts/input/{$part->parts_category_no|escape}/{$part->parts_no|escape}/'">複製</button>
+                <button onClick="location.href='/admin/parts/input/{$templateId|escape}{$part->parts_category_no|escape}/{$part->parts_no|escape}/'">複製</button>
                 <div class="edit" style="display:none">
                     {$this->Form->create($part, ['url' => [
                         'controller' => 'Parts',
                         'action' => 'edit',
-                        $part->id,
+                        $part->id,  
                         $templateId,
                         $objectType
                         ],

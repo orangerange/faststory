@@ -109,6 +109,13 @@
     background-color: #ffffe0;
     z-index: -2;
 }
+.body_box {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    background-color: #ffffe0;
+    z-index: -2;
+}
 .row {
     display: flex;
 }

@@ -69,6 +69,30 @@ return array(
 			'body'=>'2',
 		)
 	),
+	Configure::write('object_template',
+		array(
+			'-1'=> array('name' => '顔', 'class_name'=>'face'),
+			'-2'=> array('name'=> '胴体', 'class_name'=>'body'),
+		)
+	),
+	Configure::write('object_template_key',
+		array(
+			'face'=>'-1',
+			'body'=>'-2',
+		)
+	),
+	Configure::write('face_type',
+		array(
+			'1'=> '通常',
+			'2'=> '発言',
+		)
+	),
+	Configure::write('face_type_key',
+		array(
+			'normal'=>'1',
+			'speak'=>'2',
+		)
+	),
 	define('PHRASE_MUX_NUM', 50),
 	define('NotFoundMessage', '不正な遷移です'),
 );

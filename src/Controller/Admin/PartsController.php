@@ -38,61 +38,65 @@ class PartsController extends AppController
 		$this->loadModel('ObjectTemplates');
 	}
 
-	public function index($templateId=null, $objectType = 0) {
-		$template = null;
-		if (!empty($templateId)) {
-			$template = $this->ObjectTemplates->findById($templateId)->first();
-			if (!isset($template)) {
-				throw new NotFoundException(NotFoundMessage);
+	public function index($templateId=null) {
+		if (isset($templateId)) {
+			if (array_key_exists($templateId, Configure::read('object_template'))) {
+				$template = Configure::read('object_template')[$templateId];
 			}
-		} elseif(empty($objectType) || empty(Configure::read('object_type')[$objectType])) {
-			throw new NotFoundException(NotFoundMessage);
-		}
-		$parts = $this->Parts->findByType($templateId,$objectType);
-
-		$this->set(compact('template', 'templateId', 'objectType', 'parts'));
-	}
-
-	public function input($partsCategoryNo=null, $partsNo=null, $templateId=null, $objectType = 0) {
-		$template = null;
-		//テンプレートID指定
-		if (!empty($templateId)) {
-			$template = $this->ObjectTemplates->findById($templateId)->first();
-			if (!isset($template)) {
-				throw new NotFoundException(NotFoundMessage);
-			}
-		//テンプレートIDの指定が無く、かつオブジェクト種類の指定が無い場合(複製時以外は不可)
-		} elseif (empty($objectType) || empty(Configure::read('object_type')[$objectType])) {
-			//複製時
-			if (!empty($partsCategoryNo) && !empty($partsNo)) {
-				if (preg_match("/^[0-9]+$/", $partsCategoryNo) && preg_match("/^[0-9]+$/", $partsNo)) {
-					if (!$part = $this->Parts->findForCopy($partsCategoryNo, $partsNo)) {
-						throw new NotFoundException(NotFoundMessage);
-					}
-					if ($part->template_id) {
-						$templateId = $part->template_id;
-						$template = $this->ObjectTemplates->findById($templateId)->first();
-					}
-					if ($part->object_type) {
-						$objectType = $part->object_type;
-					}
-					$baseCss = $this->request->getData('base_css');
-					if (isset($baseCss)) {
-						$part->css = $baseCss;
-					}
-					$part = $this->Parts->moldGetData($part);
-				} else {
+			else {
+				if (!$this->ObjectTemplates->exists(['id'=>$templateId])) {
 					throw new NotFoundException(NotFoundMessage);
 				}
+				$template = $this->ObjectTemplates->findById($templateId)->first();
+			}
+		} else {
+			throw new NotFoundException(NotFoundMessage);
+		}
+		$parts = $this->Parts->findByTemplateId($templateId);
+
+		$this->set(compact('template', 'templateId', 'parts'));
+	}
+
+	public function input($templateId=null, $partsCategoryNo=null, $partsNo=null) {
+		$template = null;
+		//複製時
+		if (isset($partsCategoryNo) && isset($partsNo)) {
+			if (preg_match("/^[0-9]+$/", $partsCategoryNo) && preg_match("/^[0-9]+$/", $partsNo)) {
+				if (!$part = $this->Parts->findForCopy($partsCategoryNo, $partsNo)) {
+					throw new NotFoundException(NotFoundMessage);
+				}
+				$templateId = $part->template_id;
+				if (array_key_exists($templateId, Configure::read('object_template'))) {
+					$template = Configure::read('object_template')[$templateId];
+				} else {
+					$template = $this->ObjectTemplates->findById($templateId)->first();
+				}
+
+				$baseCss = $this->request->getData('base_css');
+				if (isset($baseCss)) {
+					$part->css = $baseCss;
+				}
+				$part = $this->Parts->moldGetData($part);
 			} else {
 				throw new NotFoundException(NotFoundMessage);
 			}
+		//テンプレートID指定
+		} elseif (isset($templateId)) {
+			if (array_key_exists($templateId, Configure::read('object_template'))) {
+				$template = Configure::read('object_template')[$templateId];
+			}
+			else {
+				if (!$this->ObjectTemplates->exists(['id'=>$templateId])) {
+					throw new NotFoundException(NotFoundMessage);
+				}
+				$template = $this->ObjectTemplates->findById($templateId)->first();
+			}
 		}
-		$partCategories = $this->PartCategories->findListByType($templateId, $objectType);
+
+		$partCategories = $this->PartCategories->findListByTemplateId($templateId);
 		if ($this->request->is(['post', 'put']) && !isset($baseCss)) {
 			$data= $this->Parts->moldSetData($this->request->getData(), true);
 			$data['template_id'] = $templateId;
-			$data['object_type'] = $objectType;
 			$part = $this->Parts->newEntity($data);
 			if($this->Parts->save($part)) {
 				$this->Flash->success(__('新規登録しました'));
@@ -100,10 +104,10 @@ class PartsController extends AppController
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('template', 'templateId', 'objectType', 'partCategories', 'part'));
+		$this->set(compact('template', 'templateId', 'partCategories', 'part'));
 	}
 
-	public function edit($id, $templateId = 0, $objectType = 0) {
+	public function edit($id) {
 		$this->autoRender = false;
 		if (preg_match("/^[0-9]+$/", $id)) {
 			if (!$part = $this->Parts->findById($id)) {
@@ -128,20 +132,21 @@ class PartsController extends AppController
 		}
 	}
 
-	public function editCopy($partsCategoryNo = null, $partsNo = null, $templateId = 0, $objectType = 0) {
+	public function editCopy($partsCategoryNo = null, $partsNo = null) {
 		$partCategories = $this->PartCategories->find('list', ['keyField'=>'id', 'valueField'=>'name'])->order(['sort_no'=>'ASC'])->all();
+		//複製時
 		if (isset($partsCategoryNo) && isset($partsNo)) {
 			if (preg_match("/^[0-9]+$/", $partsCategoryNo) && preg_match("/^[0-9]+$/", $partsNo)) {
 				if (!$part = $this->Parts->findForCopy($partsCategoryNo, $partsNo)) {
 					throw new NotFoundException(NotFoundMessage);
 				}
-				if ($part->template_id) {
-					$templateId = $part->template_id;
+				$templateId = $part->template_id;
+				if (array_key_exists($templateId, Configure::read('object_template'))) {
+					$template = Configure::read('object_template')[$templateId];
+				} else {
 					$template = $this->ObjectTemplates->findById($templateId)->first();
 				}
-				if ($part->object_type) {
-					$objectType = $part->object_type;
-				}
+
 				$baseCss = $this->request->getData('base_css');
 				if (isset($baseCss)) {
 					$part->css = $baseCss;
@@ -155,12 +160,14 @@ class PartsController extends AppController
 						$this->Flash->error(__('更新に失敗しました'));
 					}
 					return $this->redirect(
-					['controller' => 'Parts', 'action' => 'index', $templateId, $objectType]
+					['controller' => 'Parts', 'action' => 'index', $templateId]
 					);
 				}
 			} else {
 				throw new NotFoundException(NotFoundMessage);
 			}
+		} else {
+			throw new NotFoundException(NotFoundMessage);
 		}
 		$this->set(compact('template', 'templateId', 'objectType', 'partCategories', 'part'));
 		$this->set('editFlg', true);

@@ -1,6 +1,10 @@
 {$this->Flash->render()}
-<h1>パーツカテゴリー{if $editFlg}編集{else}登録{/if}({if $template}{$template->name}{else}{$config->object_type[$objectType]}{/if})</h1>
-{$this->Form->create($category,['enctype' => 'multipart/form-data', 'url' => [$templateId, $objectType]])}
+<h1>パーツカテゴリー{if $editFlg}編集{else}登録{/if}({$template['name']|escape})</h1>
+{if $editFlg}
+    {$this->Form->create($category,['enctype' => 'multipart/form-data', 'url' => [$id]])}
+{else}
+    {$this->Form->create($category,['enctype' => 'multipart/form-data', 'url' => [$templateId]])}
+{/if}
 {$this->Form->input('name', ['type'=>'text'])}
 {$this->Form->input('class_name', ['type'=>'text'])}
 {$this->Form->input('z_index', ['type'=>'text'])}

@@ -4,7 +4,7 @@
     {$this->Display->css($_css.css)}
 {/foreach}
 <div><a href='/admin/parts/index/{$templateId|escape}'>パーツ一覧</a></div>
-<h1>オブジェクト{if $editFlg}編集{else}登録{/if}</h1>
+<h1>{$template->name|escape}オブジェクト{if $editFlg}編集{else}登録{/if}</h1>
 {$this->Form->create($object,['enctype' => 'multipart/form-data'])}
 <table>
     <tr>
@@ -147,4 +147,4 @@
 <form id='parts_edit_form' target='_blank' method='post'>
     <input type='hidden' class='base_css' name='base_css'>
 </form>
-<div><a href='/admin/characters/index'>一覧に戻る</a></div>
+<div><a href='/admin/objects/index/{$templateId|escape}'>一覧に戻る</a></div>

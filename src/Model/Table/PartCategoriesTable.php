@@ -37,15 +37,11 @@ class PartCategoriesTable extends Table {
 		]);
 	}
 
-	public function findNextSortNo($templateId = 0, $objectType = 0) {
+	public function findNextSortNo($templateId = null) {
 		$conditions = array();
 		if (isset($templateId)) {
 			$conditions = array(
 				'template_id' => $templateId
-			);
-		} else {
-			$conditions = array(
-				'object_type' => $objectType
 			);
 		}
 		$result = $this->find()->where($conditions)->order(['sort_no' => 'DESC'])->first();
@@ -56,15 +52,11 @@ class PartCategoriesTable extends Table {
 		}
 	}
 
-	public function findByType($templateId = 0, $objectType = 0) {
+	public function findByTemplateId($templateId = null) {
 		$conditions = array();
-		if (!empty($templateId)) {
+		if (isset($templateId)) {
 			$conditions = array(
 				'template_id' => $templateId
-			);
-		} elseif(!empty($objectType)) {
-			$conditions = array(
-				'object_type' => $objectType
 			);
 		}
 		$result = $this->find()
@@ -75,22 +67,4 @@ class PartCategoriesTable extends Table {
 		return $result;
 	}
 
-	public function findListByType($templateId = 0, $objectType = 0) {
-		$conditions = array();
-		if (!empty($templateId)) {
-			$conditions = array(
-				'template_id' => $templateId
-			);
-		} else {
-			$conditions = array(
-				'object_type' => $objectType
-			);
-		}
-		$result = $this->find('list', ['keyField'=>'id', 'valueField'=>'name'])
-				->where($conditions)
-				->order('PartCategories.sort_no')
-				->order('PartCategories.id')
-				->all();
-		return $result;
-	}
 }

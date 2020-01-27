@@ -1,8 +1,8 @@
 {$this->Flash->render()}
 {foreach from=$css item = _css}
  {/foreach}
-<h1>オブジェクト一覧</h1>
-<div><a href='/admin/objects/input/{$templateId|escape}'>新規登録</a></div>
+<h1>{$template->name|escape}オブジェクト一覧</h1>
+<div><a href='/admin/objects/input/{$template->id|escape}'>新規登録</a></div>
 <div><a href='/admin/contents/index'>作品一覧</a></div>
 <table>
     <thead>

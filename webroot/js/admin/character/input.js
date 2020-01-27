@@ -52,7 +52,7 @@ $(function () {
         var parts_no = $('.parts_'+parts_category_no).val();
         var css = $('.parts_css_' + parts_category_no).val();
         $('.base_css').val(css);
-        $('#parts_copy_form').attr('action', '/admin/parts/input/'+parts_category_no+'/'+parts_no);
+        $('#parts_copy_form').attr('action', '/admin/parts/input/-1/'+parts_category_no+'/'+parts_no);
         $('#parts_copy_form').submit();
     });
     $(document).on("click", ".edit_character_parts", function () {

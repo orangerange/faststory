@@ -48,7 +48,7 @@ class CharactersController extends AppController
 	public function input() {
 		$contents = $this->Contents->find('list')->order(['id'=>'ASC']);
 		$css = $this->Parts->find()->select('css')->order(['id'=>'ASC']);
-		$partCategories = $this->PartCategories->findByType(null, Configure::read('object_type_key.face'));
+		$partCategories = $this->PartCategories->findByTemplateId(Configure::read('object_template_key.face'));
 		$parts = [];
 		$partsCss = [];
 		foreach($partCategories as $_key=>$_value) {
@@ -76,7 +76,7 @@ class CharactersController extends AppController
 	public function edit($id) {
 		$contents = $this->Contents->find('list');
 		$css = $this->Parts->find()->select('css')->order(['id'=>'ASC']);
-		$partCategories = $this->PartCategories->findByType(null, Configure::read('object_type_key.face'));
+		$partCategories = $this->PartCategories->findByTemplateId(Configure::read('object_template_key.face'));
 		$parts = [];
 		$partsCss = [];
 		foreach($partCategories as $_key=>$_value) {

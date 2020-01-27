@@ -34,36 +34,43 @@ class PartCategoriesController extends AppController
 		$this->loadModel('ObjectTemplates');
 	}
 
-	public function index($templateId = 0, $objectType = 0) {
-		$template = null;
-		if (!empty($templateId)) {
-			$template = $this->ObjectTemplates->findById($templateId)->first();
-			if (!isset($template)) {
-				throw new NotFoundException(NotFoundMessage);
+	public function index($templateId = null) {
+		if (isset($templateId)) {
+			if (array_key_exists($templateId, Configure::read('object_template'))) {
+				$template = Configure::read('object_template')[$templateId];
+			} else {
+				if (!$this->ObjectTemplates->exists(['id' => $templateId])) {
+					throw new NotFoundException(NotFoundMessage);
+				}
+				$template = $this->ObjectTemplates->findById($templateId)->first();
 			}
-		} elseif(empty($objectType) || empty(Configure::read('object_type')[$objectType])) {
+		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
-		$partCategories = $this->PartCategories->findByType($templateId, $objectType);
+
+		$partCategories = $this->PartCategories->findByTemplateId($templateId);
 		$this->set(compact('template', 'templateId', 'objectType', 'partCategories'));
 	}
 
-	public function input($templateId = 0, $objectType = 0) {
-		$template = null;
-		if (!empty($templateId)) {
-			$template = $this->ObjectTemplates->findById($templateId)->first();
-			if (!isset($template)) {
-				throw new NotFoundException(NotFoundMessage);
+	public function input($templateId = null) {
+		if (isset($templateId)) {
+			if (array_key_exists($templateId, Configure::read('object_template'))) {
+				$template = Configure::read('object_template')[$templateId];
+			} else {
+				if (!$this->ObjectTemplates->exists(['id' => $templateId])) {
+					throw new NotFoundException(NotFoundMessage);
+				}
+				$template = $this->ObjectTemplates->findById($templateId)->first();
 			}
-		} elseif(empty($objectType) || empty(Configure::read('object_type')[$objectType])) {
+		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
+
 		$category = $this->PartCategories->newEntity();
 		if ($this->request->is('post')) {
 			$category = $this->PartCategories->patchEntity($category, $this->request->getData());
-			$category->sort_no = $this->PartCategories->findNextSortNo($templateId, $objectType);
+			$category->sort_no = $this->PartCategories->findNextSortNo($templateId);
 			$category->template_id = $templateId;
-			$category->object_type = $objectType;
 			if ($this->PartCategories->save($category)) {
 				$this->Flash->success(__('新規登録しました'));
 				$category = $this->PartCategories->newEntity();
@@ -72,21 +79,28 @@ class PartCategoriesController extends AppController
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('template', 'templateId', 'objectType', 'template'));
+		$this->set(compact('template', 'templateId', 'template'));
 	}
 
-	public function edit($id, $templateId = 0, $objectType = 0) {
-		if (preg_match("/^[0-9]+$/", $id)) {
-			if(!$category = $this->PartCategories->findById($id)->first()) {
+	public function edit($id = null) {
+		if (isset($id)) {
+			if (!$this->PartCategories->exists(['id' => $id])) {
 				throw new NotFoundException(NotFoundMessage);
 			}
+			$category = $this->PartCategories->findById($id)->first();
+
 			if ($category->template_id) {
 				$templateId = $category->template_id;
-				$template = $this->ObjectTemplates->findById($templateId)->first();
+				if (array_key_exists($templateId, Configure::read('object_template'))) {
+					$template = Configure::read('object_template')[$templateId];
+				} else {
+					if (!$this->ObjectTemplates->exists(['id' => $templateId])) {
+						throw new NotFoundException(NotFoundMessage);
+					}
+					$template = $this->ObjectTemplates->findById($templateId)->first();
+				}
 			}
-			if ($category->object_type) {
-				$objectType = $category->object_type;
-			}
+
 			if($this->request->is(['patch', 'post', 'put'])) {
 				$category = $this->PartCategories->patchEntity($category, $this->request->getData());
 				if ($this->PartCategories->save($category)) {
@@ -95,7 +109,7 @@ class PartCategoriesController extends AppController
 					$this->Flash->error(__('更新に失敗しました'));
 				}
 			}
-			$this->set(compact('template', 'templateId', 'objectType', 'category'));
+			$this->set(compact('id', 'template', 'templateId', 'category'));
 		} else{
 			throw new NotFoundException(NotFoundMessage);
 		}

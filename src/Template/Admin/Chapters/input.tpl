@@ -17,9 +17,9 @@
                             {$this->Display->css($_value->css, '.object_'|cat:$_value->id)}
                         </div>
                         <input type='hidden' class='object_id' value={$_value->id|escape}>
-                        <input type='hidden' class='object_no' value='1'>
                         <input type='hidden' class='width' value='{$_value->object_template->width|escape}'>
                         <input type='hidden' class='height' value='{$_value->object_template->height|escape}'>
+                        オブジェクト番号: <input type='text' class='object_no' value='1'>
                         <div class='phrase_object'>
                             <div class='html_show object_input' style='width:{$_value->object_template->width|escape}%; height:{$_value->object_template->height|escape}%;'>
                                 <div class='object_{$_value->id|escape}'>

@@ -42,28 +42,23 @@ class ObjectsController extends AppController
 		$this->loadModel('ObjectParts');
     }
 
-	public function index($templateId = 0) {
-		if (empty($templateId) || !$this->ObjectTemplates->exists(['id'=>$templateId])) {
+	public function index($templateId = null) {
+		if (!isset($templateId) || !$this->ObjectTemplates->exists(['id'=>$templateId])) {
 			throw new NotFoundException(NotFoundMessage);
 		}
+		$template = $this->ObjectTemplates->findById($templateId)->first();
 		$objects = $this->Objects->find('all')->where(['template_id'=>$templateId])->order(['id' => 'ASC']);
-		$this->set(compact('objects'));
+		$this->set(compact('template', 'objects'));
 	}
 
-	public function input($templateId = 0) {
-		$template = null;
-		//テンプレートID指定
-		if (!empty($templateId)) {
-			$template = $this->ObjectTemplates->findById($templateId)->first();
-			if (!isset($template)) {
-				throw new NotFoundException(NotFoundMessage);
-			}
-		} else {
+	public function input($templateId = null) {
+		if (!isset($templateId) || !$this->ObjectTemplates->exists(['id'=>$templateId])) {
 			throw new NotFoundException(NotFoundMessage);
 		}
+		$template = $this->ObjectTemplates->findById($templateId)->first();
 		$contents = $this->Contents->find('list')->order(['id'=>'ASC']);
 		$css = $this->Parts->find()->select('css')->where(['template_id'=>$templateId])->order(['id'=>'ASC']);
-		$partCategories = $this->PartCategories->findByType($templateId);
+		$partCategories = $this->PartCategories->findByTemplateId($templateId);
 		$parts = [];
 		$partsCss = [];
 		foreach($partCategories as $_key=>$_value) {
@@ -89,44 +84,43 @@ class ObjectsController extends AppController
 		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'css', 'cssString'));
 	}
 
-	public function edit($id ) {
-		if (preg_match("/^[0-9]+$/", $id)) {
-			if (!$object = $this->Objects->findById($id)) {
-				throw new NotFoundException(NotFoundMessage);
-			};
-			$partsSelected = $this->ObjectParts->findListByObjectId($id)->toArray();
-			$object = $this->Objects->moldGetData($object);
-			$templateId = $object->template_id;
-			$template = $this->ObjectTemplates->findById($templateId)->first();
-			$contents = $this->Contents->find('list');
-			$css = $this->Parts->find()->select('css')->where(['template_id'=>$templateId])->order(['id'=>'ASC']);
-			$partCategories = $this->PartCategories->findByType($templateId);
-			$parts = [];
-			$partsCss = [];
-			foreach($partCategories as $_key=>$_value) {
-				$parts[$_value->id] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'html'])->where(['parts_category_no'=>$_value->id])->toArray();
-				$partsCss[$_value->id] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'css'])->where(['parts_category_no'=>$_value->id]);
-			}
-			$cssString = json_encode($partsCss);
-			if ($this->request->is(['patch', 'post', 'put'])) {
-				$data = $this->request->getData();
-				foreach ($data['object_parts'] as $_key => $_value) {
-					if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
-						unset($data['object_parts'][$_key]);
-					}
-				}
-				$object = $this->Objects->patchEntity($object, $data);
-				$this->ObjectParts->deleteByObjectId($id);
-				if ($this->Objects->save($object)) {
-					$this->Flash->success(__('更新しました'));
-				} else {
-					$this->Flash->error(__('更新に失敗しました'));
-				}
-			}
-			$this->set(compact('templateId', 'template','contents', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString'));
-		} else {
+	public function edit($id) {
+		if (!isset($id) || !$this->Objects->exists(['id' => $id])) {
 			throw new NotFoundException(NotFoundMessage);
 		}
+		$object = $this->Objects->findById($id);
+
+		$partsSelected = $this->ObjectParts->findListByObjectId($id)->toArray();
+		$object = $this->Objects->moldGetData($object);
+		$templateId = $object->template_id;
+		$template = $this->ObjectTemplates->findById($templateId)->first();
+		$contents = $this->Contents->find('list');
+		$css = $this->Parts->find()->select('css')->where(['template_id' => $templateId])->order(['id' => 'ASC']);
+		$partCategories = $this->PartCategories->findByTemplateId($templateId);
+		$parts = [];
+		$partsCss = [];
+		foreach ($partCategories as $_key => $_value) {
+			$parts[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'html'])->where(['parts_category_no' => $_value->id])->toArray();
+			$partsCss[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'css'])->where(['parts_category_no' => $_value->id]);
+		}
+		$cssString = json_encode($partsCss);
+		if ($this->request->is(['patch', 'post', 'put'])) {
+			$data = $this->request->getData();
+			foreach ($data['object_parts'] as $_key => $_value) {
+				if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
+					unset($data['object_parts'][$_key]);
+				}
+			}
+			$object = $this->Objects->patchEntity($object, $data);
+			$this->ObjectParts->deleteByObjectId($id);
+			if ($this->Objects->save($object)) {
+				$this->Flash->success(__('更新しました'));
+			} else {
+				$this->Flash->error(__('更新に失敗しました'));
+			}
+		}
+		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString'));
+
 		$this->set('editFlg', true);
 		$this->render('input');
 	}

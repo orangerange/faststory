@@ -1,7 +1,7 @@
 {$this->Flash->render()}
 {$this->Html->script('admin/part/input.js', ['block'=>'script'])}
 <div><a href='/admin/parts/index/{$templateId|escape}/{$objectType|escape}'>パーツ一覧</a></div>
-<h1>パーツ{if $editFlg}個別編集{else}登録{/if}({if $template}{$template->name}{else}{$config->object_type[$objectType]}{/if})</h1>
+<h1>パーツ{if $editFlg}個別編集{else}登録{/if}({$template['name']})</h1>
 <div>
     {$this->Form->create($part, [
         'enctype' => 'multipart/form-data']
@@ -20,15 +20,19 @@
             <div class='css'>
                 {$this->Display->css($part->css)}
             </div>
-            {if $template}
-                <div class='phrase_object'>
-                    <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+            {if $template['class_name'] == 'face'}
+                <div class='character_box html_show'>
+                    <div class='character'>
                         {$part->html}
                     </div>
                 </div>
+            {elseif $template['class_name'] == 'body'}
+                <div class='body_box html_show'>
+                    {$part->html}
+                </div>
             {else}
-                <div class='character_box html_show'>
-                    <div class='character'>
+                <div class='phrase_object'>
+                    <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                         {$part->html}
                     </div>
                 </div>
