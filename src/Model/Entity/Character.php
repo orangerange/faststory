@@ -29,6 +29,7 @@ class Character extends Entity
         'content_id' => true,
         'name' => true,
         'name_color' => true,
+        'foreign_color' => true,
         'picture' => true,
         'dir' => true,
         'type' => true,

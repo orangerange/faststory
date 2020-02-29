@@ -19,10 +19,14 @@
         <th>キャラクター名表示色</th>
         <td>{$this->Form->input('name_color',['type'=>'color', 'label'=>false])}</td>
     </tr>
+    <tr>
+        <th>外国語表示色</th>
+        <td>{$this->Form->input('foreign_color',['type'=>'color', 'label'=>false])}</td>
+    </tr>
     {*<tr>
         <th>パーツ合成</th>
         <td>
-            
+
             <table colspan='{$partCategories|@count + 1}'>
                 <tr>
                     {foreach from=$partCategories key=_key item=_value}
@@ -72,7 +76,7 @@
                                     <div class='close-btn' id='js-close-btn_{$_value->id|escape}'><i class='fas fa-times'></i></div>
                                     <table>
                                         <tr>
-                                            
+
                                             {foreach from=$parts[{$_value->id|escape}] key=_partsNo item=_html}
                                                 <td>
                                                     <input type='hidden' class='parts_category_no' value={$_value->id|escape}>
@@ -89,7 +93,7 @@
                                 </div>
                                 <div class='black-background' id='js-black-bg_{$_value->id|escape}'></div>
                             </div>
-                            {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.parts_no', 
+                            {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.parts_no',
                                                 [
                                                     'class'=>'parts parts_'|cat:$_value->id,
                                                     'type'=>'hidden'
@@ -109,7 +113,7 @@
                             {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.parts_css',
                                                 [
                                                     'style'=>'width:100px',
-                                                    'class'=>'parts_css parts_css_'|cat:$_value->id, 
+                                                    'class'=>'parts_css parts_css_'|cat:$_value->id,
                                                     'type'=>'textarea',
                                                     'label'=>false
                                             ])}
@@ -212,7 +216,7 @@
                                 </div>
                                 <div class='black-background' id='js-black-bg_{$_value->id|escape}'></div>
                             </div>
-                            {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.parts_no', 
+                            {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.parts_no',
                                                 [
                                                     'class'=>'parts parts_'|cat:$_value->id,
                                                     'type'=>'hidden'
@@ -229,7 +233,7 @@
                             {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.parts_css',
                                                 [
                                                     'style'=>'width:100px',
-                                                    'class'=>'parts_css parts_css_'|cat:$_value->id, 
+                                                    'class'=>'parts_css parts_css_'|cat:$_value->id,
                                                     'type'=>'textarea',
                                                     'label'=>false
                                             ])}

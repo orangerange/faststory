@@ -35,6 +35,8 @@ class Phrase extends Entity
         'character_id' => true,
         'no' => true,
         'sentence' => true,
+        'sentence_kana' => true,
+        'sentence_translate' => true,
         'speaker_name' => true,
         'speaker_color' => true,
         'html' => true,

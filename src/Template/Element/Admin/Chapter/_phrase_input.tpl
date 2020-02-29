@@ -6,6 +6,8 @@
     {$this->Form->control('phrases.'|cat:$i|cat:'.speaker_color',['type'=>'color'])}
     <span class="count">{$chapter['phrases'][$i]['sentence']|count_characters}</span>文字
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence', ['type'=>'textarea', 'cols'=>50, 'class'=>'sentence'])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.sentence_kana', ['type'=>'textarea', 'cols'=>50, 'class'=>'sentence_kana'])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.sentence_translate', ['type'=>'textarea', 'cols'=>50, 'class'=>'sentence_translate'])}
     {*{if $chapter['phrases'][$i]['dir']}
     <image src="{$this->Display->imagePath($chapter['phrases'][$i])}">
     {$this->Form->control('phrases.'|cat:$i|cat:'.picture_before',['type'=>'hidden','value'=>$chapter['phrases'][$i]['picture']])}

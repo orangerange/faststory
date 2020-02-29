@@ -16,9 +16,19 @@
         {/if}
         <div class="phrase">
             {if $character || $phrase->speaker_name}
-                <div class="{$nameClass}" style="color:{if $phrase->speaker_name}{$phrase->speaker_color}{else}{$character->name_color}{/if}"><b>{if $phrase->speaker_name}{$phrase->speaker_name|escape}{else}{$character->name|escape}{/if}</b></div></br>
+                <div class="{$nameClass}" style="color:{if $phrase->speaker_name}{$phrase->speaker_color}{else}{$character->name_color}{/if}"><b>{if $phrase->speaker_name}{$phrase->speaker_name|escape}{else}{$character->name|escape}{/if}</b></div>
             {/if}
-            {$phrase->sentence|escape|nl2br}
+            {if $phrase->sentence_translate}
+                <div style="color:{$character->foreign_color};">
+                    <div class="kana">{$phrase->sentence_kana|escape|nl2br}</div>
+                    <div class="foreign">{$phrase->sentence|escape|nl2br}</div>
+                </div>
+                ({$phrase->sentence_translate})
+            {else}
+                <div>
+                    {$phrase->sentence|escape|nl2br}
+                </div>
+            {/if}
         </div>
     {/if}
 </div>

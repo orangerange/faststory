@@ -1,6 +1,6 @@
 {$this->Flash->render()}
 <h1>オブジェクトテンプレート</h1>
-<div><a href='/object-templates/input'>新規登録</a></div>
+<div><a href='/admin/object-templates/input'>新規登録</a></div>
 <table>
     <thead>
         <tr>
