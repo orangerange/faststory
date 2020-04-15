@@ -9,11 +9,21 @@
 <table>
     <tr>
         <th>作品</th>
-        <td>{$this->Form->input('content_id',['options'=>$contents, 'label'=>false, 'empty'=>'-'])}</td>
+        <td>{$this->Form->input('content_id',['class'=>'content_id', 'options'=>$contents, 'label'=>false, 'empty'=>'-'])}</td>
     </tr>
     <tr>
         <th>オブジェクト名</th>
         <td>{$this->Form->input('name', ['type'=>'text', 'label'=>false])}</td>
+    </tr>
+    <tr>
+        <th>キャラクター</th>
+        <td class="character_select">
+            {$this->Form->control('character_id',['class'=>'character_id', 'label'=>false, 'options'=>$characters, 'empty'=>'--', 'class' => 'character_id'])}
+        </td>
+    </tr>
+    <tr>
+        <th>デフォルト発話フラグ</th>
+        <td>{$this->Form->input('default_speak_flg', ['type'=>'checkbox', 'label'=>false])}</td>
     </tr>
     <tr>
         <th>パーツ合成</th>
@@ -88,7 +98,7 @@
                             <div class='popup' id='js-popup_{$_value->id|escape}'>
                                 <div class='popup-inner'>
                                     <div class='close-btn' id='js-close-btn_{$_value->id|escape}'><i class='fas fa-times'></i></div>
-                                    <table>
+                                    <table class="scroll_x">
                                         <tr>
                                             {foreach from=$parts[{$_value->id|escape}] key=_partsNo item=_html}
                                                 <td>
@@ -108,7 +118,7 @@
                                 </div>
                                 <div class='black-background' id='js-black-bg_{$_value->id|escape}'></div>
                             </div>
-                            {$this->Form->input('object_parts.'|cat:$_value->id|cat:'.parts_no', 
+                            {$this->Form->input('object_parts.'|cat:$_value->id|cat:'.parts_no',
                                                 [
                                                     'class'=>'parts parts_'|cat:$_value->id,
                                                     'type'=>'hidden'
@@ -125,7 +135,7 @@
                             {$this->Form->input('object_parts.'|cat:$_value->id|cat:'.parts_css',
                                                 [
                                                     'style'=>'width:100px',
-                                                    'class'=>'parts_css parts_css_'|cat:$_value->id, 
+                                                    'class'=>'parts_css parts_css_'|cat:$_value->id,
                                                     'type'=>'textarea',
                                                     'label'=>false
                                             ])}

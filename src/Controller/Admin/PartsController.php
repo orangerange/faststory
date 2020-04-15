@@ -122,7 +122,7 @@ class PartsController extends AppController
 					$this->Flash->error(__('更新に失敗しました'));
 				}
 				return $this->redirect(
-					['controller' => 'Parts', 'action' => 'index', $templateId, $objectType]
+					['controller' => 'Parts', 'action' => 'index', $part->template_id]
 				);
 			} else {
 				throw new NotFoundException(NotFoundMessage);

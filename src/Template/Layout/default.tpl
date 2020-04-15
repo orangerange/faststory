@@ -15,7 +15,7 @@
     <body>
         {$this->fetch('content')}
         {$this -> Html-> script('vue')}
-{*        {$this->Html->script('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')}*}
+        {$this->Html->script('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')}
         {$this->Fetch('script')}
     </body>
 </html>

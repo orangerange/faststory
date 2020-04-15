@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -37,13 +38,13 @@ class ObjectsTable extends Table
         $this->setDisplayField('name');
         $this->addBehavior('Timestamp');
 
-		$this->belongsTo('ObjectTemplates', [
-			'foreignKey' => 'template_id'
-		]);
-		$this->hasMany('ObjectParts', [
-			'foreignKey' => 'object_id'
-		]);
-	}
+        $this->belongsTo('ObjectTemplates', [
+            'foreignKey' => 'template_id'
+        ]);
+        $this->hasMany('ObjectParts', [
+            'foreignKey' => 'object_id'
+        ]);
+    }
 
     /**
      * Default validation rules.
@@ -51,25 +52,59 @@ class ObjectsTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator) {
-		$validator
-			->notEmpty('name')
-		;
-		return $validator;
-	}
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->notEmpty('name');
+        return $validator;
+    }
 
-	public function findById($id) {
-		return $this->find()->where(['Objects.id' => $id])->contain(['ObjectParts', 'ObjectTemplates'])->first();
-	}
+    public function findById($id)
+    {
+        return $this->find()->where(['Objects.id' => $id])->first();
+    }
 
-	public function moldGetData($data) {
-		$moldData = array();
-		if (isset($data['object_parts'])) {
-			foreach ($data['object_parts'] as $_key => $_value) {
-				$moldData['object_parts'][$_value['parts_category_no']] = $_value;
-			}
-			$data['object_parts'] = $moldData['object_parts'];
-		}
-		return $data;
-	}
+    public function findSpeak($characterId)
+    {
+        $face = $this->find()->where(
+            [
+                'Objects.character_id' => $characterId,
+                'Objects.template_id' => OBJECT_TEMPLATE_FACE,
+                'Objects.default_speak_flg' => FLG_ON,
+            ]
+        )
+            ->contain(['ObjectTemplates'])
+            ->first();
+        $body = $this->find()->where(
+            [
+                'Objects.character_id' => $characterId,
+                'Objects.template_id' => OBJECT_TEMPLATE_BODY,
+                'Objects.default_speak_flg' => FLG_ON,
+            ]
+        )
+            ->contain(['ObjectTemplates'])
+            ->first();
+        $speech = $this->find()->where(
+            [
+                'Objects.template_id' => OBJECT_TEMPLATE_SPEECH,
+            ]
+        )
+            ->contain(['ObjectTemplates'])
+            ->first();
+
+        $result = array('face' => $face, 'body' => $body, 'speech'=>$speech);
+        return $result;
+    }
+
+    public function moldGetData($data)
+    {
+        $moldData = array();
+        if (isset($data['object_parts'])) {
+            foreach ($data['object_parts'] as $_key => $_value) {
+                $moldData['object_parts'][$_value['parts_category_no']] = $_value;
+            }
+            $data['object_parts'] = $moldData['object_parts'];
+        }
+        return $data;
+    }
 }

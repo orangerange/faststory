@@ -27,6 +27,8 @@ class Object extends Entity
 		'id' => true,
 		'template_id' => true,
 		'content_id' => true,
+		'character_id' => true,
+		'default_speak_flg' => true,
 		'name' => true,
 		'html' => true,
 		'css' => true,

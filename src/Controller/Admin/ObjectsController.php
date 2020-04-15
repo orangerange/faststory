@@ -40,6 +40,8 @@ class ObjectsController extends AppController
 		$this->loadModel('Parts');
 		$this->loadModel('PartCategories');
 		$this->loadModel('ObjectParts');
+		$this->loadModel('Characters');
+		$this->loadModel('CharacterParts');
     }
 
 	public function index($templateId = null) {
@@ -59,6 +61,7 @@ class ObjectsController extends AppController
 		$contents = $this->Contents->find('list')->order(['id'=>'ASC']);
 		$css = $this->Parts->find()->select('css')->where(['template_id'=>$templateId])->order(['id'=>'ASC']);
 		$partCategories = $this->PartCategories->findByTemplateId($templateId);
+        $characters = $this->Characters->find('list')->where(['content_id'=>$template->content_id]);
 		$parts = [];
 		$partsCss = [];
 		foreach($partCategories as $_key=>$_value) {
@@ -89,9 +92,9 @@ class ObjectsController extends AppController
 			throw new NotFoundException(NotFoundMessage);
 		}
 		$object = $this->Objects->findById($id);
-
 		$partsSelected = $this->ObjectParts->findListByObjectId($id)->toArray();
 		$object = $this->Objects->moldGetData($object);
+        $characters = $this->Characters->find('list')->where(['content_id'=>$object->content_id]);
 		$templateId = $object->template_id;
 		$template = $this->ObjectTemplates->findById($templateId)->first();
 		$contents = $this->Contents->find('list');
@@ -119,7 +122,7 @@ class ObjectsController extends AppController
 				$this->Flash->error(__('更新に失敗しました'));
 			}
 		}
-		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString'));
+		$this->set(compact('templateId', 'template', 'contents', 'characters', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString'));
 
 		$this->set('editFlg', true);
 		$this->render('input');
@@ -136,14 +139,45 @@ class ObjectsController extends AppController
 		}
 	}
 
-	public function delete($id) {
-		if (preg_match("/^[0-9]+$/", $id)) {
-			$content = $this->Objects->get($id);
-			$this->Objects->delete($id);
-		} else {
-			throw new NotFoundException(NotFoundMessage);
-		}
-		$this->render(false,false);
-	}
+    public function copyFace($characterId)
+    {
+        if (preg_match("/^[0-9]+$/", $characterId)) {
+            if (!$character = $this->Characters->findById($characterId)) {
+                throw new NotFoundException(NotFoundMessage);
+            }
+            $objectData = array(
+                'template_id' => Configure::read('object_template_key.face'),
+                'content_id' => $character->content_id,
+                'character_id' => $character->id,
+                'name' => $character->name . '顔',
+                'ｈｔｍｌ' => $character->html,
+                'css' => $character->css,
+            );
+            $objectData['object_parts'] = array();
+            foreach ($character->character_parts as $characterPart) {
+                $objectData['object_parts'][$characterPart->parts_category_no] ['parts_category_no'] = $characterPart->parts_category_no;
+                $objectData['object_parts'][$characterPart->parts_category_no] ['parts_no'] = $characterPart->parts_no;
+                $objectData['object_parts'][$characterPart->parts_category_no] ['parts_css'] = $characterPart->parts_css;
+            }
+            $object = $this->Objects->newEntity($objectData, ['associated' => ['ObjectParts']]);
+            $this->Objects->save($object);
+            return $this->redirect(
+                ['controller' => 'objects', 'action' => 'edit', $object->id]
+            );
+        } else {
+            throw new NotFoundException(NotFoundMessage);
+        }
+        $this->render(false,false);
+    }
+
+//	public function delete($id) {
+//		if (preg_match("/^[0-9]+$/", $id)) {
+//			$content = $this->Objects->get($id);
+//			$this->Objects->delete($id);
+//		} else {
+//			throw new NotFoundException(NotFoundMessage);
+//		}
+//		$this->render(false,false);
+//	}
 
 }

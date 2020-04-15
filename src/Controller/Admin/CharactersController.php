@@ -146,7 +146,9 @@ class CharactersController extends AppController
 	public function detail($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
 			$character = $this->Characters->get($id);
-			$this->set(compact('character'));
+			$phrase = array();
+			$phrase['sentence'] = 'サンプルサンプルサンプル\nあああああ';
+			$this->set(compact('phrase', 'character'));
 		} else{
 			die('存在しない');
 		}

@@ -26,12 +26,6 @@
                             {$part->html}
                         {/strip}
                     </div>
-                {elseif $template['class_name'] == 'body'}
-                    <div class='body_box html_show'>
-                        {strip}
-                            {$part->html}
-                        {/strip}
-                    </div>
                 {else}
                     <div class='phrase_object'>
                         <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
@@ -45,7 +39,7 @@
                     {$this->Form->create($part, ['url' => [
                         'controller' => 'Parts',
                         'action' => 'edit',
-                        $part->id,  
+                        $part->id,
                         $templateId,
                         $objectType
                         ],

@@ -44,18 +44,16 @@ class AppController extends Controller
      *
      * @return void
      */
-	
+
 	// viewClassにSmartyViewを指定
-	public $viewClass = 'App\View\SmartyView';
+//	public $viewClass = 'App\View\SmartyView';
 	public $helpers = array('Display', 'Config');
 
     public function initialize()
     {
         parent::initialize();
+		$this->viewBuilder()->setClassName('App\View\SmartyView');
 
-        $this->loadComponent('RequestHandler', [
-            'enableBeforeRedirect' => false,
-        ]);
         $this->loadComponent('Flash');
 		$config = (object)Configure::read();
 		$this->set(compact('config'));
@@ -80,12 +78,12 @@ class AppController extends Controller
             } else {
                 throw new RuntimeException('ディレクトリの指定がありません。');
             }
- 
+
             // 未定義、複数ファイル、破損攻撃のいずれかの場合は無効処理
             if (!isset($file['error']) || is_array($file['error'])){
                 throw new RuntimeException('Invalid parameters.');
             }
- 
+
             // エラーのチェック
             switch ($file['error']) {
                 case 0:
@@ -100,15 +98,15 @@ class AppController extends Controller
                 default:
                     throw new RuntimeException('Unknown errors.');
             }
- 
+
             // ファイル情報取得
             $fileInfo = new File($file["tmp_name"]);
- 
+
             // ファイルサイズのチェック
             if ($fileInfo->size() > $limitFileSize) {
                 throw new RuntimeException('Exceeded filesize limit.');
             }
- 
+
             // ファイルタイプのチェックし、拡張子を取得
             if (false === $ext = array_search($fileInfo->mime(),
                                               ['jpg' => 'image/jpeg',
@@ -117,19 +115,19 @@ class AppController extends Controller
                                               true)){
                 throw new RuntimeException('Invalid file format.');
             }
- 
+
             // ファイル名の生成
 //            $uploadFile = $file["name"] . "." . $ext;
             $uploadFile = sha1_file($file["tmp_name"]) . "." . $ext;
- 
+
             // ファイルの移動
             if (!@move_uploaded_file($file["tmp_name"], $dir . "/" . $uploadFile)){
                 throw new RuntimeException('Failed to move uploaded file.');
             }
- 
+
             // 処理を抜けたら正常終了
 //            echo 'File is uploaded successfully.';
- 
+
         } catch (RuntimeException $e) {
             throw $e;
         }

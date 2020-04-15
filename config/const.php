@@ -59,8 +59,8 @@ return array(
 	),
 	Configure::write('object_type',
 		array(
-			'1'=>'顔',
-			'2'=>'胴体',
+			'1'=>'キャラクター顔',
+			'2'=>'キャラクター胴体',
 		)
 	),
 	Configure::write('object_type_key',
@@ -71,28 +71,19 @@ return array(
 	),
 	Configure::write('object_template',
 		array(
-			'-1'=> array('name' => '顔', 'class_name'=>'face'),
-			'-2'=> array('name'=> '胴体', 'class_name'=>'body'),
+			'3'=> array('name' => '顔', 'class_name'=>'face'),
 		)
 	),
 	Configure::write('object_template_key',
 		array(
-			'face'=>'-1',
-			'body'=>'-2',
-		)
-	),
-	Configure::write('face_type',
-		array(
-			'1'=> '通常',
-			'2'=> '発言',
-		)
-	),
-	Configure::write('face_type_key',
-		array(
-			'normal'=>'1',
-			'speak'=>'2',
+			'face'=>'3',
 		)
 	),
 	define('PHRASE_MUX_NUM', 50),
 	define('NotFoundMessage', '不正な遷移です'),
+    define('FLG_OFF', 0),
+    define('FLG_ON', 1),
+    define('OBJECT_TEMPLATE_BODY', 2),
+    define('OBJECT_TEMPLATE_FACE', 3),
+    define('OBJECT_TEMPLATE_SPEECH', 4),
 );

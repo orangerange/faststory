@@ -9,7 +9,7 @@
     <input type='hidden' id='phrase_no'>
     <div class='popup-inner'>
         <div class='close-btn' id='js-close-btn'><i class='fas fa-times'></i></div>
-        <table>
+        <table class="scroll_x">
             <tr>
                 {foreach from=$objects key=_key item=_value}
                     <td>
@@ -51,7 +51,9 @@
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}
     {*divタグを入れ子構造にする*}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
-        {$this->element('admin/chapter/_phrase_input', ['i'=>$i])}
+        <div class="phrase_unit">
+            {$this->element('admin/chapter/_phrase_input', ['i'=>$i])}
+        </div>
     {/for}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
     </div>
