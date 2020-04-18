@@ -62,6 +62,12 @@
 .scroll_x {
     display: block;
     overflow-x: scroll;
-    white-space: nowrap;
-    width:80%;
+    /*white-space: nowrap;*/
+    width:500px;
+}
+.count {
+    font-weight:bold;
+}
+.count_display {
+    color:red;
 }

@@ -27,10 +27,10 @@ $(function () {
     $(document).on('click', '.object_clear', function(){
           //イラストクリア
           $(this).prevAll('.html_show').html('');
-          $(this).prevAll('.html_show').find('style').html('');
+          $(this).prevAll('.css_show').find('style').html('');
           //イラストhtml・cssクリア
-        $(this).nextAll().find('.html').val('');
-        $(this).nextAll().find('.css').val('');
+        $(this).nextAll('.textarea').find('.html').val('');
+        $(this).nextAll('.textarea').find('.css').val('');
     })
     $(document).on('click', '.object_speak', function () {
         // 共通セレクタ定義
