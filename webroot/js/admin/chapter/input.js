@@ -38,6 +38,7 @@ $(function () {
         var css_selector = $(this).closest('.checkbox').prevAll('.textarea').find('.css');
         var html_show_selector = $(this).closest('.checkbox').prevAll('.html_show');
         var css_show_selector = $(this).closest('.checkbox').prevAll('.css_show');
+        var object_speak_check = $(this);
         if ($(this).prop('checked')) {
             //キャラクタID取得
             var character_id = $(this).closest('.checkbox').prevAll('.select').find('.character_id').val();
@@ -46,13 +47,18 @@ $(function () {
             var sentence_translate = $(this).closest('.checkbox').nextAll('.textarea').find('.sentence_translate').val();
             if (!character_id) {
                 alert('キャラクターを選択して下さい');
-                $(this).prop('checked', false);
+                object_speak_check.prop('checked', false);
             } else {
                 // 値クリア
                 html_selector.val('');
                 css_selector.val('');
                 html_show_selector.html('');
                 css_show_selector.find('style').html('');
+                // 各パーツのオブジェクトNoを取得
+                var face_object_no = $('#js-popup').find('.object_no' + '.default_speak' + '.face').val();
+                var body_object_no = $('#js-popup').find('.object_no' + '.default_speak' + '.body').val();
+
+                var html_flg = false;
                 // html取得
                 $.ajax({
                     type: "post",
@@ -67,31 +73,39 @@ $(function () {
                     },
                 }).done(function (data, status, jqXHR) {
                     var html = data;
-                    html_selector.val(html);
-                    html_show_selector.html(html);
+                    if (html) {
+                        html_flg = true;
+                        html_selector.val(html);
+                        html_show_selector.html(html);
+                    } else {
+                        alert('対応するパーツが存在しません。');
+                        object_speak_check.prop('checked', false);
+                    }
                 }).fail(function (jqXHR, status, error) {
                     console.log(jqXHR);
                     console.log(status);
                     console.log(error);
                 });
                 // css取得
-                $.ajax({
-                    type: "post",
-                    url: "/admin_ajax/chapters/character-speak-css",
-                    dataType: 'text',
-                    // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
-                    data: {
-                        "character_id": character_id,
-                    },
-                }).done(function (data, status, jqXHR) {
-                    var css = data;
-                    css_selector.val(css);
-                    css_show_selector.find('style').html(css);
-                }).fail(function (jqXHR, status, error) {
-                    console.log(jqXHR);
-                    console.log(status);
-                    console.log(error);
-                });
+                if (html_flg) {
+                    $.ajax({
+                        type: "post",
+                        url: "/admin_ajax/chapters/character-speak-css",
+                        dataType: 'text',
+                        // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
+                        data: {
+                            "character_id": character_id,
+                        },
+                    }).done(function (data, status, jqXHR) {
+                        var css = data;
+                        css_selector.val(css);
+                        css_show_selector.find('style').html(css);
+                    }).fail(function (jqXHR, status, error) {
+                        console.log(jqXHR);
+                        console.log(status);
+                        console.log(error);
+                    });
+                }
             }
         } else {
             html_selector.val('');

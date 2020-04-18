@@ -48,6 +48,10 @@ class ChaptersController extends AppController
             $sentenceKana = $this->request->getData('sentence_kana');
             $speak = $this->Objects->findSpeak($characterId);
             $character = $this->Characters->get($characterId);
+            if (!isset($speak['face']->id) || !isset($speak['body']->id)) {
+                $this->autoRender = false;
+                $this->response->body('');
+            }
             $this->set(['face'=>$speak['face'], 'body'=>$speak['body'], 'speech'=>$speak['speech'], 'sentence'=>$sentence, 'sentence_kana'=>$sentenceKana, 'sentence_translate'=>$sentenceTranslate, 'character'=>$character]);
         } else {
             throw new NotFoundException(NotFoundMessage);
