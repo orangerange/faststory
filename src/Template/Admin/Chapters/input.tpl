@@ -13,7 +13,7 @@
             <tr>
                 {foreach from=$objects key=_key item=_value}
                     <td>
-                        <div class='css css_object_{$_vslue->id|escape}'>
+                        <div class='css css_object_{$_value->id|escape}'>
                             {$this->Display->css($_value->css, '.object_'|cat:$_value->id)}
                         </div>
                         <input type='hidden' class='object_id' value={$_value->id|escape}>
@@ -51,9 +51,9 @@
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}
     {*divタグを入れ子構造にする*}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
-        <div class="phrase_unit">
+{*        <div class="phrase_unit">*}
             {$this->element('admin/chapter/_phrase_input', ['i'=>$i])}
-        </div>
+{*        </div>*}
     {/for}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
     </div>

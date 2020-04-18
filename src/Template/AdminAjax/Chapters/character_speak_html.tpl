@@ -15,7 +15,7 @@
             </div>
             ({$sentence_translate})
         {else}
-            <div>
+            <div class="speak">
                 {$sentence|escape|nl2br}
             </div>
         {/if}
