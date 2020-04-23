@@ -61,7 +61,16 @@ class ChaptersController extends AppController
 			if (!$chapter = $this->Chapters->findByPrefixAndNo($prefix, $no)) {
 				throw new NotFoundException(NotFoundMessage);
 			}
-			$this->set(compact('chapter'));
+			// アニメーション用jsの取り出し
+            $scripts = array();
+			$phraseNum = 1;
+            foreach($chapter['phrases'] as $_phrase) {
+                if (!empty($_phrase)) {
+                    $scripts[$phraseNum] = $_phrase->js;
+                }
+                $phraseNum ++;
+            }
+			$this->set(compact('chapter', 'scripts'));
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}

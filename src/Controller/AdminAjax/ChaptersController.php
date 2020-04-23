@@ -69,22 +69,22 @@ class ChaptersController extends AppController
             $faceWidth = $speak['face']->object_template->width;
             $faceHeight = $speak['face']->object_template->height;
             $util = new AppUtility();
-            $faceCss = $util->addPreClassToCss($faceCss, '.object_' . $faceId);
-            $faceCss = $this->_makeBaseCss('.object_' . $faceId, $faceWidth, $faceHeight, 'face') . ' ' . $faceCss;
+            $faceCss = $util->addPreClassToCss($faceCss, '.face.object_' . $faceId);
+            $faceCss = $this->_makeBaseCss('.face.object_' . $faceId, $faceWidth, $faceHeight, 'face') . ' ' . $faceCss;
 
             $bodyCss = $speak['body']->css;
             $bodyId = $speak['body']->id;
             $bodyWidth = $speak['body']->object_template->width;
             $bodyHeight = $speak['body']->object_template->height;
-            $bodyCss = $util->addPreClassToCss($bodyCss, '.object_' . $bodyId);
-            $bodyCss = $this->_makeBaseCss('.object_' . $bodyId, $bodyWidth, $bodyHeight, 'body') . ' ' . $bodyCss;
+            $bodyCss = $util->addPreClassToCss($bodyCss, '.body.object_' . $bodyId);
+            $bodyCss = $this->_makeBaseCss('.body.object_' . $bodyId, $bodyWidth, $bodyHeight, 'body') . ' ' . $bodyCss;
 
             $speechCss = $speak['speech']->css;
             $speechId = $speak['speech']->id;
             $speechWidth = $speak['speech']->object_template->width;
             $speechHeight = $speak['speech']->object_template->height;
-            $speechCss = $util->addPreClassToCss($speechCss, '.object_' . $speechId);
-            $speechCss = $this->_makeBaseCss('.object_' . $speechId, $speechWidth, $speechHeight, 'speech') . ' ' . $speechCss;
+            $speechCss = $util->addPreClassToCss($speechCss, '.speech.object_' . $speechId);
+            $speechCss = $this->_makeBaseCss('.speech.object_' . $speechId, $speechWidth, $speechHeight, 'speech') . ' ' . $speechCss;
 
             $css = $faceCss . $bodyCss . $speechCss;
             $this->response->body($css);

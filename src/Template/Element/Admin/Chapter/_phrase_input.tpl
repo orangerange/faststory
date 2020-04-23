@@ -10,11 +10,11 @@
     <div id='html_show_{$i|escape}' class='phrase_object html_show'>
         {$chapter['phrases'][$i]['html']}
     </div>
+    <button class='object_select' type='button'>選択</button>
+    <button class='object_clear' type='button'>イラストクリア</button>
     {$this->Form->control('phrases.'|cat:$i|cat:'.html', ['type'=>'textarea', 'cols'=>50, 'class'=>'html'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.css', ['type'=>'textarea', 'cols'=>50, 'class'=>'css'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.js', ['type'=>'textarea', 'cols'=>50, 'class'=>'js'])}
-    <button class='object_select' type='button'>選択</button>
-    <button class='object_clear' type='button'>イラストクリア</button>
     {assign var='checked' value=''}
     {if $chapter->phrases[$i]->character_id && $chapter->phrases[$i]->html && $chapter->phrases[$i]->css}
         {assign var=checked value='checked'}

@@ -79,7 +79,7 @@ class PartCategoriesController extends AppController
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('template', 'templateId', 'template'));
+		$this->set(compact('templateId', 'template'));
 	}
 
 	public function edit($id = null) {

@@ -12,7 +12,7 @@ class DisplayHelper extends Helper {
 		$dir = $data->dir;
 		$dir = ltrim($dir, 'webroot/');
 		$path = '/' . $dir . $data->picture;
-		
+
 		return $path;
     }
 	public function baseClassCss() {
@@ -29,4 +29,15 @@ class DisplayHelper extends Helper {
 		$content = AppUtility::addPreClassToCss($content, $preClass);
 		return '<style type="text/css">' . $content . '</style>';
 	}
+
+	public function phraseJs($scripts = array()) {
+        $js = '<script type="text/javascript">' . VUE_PHRASE_SCRIPT_FIRST;
+        foreach($scripts as $_phraseNum => $_script) {
+            $js.= 'if (this.num ==' .  $_phraseNum . ') {';
+            $js.= $_script;
+            $js.= '}';
+        }
+        $js .= VUE_PHRASE_SCRIPT_LAST . '</script>';
+        return $js;
+    }
 }
