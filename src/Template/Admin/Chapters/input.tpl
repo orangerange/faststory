@@ -19,8 +19,8 @@
                         <input type='hidden' class='object_id' value={$_value->id|escape}>
                         <input type='hidden' class='width' value='{$_value->object_template->width|escape}'>
                         <input type='hidden' class='height' value='{$_value->object_template->height|escape}'>
-                        オブジェクト番号: <input type='text' class='object_no {if $_value->default_speak_flg} default_speak{/if}{if $_value->template_id==$smarty.const.OBJECT_TEMPLATE_FACE} face{/if}{if $_value->template_id==$smarty.const.OBJECT_TEMPLATE_BODY} body{/if}{if $_value->template_id==$smarty.const.OBJECT_TEMPLATE_SPEECH} speech{/if}' value='1'>
-                        <div class='phrase_object'>
+                        オブジェクト番号: <input type='text' class='object_no {if $_value->default_speak_flg}{if $_value->template_id==$smarty.const.OBJECT_TEMPLATE_FACE}default_speak_face{elseif $_value->template_id==$smarty.const.OBJECT_TEMPLATE_BODY}default_speak_body{elseif $_value->template_id==$smarty.const.OBJECT_TEMPLATE_SPEECH}default_speak_speech{/if}{/if}' value='1'>
+                        <div class='html_show'>
                             <div class='html_show object_input' style='width:{$_value->object_template->width|escape}%; height:{$_value->object_template->height|escape}%;'>
                                 <div class='object_{$_value->id|escape}'>
                                     {$_value->html}

@@ -32,6 +32,12 @@ $(function () {
         $(this).nextAll('.textarea').find('.html').val('');
         $(this).nextAll('.textarea').find('.css').val('');
     })
+    // $(document).on('change', '.js', function() {
+    //     var phrase_no = $(this).parents().children('.phrase_no').val();
+    //     var js ="$(document).on('click', '.object_animate_" + phrase_no + ", function() { " + $(this).val() + "})";
+    //     $(this).closest('div').prevAll('script').html(js);
+    // })
+
     $(document).on('click', '.object_speak', function () {
         // 共通セレクタ定義
         var html_selector = $(this).parents('.checkbox').prevAll('.textarea').find('.html');
@@ -55,10 +61,10 @@ $(function () {
                 html_show_selector.html('');
                 css_show_selector.find('style').html('');
                 // 各パーツのオブジェクトNoを取得
-                var face_object_no = $('#js-popup').find('.object_no' + '.default_speak' + '.face').val();
-                var body_object_no = $('#js-popup').find('.object_no' + '.default_speak' + '.body').val();
+                var face_object_no = $('#js-popup').find('.object_no' + '.default_speak_face').val();
+                var body_object_no = $('#js-popup').find('.object_no' + '.default_speak_body').val();
+                var speech_object_no = $('#js-popup').find('.object_no' + '.default_speak_speech').val();
 
-                var html_flg = false;
                 // html取得
                 $.ajax({
                     type: "post",
@@ -74,9 +80,39 @@ $(function () {
                 }).done(function (data, status, jqXHR) {
                     var html = data;
                     if (html) {
-                        html_flg = true;
+                        html = wholeReplace(html , 'face object', 'face object_'  + face_object_no);
+                        html = wholeReplace(html , 'body object', 'body object_'  + body_object_no);
+                        html = wholeReplace(html , 'speech object', 'speech object_'  + speech_object_no);
                         html_selector.val(html);
                         html_show_selector.html(html);
+                        // css取得
+                        $.ajax({
+                            type: "post",
+                            url: "/admin_ajax/chapters/character-speak-css",
+                            dataType: 'text',
+                            // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
+                            data: {
+                                "character_id": character_id,
+                            },
+                        }).done(function (data, status, jqXHR) {
+                            var css = data;
+                            css = wholeReplace(css , '.face.object', '.face.object_'  + face_object_no);
+                            css = wholeReplace(css , '.body.object', '.body.object_'  + body_object_no);
+                            css = wholeReplace(css , '.speech.object', '.speech.object_'  + speech_object_no);
+                            css_selector.val(css);
+                            css_show_selector.find('style').html(css);
+                            // オブジェクトNoのインクレメント
+                            face_object_no++;
+                            body_object_no++;
+                            speech_object_no++;
+                            $('#js-popup').find('.object_no' + '.default_speak_face').val(face_object_no);
+                            $('#js-popup').find('.object_no' + '.default_speak_body').val(body_object_no);
+                            $('#js-popup').find('.object_no' + '.default_speak_speech').val(speech_object_no);
+                        }).fail(function (jqXHR, status, error) {
+                            console.log(jqXHR);
+                            console.log(status);
+                            console.log(error);
+                        });
                     } else {
                         alert('対応するパーツが存在しません。');
                         object_speak_check.prop('checked', false);
@@ -86,26 +122,6 @@ $(function () {
                     console.log(status);
                     console.log(error);
                 });
-                // css取得
-                if (html_flg) {
-                    $.ajax({
-                        type: "post",
-                        url: "/admin_ajax/chapters/character-speak-css",
-                        dataType: 'text',
-                        // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
-                        data: {
-                            "character_id": character_id,
-                        },
-                    }).done(function (data, status, jqXHR) {
-                        var css = data;
-                        css_selector.val(css);
-                        css_show_selector.find('style').html(css);
-                    }).fail(function (jqXHR, status, error) {
-                        console.log(jqXHR);
-                        console.log(status);
-                        console.log(error);
-                    });
-                }
             }
         } else {
             html_selector.val('');
@@ -174,10 +190,10 @@ $(function () {
         var height = $(this).closest('td').find('.height').val();
 
         var html_select = deleteSpace($(this).closest('td').find('.html_show').html());
-        html_select = wholeReplace(html_select , 'object_' + object_id, 'object_'  + object_id + '_' + object_no)
+        html_select = wholeReplace(html_select , 'object_' + object_id, 'object_'  + object_no + '_' + object_id)
         var css_select = deleteSpace($(this).closest('td').find('style').html());
-        css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_id + '_' + object_no);
-        var css_add = '.object_'  + object_id + '_' + object_no + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
+        css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
+        var css_add = '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
         var html_input = $('#phrases-'+phrase_no+'-html').val();
         var css_input = $('#phrases-'+phrase_no+'-css').val();
         var html = html_select + html_input;

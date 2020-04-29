@@ -87,7 +87,7 @@ class ChaptersController extends AppController
             $speechCss = $this->_makeBaseCss('.speech.object_' . $speechId, $speechWidth, $speechHeight, 'speech') . ' ' . $speechCss;
 
             $css = $faceCss . $bodyCss . $speechCss;
-            $this->response->body($css);
+            $this->response->getBody()->write($css);
         } else {
             throw new NotFoundException(NotFoundMessage);
         }
