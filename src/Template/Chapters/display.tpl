@@ -1,5 +1,6 @@
 {* 元々読み込んでいたページめくり用jsファイルを、アニメーション用スクリプトを埋め込むために設定ファイル化(ヘルパー化)*}
 {*{$this->Html->script('chapter/display.js', ['block'=>true])}*}
+{$this->Html->script('config.js', ['block'=>true])}
 {assign var='characterIds' value=","|explode:""}
 {capture name="garbage"}{$characterIds|@array_pop}{/capture}
 {foreach from=$chapter['phrases'] item=_phrase name=phraseLoop1}

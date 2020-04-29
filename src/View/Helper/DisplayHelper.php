@@ -40,4 +40,8 @@ class DisplayHelper extends Helper {
         $js .= VUE_PHRASE_SCRIPT_LAST . '</script>';
         return $js;
     }
+    public function adminAnimateJs($i, $script = '') {
+        $js = '<script type="text/javascript">' . "$(document).on('click', '.object_animate_" . $i . "', function() { " . $script . "})" . "</script>";
+        return $js;
+    }
 }

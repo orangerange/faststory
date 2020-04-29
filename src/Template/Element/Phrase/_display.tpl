@@ -1,6 +1,6 @@
 <div class='phrase_all'>
     {if $phrase->html && $phrase->css}
-        <div class='phrase_object_display'>
+        <div class='phrase_object phrase_object_display'>
             {$phrase->html}
         </div>
     {else}

@@ -62,3 +62,4 @@
 {$this->Form->end()}
 <div><a href='/admin/chapters/index/{$contentId}'>一覧に戻る</a></div>
 </div>
+{$this->Html->script('config.js')}

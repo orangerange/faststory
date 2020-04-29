@@ -7,11 +7,13 @@
     <div id='css_show_{$i|escape}' class='css_show'>
         {$this->Display->css($chapter['phrases'][$i]['css'])}
     </div>
+    {$this->Display->adminAnimateJs($i, $chapter['phrases'][$i]['js'])}
     <div id='html_show_{$i|escape}' class='phrase_object html_show'>
         {$chapter['phrases'][$i]['html']}
     </div>
     <button class='object_select' type='button'>選択</button>
     <button class='object_clear' type='button'>イラストクリア</button>
+    <button class='object_animate object_animate_{$i}' type='button'>アニメーション実行</button>
     {$this->Form->control('phrases.'|cat:$i|cat:'.html', ['type'=>'textarea', 'cols'=>50, 'class'=>'html'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.css', ['type'=>'textarea', 'cols'=>50, 'class'=>'css'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.js', ['type'=>'textarea', 'cols'=>50, 'class'=>'js'])}

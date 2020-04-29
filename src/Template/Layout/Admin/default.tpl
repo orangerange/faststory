@@ -9,6 +9,7 @@
         <meta name="description" content="">
         <meta name="keywords" content="" />
         {$this -> Html -> script('jquery-1.8.3')}
+        {$this -> Html-> script('anime.min')}
         {$this -> Html -> script('admin/common')}
         {$this->Fetch('script')}
         {$this->Display->baseClassCss()}
