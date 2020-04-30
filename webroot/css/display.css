@@ -87,6 +87,7 @@
     .phrase_object_display {
         height: 145px;
         border:solid 1px black;
+        position:relative;
     }
     .next_out {
         padding-left: 130px;
