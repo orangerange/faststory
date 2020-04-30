@@ -35,6 +35,7 @@
     .phrase_object_display {
         height: 350px;
         border:solid 1px black;
+        position:relative;
     }
     .next_out {
         padding-left: 650px;

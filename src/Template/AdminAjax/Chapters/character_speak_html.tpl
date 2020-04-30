@@ -1,8 +1,10 @@
-<div class="face object_{$face->id}">
-    {$face->html}
-</div>
-<div class="body object_{$body->id}">
-    {$body->html}
+<div class="character_speak_{$phraseNo}">
+    <div class="face object_{$face->id}">
+        {$face->html}
+    </div>
+    <div class="body object_{$body->id}">
+        {$body->html}
+    </div>
 </div>
 <div class="speech object_{$speech->id}">
     <div class="main_1">

@@ -45,6 +45,7 @@ $(function () {
         var html_show_selector = $(this).closest('.checkbox').prevAll('.html_show');
         var css_show_selector = $(this).closest('.checkbox').prevAll('.css_show');
         var object_speak_check = $(this);
+        var phrase_no = $(this).closest('.input').prevAll('.phrase_no').val();
         if ($(this).prop('checked')) {
             //キャラクタID取得
             var character_id = $(this).closest('.checkbox').prevAll('.select').find('.character_id').val();
@@ -73,6 +74,7 @@ $(function () {
                     // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
                     data: {
                         "character_id": character_id,
+                        "phrase_no": phrase_no,
                         "sentence": sentence,
                         "sentence_kana": sentence_kana,
                         "sentence_translate": sentence_translate,
@@ -93,6 +95,7 @@ $(function () {
                             // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
                             data: {
                                 "character_id": character_id,
+                                "phrase_no": phrase_no,
                             },
                         }).done(function (data, status, jqXHR) {
                             var css = data;
