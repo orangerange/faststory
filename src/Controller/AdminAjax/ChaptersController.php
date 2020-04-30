@@ -103,7 +103,7 @@ class ChaptersController extends AppController
         $baseCss = $baseClass . '{ width:' . $width . '%;' . ' height:' . $height . '%; position:absolute;';
         switch ($speakType) {
             case 'face':
-                $baseCss .= ' top:13%; left:' . $faceRelLeft . '%;';
+                $baseCss .= ' top:10%; left:' . $faceRelLeft . '%;';
                 break;
             case 'body':
                 $baseCss .= ' bottom:0%; left:0%;';

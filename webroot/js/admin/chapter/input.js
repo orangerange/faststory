@@ -29,8 +29,8 @@ $(function () {
           $(this).prevAll('.html_show').html('');
           $(this).prevAll('.css_show').find('style').html('');
           //イラストhtml・cssクリア
-        $(this).nextAll('.textarea').find('.html').val('');
-        $(this).nextAll('.textarea').find('.css').val('');
+        $(this).nextAll('.input').find('.html').val('');
+        $(this).nextAll('.input').find('.css').val('');
     })
     // $(document).on('change', '.js', function() {
     //     var phrase_no = $(this).parents().children('.phrase_no').val();
@@ -40,7 +40,7 @@ $(function () {
 
     $(document).on('click', '.object_speak', function () {
         // 共通セレクタ定義
-        var html_selector = $(this).parents('.checkbox').prevAll('.textarea').find('.html');
+        var html_selector = $(this).closest('.checkbox').prevAll('.textarea').find('.html');
         var css_selector = $(this).closest('.checkbox').prevAll('.textarea').find('.css');
         var html_show_selector = $(this).closest('.checkbox').prevAll('.html_show');
         var css_show_selector = $(this).closest('.checkbox').prevAll('.css_show');
@@ -49,9 +49,9 @@ $(function () {
         if ($(this).prop('checked')) {
             //キャラクタID取得
             var character_id = $(this).closest('.checkbox').prevAll('.select').find('.character_id').val();
-            var sentence = $(this).closest('.checkbox').nextAll('.textarea').find('.sentence').val();
-            var sentence_kana = $(this).closest('.checkbox').nextAll('.textarea').find('.sentence_kana').val();
-            var sentence_translate = $(this).closest('.checkbox').nextAll('.textarea').find('.sentence_translate').val();
+            var sentence = $(this).closest('.checkbox').prevAll('.input').find('.sentence').val();
+            var sentence_kana = $(this).closest('.checkbox').prevAll('.input').find('.sentence_kana').val();
+            var sentence_translate = $(this).closest('.checkbox').prevAll('.input').find('.sentence_translate').val();
             if (!character_id) {
                 alert('キャラクターを選択して下さい');
                 object_speak_check.prop('checked', false);
@@ -134,7 +134,7 @@ $(function () {
         }
     })
 
-    $(document).on('click', '.insert', function(){
+    $(document).on('click', '.insert', function() {
         var phrase_no = $(this).parent().children('.phrase_no').val();
         var phrase_num = $('#phrase_num').val();
         for (var i = phrase_num -2 ; i >= phrase_no; i--) {
@@ -158,14 +158,15 @@ $(function () {
             })
         }
     })
+
     $('.sentence').bind('keydown keyup keypress change',function(){
         var thisValueLength = $(this).val().length;
-        $(this).closest('.textarea').prevAll().find('.count').html(thisValueLength);
+        $(this).closest('.input').prevAll().find('.count').html(thisValueLength);
         // 発話フラグが立っている場合
-        if ($(this).closest('.textarea').prevAll('.checkbox').find('.object_speak').prop('checked')) {
-            $(this).closest('.textarea').prevAll().find('.speak').html($(this).val());
-            var html = $(this).closest('.textarea').prevAll('.html_show').html();
-            $(this).closest('.textarea').prevAll().find('.html').html(html);
+        if ($(this).closest('.input').nextAll('.checkbox').find('.object_speak').prop('checked')) {
+            $(this).closest('.input').nextAll('.html_show').find('.speak').html($(this).val());
+            var html = $(this).closest('.input').nextAll('.html_show').html();
+            $(this).closest('.input').nextAll('.input').find('.html').html(html);
         }
     })
     $(document).on("click", ".object_select", function () {
@@ -192,7 +193,7 @@ $(function () {
         var width = $(this).closest('td').find('.width').val();
         var height = $(this).closest('td').find('.height').val();
 
-        var html_select = deleteSpace($(this).closest('td').find('.html_show').html());
+        var html_select = deleteSpace($(this).closest('td').find('.object_input').html());console.log(html_select);
         html_select = wholeReplace(html_select , 'object_' + object_id, 'object_'  + object_no + '_' + object_id)
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
