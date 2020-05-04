@@ -21,14 +21,14 @@
                     {/strip}
                 </div>
                 {if $template['class_name'] == 'face'}
-                    <div class='character_box html_show'>
+                    <div class='character_box'>
                         {strip}
                             {$part->html}
                         {/strip}
                     </div>
                 {else}
-                    <div class='phrase_object'>
-                        <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                    <div class='html_show'>
+                        <div class='object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                             {$part->html}
                         </div>
                     </div>
