@@ -98,6 +98,19 @@ class ChaptersController extends AppController
         }
     }
 
+    public function objectLayout() {
+        $this->viewBuilder()->setLayout(false);
+        // Ajax からのリクエストか、否かを確認
+        if ($this->request->is("ajax")) {
+            $css = $this->request->getData('css');
+            $i = $this->request->getData('phrase_no');
+            $layouts = $this->Chapters->findObjectLayoutByCss($css);
+            $this->set(compact('layouts', 'i'));
+        } else {
+            throw new NotFoundException(NotFoundMessage);
+        }
+    }
+
     private function _makeBaseCss($baseClass, $width, $height, $speakType, $faceRelLeft) {
         $this->autoRender = false;
         $baseCss = $baseClass . '{ width:' . $width . '%;' . ' height:' . $height . '%; position:absolute;';

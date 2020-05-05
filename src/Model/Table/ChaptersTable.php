@@ -93,4 +93,26 @@ class ChaptersTable extends Table {
 		return true;
 	}
 
+    public function findObjectLayoutByCss($css) {
+        $layout = array();
+        // 発話
+        $pattern = "/.character_speak_[0-9]+{.*?}/";
+        if (!preg_match_all($pattern, $css, $matches)) {
+//            return false;
+        }
+        foreach ($matches[0] as $_match) {
+            $LayoutCss = $_match;
+            $layout[] = $LayoutCss;
+        }
+        // それ以外
+	    $pattern = "/.object_[0-9]+_[0-9]+{.*?}/";
+	    if (!preg_match_all($pattern, $css, $matches)) {
+//	        return false;
+        }
+	    foreach ($matches[0] as $_match) {
+	        $LayoutCss = $_match;
+            $layout[] = $LayoutCss;
+        }
+        return $layout;
+    }
 }

@@ -51,9 +51,7 @@
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}
     {*divタグを入れ子構造にする*}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
-{*        <div class="phrase_unit">*}
             {$this->element('admin/chapter/_phrase_input', ['i'=>$i])}
-{*        </div>*}
     {/for}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
     </div>

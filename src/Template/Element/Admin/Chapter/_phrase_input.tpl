@@ -17,7 +17,11 @@
     <div id='html_show_{$i|escape}' class='phrase_object html_show'>
         {$chapter['phrases'][$i]['html']}
     </div>
+    <div class='object_layout_input object_layout_input_{$i}'>
+        {$this->element('admin/chapter/_object_layout', ['layouts'=>$layouts[$i]])}
+    </div>
     <button class='object_select' type='button'>選択</button>
+    <button class='object_modify' type='button'>微調整</button>
     <button class='object_clear' type='button'>イラストクリア</button>
     <button class='object_animate object_animate_{$i}' type='button'>アニメーション実行</button>
     {assign var='checked' value=''}

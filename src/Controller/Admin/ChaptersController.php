@@ -94,6 +94,12 @@ class ChaptersController extends AppController
             if (!$chapter = $this->Chapters->findById($id)) {
                 throw new NotFoundException(NotFoundMessage);
             }
+            // オブジェクトレイアウト
+            $layouts = array();
+            foreach ($chapter['phrases'] as $_key => $_value) {
+                $cssLayout = $_value->css;
+                $layouts[$_key] = $this->Chapters->findObjectLayoutByCss($cssLayout);
+            }
             $objects = $this->Objects->find('all')->contain('ObjectTemplates')->where(['Objects.content_id' => $chapter->content_id])->order(['Objects.id' => 'ASC']);
             $chapterNo = $chapter['no'];
             $contentId = $chapter['content_id'];
@@ -133,7 +139,7 @@ class ChaptersController extends AppController
                     $connection->rollback();
                 }
             }
-            $this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects'));
+            $this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts'));
         } else {
             throw new NotFoundException(NotFoundMessage);
         }
