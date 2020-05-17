@@ -34,7 +34,7 @@ class ObjectsController extends AppController
 	public function initialize()
     {
         parent::initialize();
-		$this->loadModel('Objects');
+		$this->loadModel('ObjectProducts');
 		$this->loadModel('Characters');
     }
 

@@ -114,9 +114,9 @@ $(function () {
         var parts_category_no = $(this).closest('td').find('.parts_category_no').val();
         var parts_no = $(this).closest('td').find('.parts_no').val();
         $('.parts_'+parts_category_no).val(parts_no);
-        var html = $(this).closest('td').find('.html_show').html().replace('　', '');
+        var html = $(this).closest('td').find('.object_input').html().replace('　', '');
         var css = css_obj[parts_category_no][parts_no];
-        $('.html_show_' + parts_category_no).html(html);
+        $('.object_input_' + parts_category_no).html(html);
         $('.css_' + parts_category_no).find('style').html(css);
         $('.parts_css_'+ parts_category_no).val(css);
         //その時点における全体cssを取得
@@ -153,7 +153,7 @@ $(function () {
         var parts_class = $(this).closest('td').find('.parts_class').val();
         var html = '<div class="' + parts_class + '"></div>';
         var css = '';
-        $('.html_show_' + parts_category_no).html(html);
+        $('.object_input_' + parts_category_no).html(html);
         $('.css_' + parts_category_no).find('style').html(css);
         $('.parts_css_'+ parts_category_no).val(css);
         //その時点における全体cssを取得

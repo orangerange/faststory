@@ -35,6 +35,7 @@ class ObjectsController extends AppController
 	public function initialize()
     {
         parent::initialize();
+		$this->loadModel('ObjectProducts');
 		$this->loadModel('ObjectTemplates');
 		$this->loadModel('Contents');
 		$this->loadModel('Parts');
@@ -49,7 +50,7 @@ class ObjectsController extends AppController
 			throw new NotFoundException(NotFoundMessage);
 		}
 		$template = $this->ObjectTemplates->findById($templateId)->first();
-		$objects = $this->Objects->find('all')->where(['template_id'=>$templateId])->order(['id' => 'ASC']);
+		$objects = $this->ObjectProducts->find('all')->where(['template_id'=>$templateId])->order(['id' => 'ASC']);
 		$this->set(compact('template', 'objects'));
 	}
 
@@ -77,8 +78,8 @@ class ObjectsController extends AppController
 					unset($data['object_parts'][$_key]);
 				}
 			}
-			$object = $this->Objects->newEntity($data, ['associated' => ['ObjectParts']]);
-			if($this->Objects->save($object)) {
+			$object = $this->ObjectProducts->newEntity($data, ['associated' => ['ObjectParts']]);
+			if($this->ObjectProducts->save($object)) {
 				$this->Flash->success(__('新規登録しました'));
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
@@ -88,12 +89,12 @@ class ObjectsController extends AppController
 	}
 
 	public function edit($id) {
-		if (!isset($id) || !$this->Objects->exists(['id' => $id])) {
+		if (!isset($id) || !$this->ObjectProducts->exists(['id' => $id])) {
 			throw new NotFoundException(NotFoundMessage);
 		}
-		$object = $this->Objects->findById($id);
+		$object = $this->ObjectProducts->findById($id);
 		$partsSelected = $this->ObjectParts->findListByObjectId($id)->toArray();
-		$object = $this->Objects->moldGetData($object);
+		$object = $this->ObjectProducts->moldGetData($object);
         $characters = $this->Characters->find('list')->where(['content_id'=>$object->content_id]);
 		$templateId = $object->template_id;
 		$template = $this->ObjectTemplates->findById($templateId)->first();
@@ -114,9 +115,9 @@ class ObjectsController extends AppController
 					unset($data['object_parts'][$_key]);
 				}
 			}
-			$object = $this->Objects->patchEntity($object, $data);
+			$object = $this->ObjectProducts->patchEntity($object, $data);
 			$this->ObjectParts->deleteByObjectId($id);
-			if ($this->Objects->save($object)) {
+			if ($this->ObjectProducts->save($object)) {
 				$this->Flash->success(__('更新しました'));
 			} else {
 				$this->Flash->error(__('更新に失敗しました'));
@@ -130,7 +131,7 @@ class ObjectsController extends AppController
 
 	public function detail($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
-			if (!$object = $this->Objects->findById($id)) {
+			if (!$object = $this->ObjectProducts->findById($id)) {
 				throw new NotFoundException(NotFoundMessage);
 			}
 			$this->set(compact('object'));
@@ -159,8 +160,8 @@ class ObjectsController extends AppController
                 $objectData['object_parts'][$characterPart->parts_category_no] ['parts_no'] = $characterPart->parts_no;
                 $objectData['object_parts'][$characterPart->parts_category_no] ['parts_css'] = $characterPart->parts_css;
             }
-            $object = $this->Objects->newEntity($objectData, ['associated' => ['ObjectParts']]);
-            $this->Objects->save($object);
+            $object = $this->ObjectProducts->newEntity($objectData, ['associated' => ['ObjectParts']]);
+            $this->ObjectProducts->save($object);
             return $this->redirect(
                 ['controller' => 'objects', 'action' => 'edit', $object->id]
             );
@@ -172,8 +173,8 @@ class ObjectsController extends AppController
 
 //	public function delete($id) {
 //		if (preg_match("/^[0-9]+$/", $id)) {
-//			$content = $this->Objects->get($id);
-//			$this->Objects->delete($id);
+//			$content = $this->ObjectProducts->get($id);
+//			$this->ObjectProducts->delete($id);
 //		} else {
 //			throw new NotFoundException(NotFoundMessage);
 //		}

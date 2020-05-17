@@ -34,7 +34,7 @@ class ChaptersController extends AppController
 	public function initialize()
     {
         parent::initialize();
-		$this->loadModel('Objects');
+		$this->loadModel('ObjectProducts');
 		$this->loadModel('Characters');
     }
 
@@ -47,7 +47,7 @@ class ChaptersController extends AppController
             $sentence = $this->request->getData('sentence');
             $sentenceTranslate = $this->request->getData('sentence_translate');
             $sentenceKana = $this->request->getData('sentence_kana');
-            $speak = $this->Objects->findSpeak($characterId);
+            $speak = $this->ObjectProducts->findSpeak($characterId);
             $character = $this->Characters->get($characterId);
             if (!isset($speak['face']->id) || !isset($speak['body']->id)) {
                 $this->autoRender = false;
@@ -65,7 +65,7 @@ class ChaptersController extends AppController
         if ($this->request->is("ajax")) {
             $phraseNo = $this->request->getData('phrase_no');
             $characterId = $this->request->getData('character_id');
-            $speak = $this->Objects->findSpeak($characterId);
+            $speak = $this->ObjectProducts->findSpeak($characterId);
             $faceId = $speak['face']->id;
             $faceWidth = $speak['face']->object_template->width;
             $faceHeight = $speak['face']->object_template->height;

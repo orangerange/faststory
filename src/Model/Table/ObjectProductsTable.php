@@ -21,7 +21,7 @@ use Cake\Validation\Validator;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class ObjectsTable extends Table
+class ObjectProductsTable extends Table
 {
 
     /**
@@ -61,7 +61,7 @@ class ObjectsTable extends Table
 
     public function findById($id)
     {
-        return $this->find()->where(['Objects.id' => $id])->first();
+        return $this->find()->where(['ObjectProducts.id' => $id])->contain(['ObjectParts'])->first();
     }
 
     public function findSpeak($characterId)

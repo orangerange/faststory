@@ -40,7 +40,7 @@ class ChaptersController extends AppController
         $this->loadModel('Contents');
         $this->loadModel('Characters');
         $this->loadModel('Phrases');
-        $this->loadModel('Objects');
+        $this->loadModel('ObjectProducts');
     }
 
     public function index($contentId = null)
@@ -63,7 +63,7 @@ class ChaptersController extends AppController
             if (!$content = $this->Contents->findById($contentId)->first()) {
                 throw new NotFoundException(NotFoundMessage);
             }
-            $objects = $this->Objects->find('all')->contain('ObjectTemplates')->where(['Objects.content_id' => $contentId])->order(['Objects.id' => 'ASC']);
+            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $contentId])->order(['ObjectProducts.id' => 'ASC']);
             $contentName = $content['name'];
             $characters = $this->Characters->find('list')->where(['content_id' => $contentId]);
             $chapter = $this->Chapters->newEntity();
@@ -100,7 +100,7 @@ class ChaptersController extends AppController
                 $cssLayout = $_value->css;
                 $layouts[$_key] = $this->Chapters->findObjectLayoutByCss($cssLayout);
             }
-            $objects = $this->Objects->find('all')->contain('ObjectTemplates')->where(['Objects.content_id' => $chapter->content_id])->order(['Objects.id' => 'ASC']);
+            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $chapter->content_id])->order(['ObjectProducts.id' => 'ASC']);
             $chapterNo = $chapter['no'];
             $contentId = $chapter['content_id'];
             $contentName = $chapter['content']['name'];

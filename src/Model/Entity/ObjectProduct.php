@@ -12,7 +12,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $updated
  * @property bool $deleted
  */
-class Object extends Entity
+class ObjectProduct extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

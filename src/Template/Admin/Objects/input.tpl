@@ -42,8 +42,8 @@
                         <div class='css css_sum'>
                             {$this->Display->css($object->css, '.parts_sum')}
                         </div>
-                        <div class="phrase_object">
-                            <div class='object_input html_show parts_sum' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                        <div class="phrase_object html_show">
+                            <div class='object_input parts_sum' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                                 {if $object->html}
                                     {$object->html}
                                 {else}
@@ -77,8 +77,8 @@
                     {$this->Form->input('css_string', ['type'=>hidden, 'value'=>$cssString])}
                     {foreach from=$partCategories key=_key item=_value}
                         <td>
-                            <div class="phrase_object">
-                                <div class='object_input html_show html_show_{$_value->id}' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                            <div class="phrase_object html_show">
+                                <div class='object_input object_input_{$_value->id}' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                                     {$parts[$_value->id][$partsSelected[$_value->id]]}
                                 </div>
                             </div>
@@ -105,8 +105,8 @@
                                                     <input type='hidden' class='parts_category_no' value={$_value->id|escape}>
                                                     <input type='hidden' class='parts_no' value={$_partsNo|escape}>
                                                     <input type='hidden' class='parts_class' value={$_value->class_name|escape}>
-                                                    <div class='phrase_object'>
-                                                        <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                                                    <div class='phrase_object html_show'>
+                                                        <div class='object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                                                             {$_html}
                                                         </div>
                                                     </div>
