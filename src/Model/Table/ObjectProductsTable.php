@@ -64,6 +64,11 @@ class ObjectProductsTable extends Table
         return $this->find()->where(['ObjectProducts.id' => $id])->contain(['ObjectParts'])->first();
     }
 
+    public function findNameById($id)
+    {
+        return $this->find()->where(['ObjectProducts.id' => $id])->first()->name;
+    }
+
     public function findSpeak($characterId)
     {
         $face = $this->find()->where(

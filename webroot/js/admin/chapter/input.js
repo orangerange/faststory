@@ -15,6 +15,24 @@ $(function () {
     $(document).on('change', '.css', function () {
         var css = deleteSpace($(this).val());
         $(this).parent().prevAll('.css_show').children('style').html(css);
+        var phrase_no = $(this).closest('.input').prevAll('.phrase_no').val();
+        // CSSレイアウト更新(ajax)
+        $.ajax({
+            type: "post",
+            url: "/admin_ajax/chapters/object-layout",
+            dataType: 'text',
+            // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
+            data: {
+                "css": css,
+                "phrase_no": phrase_no,
+            },
+        }).done(function (data, status, jqXHR) {
+            $('.object_layout_input_'+phrase_no).html(data);
+        }).fail(function (jqXHR, status, error) {
+            console.log(jqXHR);
+            console.log(status);
+            console.log(error);
+        });
     })
     $(document).on('click', '.clear', function(){
           $(this).prevAll().find('input').val('');
@@ -31,6 +49,7 @@ $(function () {
           //イラストhtml・cssクリア
         $(this).nextAll('.input').find('.html').val('');
         $(this).nextAll('.input').find('.css').val('');
+        $(this).prevAll('.object_layout_input').html('');
     })
     // $(document).on('change', '.js', function() {
     //     var phrase_no = $(this).parents().children('.phrase_no').val();
@@ -40,8 +59,8 @@ $(function () {
 
     $(document).on('click', '.object_speak', function () {
         // 共通セレクタ定義
-        var html_selector = $(this).closest('.checkbox').prevAll('.textarea').find('.html');
-        var css_selector = $(this).closest('.checkbox').prevAll('.textarea').find('.css');
+        var html_selector = $(this).closest('.checkbox').nextAll('.textarea').find('.html');
+        var css_selector = $(this).closest('.checkbox').nextAll('.textarea').find('.css');
         var html_show_selector = $(this).closest('.checkbox').prevAll('.html_show');
         var css_show_selector = $(this).closest('.checkbox').prevAll('.css_show');
         var object_speak_check = $(this);
@@ -111,6 +130,23 @@ $(function () {
                             $('#js-popup').find('.object_no' + '.default_speak_face').val(face_object_no);
                             $('#js-popup').find('.object_no' + '.default_speak_body').val(body_object_no);
                             $('#js-popup').find('.object_no' + '.default_speak_speech').val(speech_object_no);
+                            // CSSレイアウト更新(ajax)
+                            $.ajax({
+                                type: "post",
+                                url: "/admin_ajax/chapters/object-layout",
+                                dataType: 'text',
+                                // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
+                                data: {
+                                    "css": css,
+                                    "phrase_no": phrase_no,
+                                },
+                            }).done(function (data, status, jqXHR) {
+                                $('.object_layout_input_' + phrase_no).html(data);
+                            }).fail(function (jqXHR, status, error) {
+                                console.log(jqXHR);
+                                console.log(status);
+                                console.log(error);
+                            });
                         }).fail(function (jqXHR, status, error) {
                             console.log(jqXHR);
                             console.log(status);
@@ -185,7 +221,7 @@ $(function () {
                 popup.classList.remove('is-show');
             })
         }
-    });
+    })
     $(document).on('click', '.object_decide', function () {
         var phrase_no = $('#phrase_no').val();
         var object_id = $(this).closest('td').find('.object_id').val();
@@ -193,8 +229,8 @@ $(function () {
         var width = $(this).closest('td').find('.width').val();
         var height = $(this).closest('td').find('.height').val();
 
-        var html_select = deleteSpace($(this).closest('td').find('.object_input').html());console.log(html_select);
-        html_select = wholeReplace(html_select , 'object_' + object_id, 'object_'  + object_no + '_' + object_id)
+        var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
+        html_select = wholeReplace(html_select , 'object_' + object_id, 'object object_'  + object_no + '_' + object_id)
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
         var css_add = '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
@@ -210,8 +246,71 @@ $(function () {
         //オブジェクト数カウント
         object_no ++;
         $(this).closest('td').find('.object_no').val(object_no);
+        // CSSレイアウト更新(ajax)
+        $.ajax({
+            type: "post",
+            url: "/admin_ajax/chapters/object-layout",
+            dataType: 'text',
+            // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
+            data: {
+                "css": css,
+                "phrase_no": phrase_no,
+            },
+        }).done(function (data, status, jqXHR) {
+            $('.object_layout_input_'+phrase_no).html(data);
+        }).fail(function (jqXHR, status, error) {
+            console.log(jqXHR);
+            console.log(status);
+            console.log(error);
+        });
         //ポップアップを閉じる
         var popup = document.getElementById('js-popup');
         popup.classList.remove('is-show');
     });
+    // オブジェクト削除
+    $(document).on("click", ".html_show > .object", function () {
+        if(!confirm('削除しますか？')){
+            /* キャンセルの時の処理 */
+            return false;
+        }else{
+            /*　OKの時の処理 */
+            var deleted_html = $(this).html();
+            var html = $(this).closest('.html_show').html();
+            var html_after = wholeReplace(html, deleted_html, '');console.log(deleted_html);
+            $(this).closest('.html_show').html(html_after);
+            alert($(this).closest('.html_show').html());
+            $(this).closest('.html_show').nextAll('.input').find('.html').val(html_after);
+            // クラス名の取得
+            // var class = deleted_html.match(/object_[0-9]+/);
+            // alert(class);
+        }
+    });
+    $(document).on("click", ".object_modify", function () {
+        var phrase_no = $(this).parent().children('.phrase_no').val();
+        var popup = document.getElementById('js_popup_modify_' + phrase_no);
+        if (popup) {
+            popup.classList.add('is-show');
+            var blackBg = document.getElementById('js_modify_black_bg_' + phrase_no);
+            var closeBtn = document.getElementById('js_modify_close_btn_' + phrase_no);
+            closePopUp(blackBg);
+            closePopUp(closeBtn);
+
+            function closePopUp(elem) {
+                if (!elem)
+                    return;
+                elem.addEventListener('click', function () {
+                    popup.classList.remove('is-show');
+                })
+            }
+        }
+    })
+    $(document).on("change", ".css_layout", function () {
+        var css_after = $(this).val();
+        var css_before = $(this).next('.css_layout_original').val();
+        var css = $(this).closest('.object_layout_input').nextAll('.input').find('.css').val();
+        var css_replaced = wholeReplace(css, css_before, css_after);
+        $(this).closest('.object_layout_input').nextAll('.input').find('.css').val(css_replaced);
+        $(this).closest('.object_layout_input').prevAll('.css_show').find('style').html(css_replaced);
+        $(this).next('.css_layout_original').val(css_after);
+    })
 })

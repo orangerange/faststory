@@ -7,10 +7,11 @@
                 <tr>
                     {foreach from=$layouts key=_key item=_value}
                         <td>
+                            <p>{$_value['name']|escape}</p>
                             <textarea class='css_layout css_layout_{$i}_{$_key}' rows='5'>
-                                {$_value}
+                                {$_value['css']}
                             </textarea>
-                            <input type='hidden' class='css_layout_original' value="{$_value}">
+                            <input type='hidden' class='css_layout_original' value="{$_value['css']}">
                         </td>
                     {/foreach}
                 </tr>

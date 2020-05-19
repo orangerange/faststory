@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Chapters Model
@@ -32,7 +33,6 @@ class ChaptersTable extends Table {
 	 */
 	public function initialize(array $config) {
 		parent::initialize($config);
-
 		$this->setTable('chapters');
 		$this->setDisplayField('title');
 
@@ -100,9 +100,11 @@ class ChaptersTable extends Table {
         if (!preg_match_all($pattern, $css, $matches)) {
 //            return false;
         }
+        $num = 1;
         foreach ($matches[0] as $_match) {
             $LayoutCss = $_match;
-            $layout[] = $LayoutCss;
+            $layout[] = array('css'=>$LayoutCss, 'name'=>'発話オブジェクト(' . $num . ')', 'no'=>$num);
+            $num++;
         }
         // それ以外
 	    $pattern = "/.object_[0-9]+_[0-9]+{.*?}/";
@@ -111,7 +113,20 @@ class ChaptersTable extends Table {
         }
 	    foreach ($matches[0] as $_match) {
 	        $LayoutCss = $_match;
-            $layout[] = $LayoutCss;
+	        $pattern= "/^.object_[0-9]+_[0-9]+/";
+            if (!preg_match($pattern, $LayoutCss, $idMatches)) {
+//	        return false;
+            }
+            $pattern = "/[0-9]+$/";
+            $extractedString = $idMatches[0];
+            if (!preg_match($pattern, $extractedString, $idMatches2)) {
+//	        return false;
+            }
+            $objectId = $idMatches2[0];
+            $objectNo = str_replace(['.object_', '_' . $objectId], ['', ''], $extractedString);
+            $ObjectProducts = TableRegistry::get('ObjectProducts');
+            $objectName = $ObjectProducts->findNameById($objectId);
+            $layout[] = array('css'=>$LayoutCss, 'name'=>$objectName . '_' . $objectNo, 'id'=>$objectId, 'no' => $objectNo);
         }
         return $layout;
     }

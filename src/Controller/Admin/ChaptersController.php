@@ -96,9 +96,18 @@ class ChaptersController extends AppController
             }
             // オブジェクトレイアウト
             $layouts = array();
+            $objectCount = array();
             foreach ($chapter['phrases'] as $_key => $_value) {
                 $cssLayout = $_value->css;
-                $layouts[$_key] = $this->Chapters->findObjectLayoutByCss($cssLayout);
+                $layout = $this->Chapters->findObjectLayoutByCss($cssLayout);
+                $layouts[$_key] = $layout;
+                foreach ($layout as $_layout) {
+                    if (isset($_layout['id']) && isset($_layout['no'])) {
+                        if (!(isset($objectCount[$_layout['id']]) && $objectCount[$_layout['id']] >= $_layout['no'])) {
+                            $objectCount[$_layout['id']] = $_layout['no'];
+                        }
+                    }
+                }
             }
             $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $chapter->content_id])->order(['ObjectProducts.id' => 'ASC']);
             $chapterNo = $chapter['no'];
@@ -139,7 +148,7 @@ class ChaptersController extends AppController
                     $connection->rollback();
                 }
             }
-            $this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts'));
+            $this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts', 'objectCount'));
         } else {
             throw new NotFoundException(NotFoundMessage);
         }
