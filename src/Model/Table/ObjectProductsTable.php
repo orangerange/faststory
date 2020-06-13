@@ -73,25 +73,25 @@ class ObjectProductsTable extends Table
     {
         $face = $this->find()->where(
             [
-                'Objects.character_id' => $characterId,
-                'Objects.template_id' => OBJECT_TEMPLATE_FACE,
-                'Objects.default_speak_flg' => FLG_ON,
+                'ObjectProducts.character_id' => $characterId,
+                'ObjectProducts.template_id' => OBJECT_TEMPLATE_FACE,
+                'ObjectProducts.default_speak_flg' => FLG_ON,
             ]
         )
             ->contain(['ObjectTemplates'])
             ->first();
         $body = $this->find()->where(
             [
-                'Objects.character_id' => $characterId,
-                'Objects.template_id' => OBJECT_TEMPLATE_BODY,
-                'Objects.default_speak_flg' => FLG_ON,
+                'ObjectProducts.character_id' => $characterId,
+                'ObjectProducts.template_id' => OBJECT_TEMPLATE_BODY,
+                'ObjectProducts.default_speak_flg' => FLG_ON,
             ]
         )
             ->contain(['ObjectTemplates'])
             ->first();
         $speech = $this->find()->where(
             [
-                'Objects.template_id' => OBJECT_TEMPLATE_SPEECH,
+                'ObjectProducts.template_id' => OBJECT_TEMPLATE_SPEECH,
             ]
         )
             ->contain(['ObjectTemplates'])

@@ -233,11 +233,12 @@ $(function () {
         html_select = wholeReplace(html_select , 'object_' + object_id, 'object object_'  + object_no + '_' + object_id)
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
-        var css_add = '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
+        var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
         var html_input = $('#phrases-'+phrase_no+'-html').val();
         var css_input = $('#phrases-'+phrase_no+'-css').val();
+        var css_end_add = '/*.object_'  + object_no + '_' + object_id + '_end*/';
         var html = html_select + html_input;
-        var css  = css_add + css_select + css_input;
+        var css  = css_add + css_select + css_end_add + css_input ;
 
         $('#phrases-'+phrase_no+'-html').val(html);
         $('#phrases-'+phrase_no+'-css').val(css);
@@ -268,21 +269,36 @@ $(function () {
         popup.classList.remove('is-show');
     });
     // オブジェクト削除
-    $(document).on("click", ".html_show > .object", function () {
+    $(document).on("click", ".object_delete", function () {
         if(!confirm('削除しますか？')){
             /* キャンセルの時の処理 */
             return false;
         }else{
             /*　OKの時の処理 */
-            var deleted_html = $(this).html();
-            var html = $(this).closest('.html_show').html();
-            var html_after = wholeReplace(html, deleted_html, '');console.log(deleted_html);
-            $(this).closest('.html_show').html(html_after);
-            alert($(this).closest('.html_show').html());
-            $(this).closest('.html_show').nextAll('.input').find('.html').val(html_after);
-            // クラス名の取得
-            // var class = deleted_html.match(/object_[0-9]+/);
-            // alert(class);
+            var phrase_no = $(this).parent().children('.phrase_no').val();
+            var object_id = $(this).parent().children('.object_id').val();
+            var object_no = $(this).parent().children('.object_no').val();
+
+            var object_class = '';
+            var speak_flg = false;
+            // 通常オブジェクト
+            if (object_id) {
+                object_class = '.object_' + object_no + '_' + object_id;
+            // それ以外(発話オブジェクト)
+            } else {
+                object_class = '.character_speak_' + phrase_no;
+                speak_flg = true;
+            }
+            var html_show_id = '#html_show_' + phrase_no;
+            $(html_show_id).find(object_class).remove();
+            var css = $(this).closest('.object_layout_input').nextAll('.input').find('.css').val();
+            var regexp = new RegExp('/\\*' + '([\\.face|\\.body|\\.speech]*)' + object_class + '_start' + '\\*/' + '([\\s\\S]*)' + '/\\*' + '(.*)' + object_class + '_end' + '\\*/' , 'g');
+            var css_replaced = css.replace(regexp, '');
+            $(this).closest('.object_layout_input').nextAll('.input').find('.css').val(css_replaced);
+            $(this).closest('.object_layout_input').prevAll('.css_show').find('style').html(css_replaced);
+            var html = $(html_show_id).html();
+            $('#phrases-'+phrase_no + '-html').val(html);
+            $(this).parent('td').remove();
         }
     });
     $(document).on("click", ".object_modify", function () {
@@ -305,7 +321,8 @@ $(function () {
         }
     })
     $(document).on("change", ".css_layout", function () {
-        var css_after = $(this).val();
+        var css_after = wholeReplace($(this).val(), '　', '');
+        var css_after = wholeReplace(css_after, ' ', '');
         var css_before = $(this).next('.css_layout_original').val();
         var css = $(this).closest('.object_layout_input').nextAll('.input').find('.css').val();
         var css_replaced = wholeReplace(css, css_before, css_after);

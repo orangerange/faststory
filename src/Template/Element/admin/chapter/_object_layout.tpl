@@ -12,6 +12,11 @@
                                 {$_value['css']}
                             </textarea>
                             <input type='hidden' class='css_layout_original' value="{$_value['css']}">
+                            <br>
+                            <button type="button" class="object_delete">オブジェクト削除</button>
+                            <input type="hidden" class="phrase_no" value={$i|escape}>
+                            <input type="hidden" class="object_id" value={$_value['id']|escape}>
+                            <input type="hidden" class="object_no" value={$_value['no']|escape}>
                         </td>
                     {/foreach}
                 </tr>

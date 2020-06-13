@@ -80,18 +80,18 @@ class ChaptersController extends AppController
             $faceCss = $speak['face']->css;
             $util = new AppUtility();
             $faceCss = $util->addPreClassToCss($faceCss, '.face.object_' . $faceId);
-            $faceCss = $this->_makeBaseCss('.face.object_' . $faceId, $faceWidth, $faceHeight, 'face', $faceRelLeft) . ' ' . $faceCss;
+            $faceCss = "/*.face.object_{$faceId}_start*/". $this->_makeBaseCss('.face.object_' . $faceId, $faceWidth, $faceHeight, 'face', $faceRelLeft) . ' ' . $faceCss . "/*.face.object_{$faceId}_end*/";
 
             $bodyCss = $speak['body']->css;
             $bodyCss = $util->addPreClassToCss($bodyCss, '.body.object_' . $bodyId);
-            $bodyCss = $this->_makeBaseCss('.body.object_' . $bodyId, $bodyWidth, $bodyHeight, 'body', $faceRelLeft) . ' ' . $bodyCss;
+            $bodyCss = "/*.body.object_{$bodyId}_start*/". $this->_makeBaseCss('.body.object_' . $bodyId, $bodyWidth, $bodyHeight, 'body', $faceRelLeft) . ' ' . $bodyCss . "/*.body.object_{$bodyId}_end*/";
 
             $speechCss = $speak['speech']->css;
             $speechCss = $util->addPreClassToCss($speechCss, '.speech.object_' . $speechId);
-            $speechCss = $this->_makeBaseCss('.speech.object_' . $speechId, $speechWidth, $speechHeight, 'speech', $faceRelLeft) . ' ' . $speechCss;
+            $speechCss = "/*.speech.object_{$speechId}_start*/". $this->_makeBaseCss('.speech.object_' . $speechId, $speechWidth, $speechHeight, 'speech', $faceRelLeft) . ' ' . $speechCss . "/*.speech.object_{$speechId}_end*/";
 
             $css ='.character_speak_' . $phraseNo . '{left:10%; width:100%; height:100%; position:absolute;}';
-            $css .= $faceCss . $bodyCss . $speechCss;
+            $css = "/*.character_speak_{$phraseNo}_start*/" . $css . $faceCss . $bodyCss . "/*.character_speak_{$phraseNo}_end*/"  . $speechCss;
             $this->response->getBody()->write($css);
         } else {
             throw new NotFoundException(NotFoundMessage);

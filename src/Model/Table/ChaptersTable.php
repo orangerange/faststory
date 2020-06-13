@@ -125,8 +125,8 @@ class ChaptersTable extends Table {
             $objectId = $idMatches2[0];
             $objectNo = str_replace(['.object_', '_' . $objectId], ['', ''], $extractedString);
             $ObjectProducts = TableRegistry::get('ObjectProducts');
-            $objectName = $ObjectProducts->findNameById($objectId);
-            $layout[] = array('css'=>$LayoutCss, 'name'=>$objectName . '_' . $objectNo, 'id'=>$objectId, 'no' => $objectNo);
+            $object = $ObjectProducts->findById($objectId);
+            $layout[] = array('css'=>$LayoutCss, 'name'=>$object->name . '_' . $objectNo, 'id'=>$objectId, 'no' => $objectNo);
         }
         return $layout;
     }
