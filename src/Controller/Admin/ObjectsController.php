@@ -151,7 +151,7 @@ class ObjectsController extends AppController
                 'content_id' => $character->content_id,
                 'character_id' => $character->id,
                 'name' => $character->name . '顔',
-                'ｈｔｍｌ' => $character->html,
+                'html' => $character->html,
                 'css' => $character->css,
             );
             $objectData['object_parts'] = array();
