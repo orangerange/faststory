@@ -171,6 +171,37 @@ class ObjectsController extends AppController
         $this->render(false,false);
     }
 
+    public function copyObject($objectId)
+    {
+        if (preg_match("/^[0-9]+$/", $objectId)) {
+            if (!$object = $this->ObjectProducts->findById($objectId)) {
+                throw new NotFoundException(NotFoundMessage);
+            }
+            $objectData = array(
+                'template_id' => $object->template_id,
+                'content_id' => $object->content_id,
+                'object_id' => $object->id,
+                'name' => $object->name,
+                'html' => $object->html,
+                'css' => $object->css,
+            );
+            $objectData['object_parts'] = array();
+            foreach ($object->object_parts as $objectPart) {
+                $objectData['object_parts'][$objectPart->parts_category_no] ['parts_category_no'] = $objectPart->parts_category_no;
+                $objectData['object_parts'][$objectPart->parts_category_no] ['parts_no'] = $objectPart->parts_no;
+                $objectData['object_parts'][$objectPart->parts_category_no] ['parts_css'] = $objectPart->parts_css;
+            }
+            $object = $this->ObjectProducts->newEntity($objectData, ['associated' => ['ObjectParts']]);
+            $this->ObjectProducts->save($object);
+            return $this->redirect(
+                ['controller' => 'objects', 'action' => 'edit', $object->id]
+            );
+        } else {
+            throw new NotFoundException(NotFoundMessage);
+        }
+        $this->render(false,false);
+    }
+
 //	public function delete($id) {
 //		if (preg_match("/^[0-9]+$/", $id)) {
 //			$content = $this->ObjectProducts->get($id);

@@ -55,6 +55,11 @@
                         </div>
                         合成結果
                     </th>
+                    {if $object->id}
+                        <th>
+                            <button type="button" onclick="window.open('/admin/objects/copy-object/{$object->id|escape}')">オブジェクトを複製</button>
+                        </th>
+                    {/if}
                 </tr>
                 <tr>
                     <th></th>
