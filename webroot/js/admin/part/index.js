@@ -17,7 +17,7 @@ $(function() {
                 .slideDown();
         }
     });
-    $(document).on("change", ".html_input", function() {
+    $(document).on("change", ".object_input", function() {
         $(this)
             .closest("td")
             .find(".html_show")

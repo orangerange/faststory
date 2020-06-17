@@ -1,6 +1,6 @@
 $(function () {
     $(document).on('change', '.html_input', function () {
-        $('.html_show').html($(this).val().replace('　', ''));
+        $('.object_input').html($(this).val().replace('　', ''));
     })
 
     $(document).on('change', '.css_input', function () {
