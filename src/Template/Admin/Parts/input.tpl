@@ -27,8 +27,8 @@
                     </div>
                 </div>
             {else}
-                <div class='phrase_object'>
-                    <div class='object_input html_show' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                <div class='phrase_object html_show'>
+                    <div class='object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                         {$part->html}
                     </div>
                 </div>
