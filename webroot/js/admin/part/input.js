@@ -19,7 +19,7 @@ $(function () {
                 var css = result.css;
                 var z_index = result.z_index;
                 $('.html_input').val(html);
-                $('.html_show').html(html);
+                $('.object_input').html(html);
                 $('.z_index').html(z_index);
                 $('.css_input').val(css);
                 $('.css').children('style').html(css);
