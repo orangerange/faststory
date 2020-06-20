@@ -21,7 +21,7 @@
                     {/strip}
                 </div>
                 {if $template['class_name'] == 'face'}
-                    <div class='character_box'>
+                    <div class='character_box object_input'>
                         {strip}
                             {$part->html}
                         {/strip}
