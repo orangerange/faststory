@@ -11,16 +11,12 @@
     {if $_phrase->css}
         {$this->Display->css($_phrase->css)}
     {/if}
-    {if $_phrase->js}
-        {$this->Display->animate($_phrase->js)}
-    {/if}
 {/foreach}
 <div id="phrases">
     {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>count($chapter['phrases'])])}
     {foreach from=$chapter['phrases'] item=_phrase name=phraseLoop2}
         <div class="speak" v-show="num >={$smarty.foreach.phraseLoop2.iteration}" ref="speak_{$smarty.foreach.phraseLoop2.iteration}">
             {$this->element('phrase/_display', ['character'=>$_phrase->character, 'phrase'=>$_phrase, 'noCharacterCssFlg' => true])}
-            <input type="hidden" id="script_{$smarty.foreach.phraseLoop2.iteration|escape}" value="{$_phrase->js}">
         </div>
     {/foreach}
     <div v-if="buttonShow" class="next_out" ref="next">

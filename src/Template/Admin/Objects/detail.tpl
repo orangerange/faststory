@@ -2,7 +2,7 @@
 <div class='css css_sum'>
     {$this->Display->css($object->css)}
 </div>
-<div class="phrase_object">
+<div class="html_show">
     <div class='object_input' style='width:{$object->object_template->width|escape}%; height:{$object->object_template->height|escape}%;'>
         {$object->html}
     </div>
