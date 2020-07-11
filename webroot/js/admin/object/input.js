@@ -83,7 +83,7 @@ $(function () {
         var parts_no = $('.parts_'+parts_category_no).val();
         var css = $('.parts_css_' + parts_category_no).val();
         $('.base_css').val(css);
-        $('#parts_copy_form').attr('action', '/admin/parts/input/'+parts_category_no+'/'+parts_no+'/');
+        $('#parts_copy_form').attr('action', '/admin/parts/input/0/'+parts_category_no+'/'+parts_no+'/');
         $('#parts_copy_form').submit();
     });
     $(document).on("click", ".edit_object_parts", function () {
@@ -148,7 +148,7 @@ $(function () {
         var popup = document.getElementById('js-popup_'+ parts_category_no);
         popup.classList.remove('is-show');
     });
-    $(document).on('click', '.parts_clear', function () {
+    $(document).on('click', '.parts_cear', function () {
         var parts_category_no = $(this).closest('td').find('.parts_category_no').val();
         var parts_class = $(this).closest('td').find('.parts_class').val();
         var html = '<div class="' + parts_class + '"></div>';
