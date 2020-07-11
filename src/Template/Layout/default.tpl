@@ -8,7 +8,6 @@
         <meta http-equiv="Content-Style-Type" content="text/css">
         <meta name="description" content="">
         <meta name="keywords" content="" />
-        {$this->Display->baseClassCss()}
         {$this->Html->css('display')}
         {$this -> Html -> script('jquery-1.8.3')}
         {$this -> Html-> script('anime.min')}
