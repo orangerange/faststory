@@ -14,13 +14,8 @@
  */
 namespace App\Controller\AdminAjax;
 
-use Cake\ORM\TableRegistry;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
-use Cake\Core\Configure;
 use App\Controller\AppController;
-use Cake\Http\Exception\NotFoundException;
-use App\Utils\AppUtility;
+
 /**
  * Static content controller
  *
@@ -39,15 +34,11 @@ class ObjectsController extends AppController
     }
 
     public function getCharacters() {
-            $this->viewBuilder()->setLayout(false);
-        // Ajax からのリクエストか、否かを確認
-//        if($this->request->is("ajax")){
-            $contentId = $this->request->getData('content_id');
-            $characters = $this->Characters->find('list')->where(['content_id'=>$contentId]);
-            $this->set(compact('characters'));
+        $this->request->allowMethod(['ajax']);
+        $this->viewBuilder()->setLayout(false);
 
-//        } else {
-//            throw new NotFoundException(NotFoundMessage);
-//        }
+        $contentId = $this->request->getData('content_id');
+        $characters = $this->Characters->find('list')->where(['content_id'=>$contentId]);
+        $this->set(compact('characters'));
     }
 }

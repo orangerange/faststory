@@ -12,6 +12,18 @@
         <td>{$this->Form->input('content_id',['options'=>$contents, 'label'=>false, 'empty'=>'-'])}</td>
     </tr>
     <tr>
+        <th>組織</th>
+        <td>
+            {$this->Form->input('organization_id',['class'=>'organization_id', 'options'=>$organizations, 'label'=>false, 'empty'=>'-'])}
+        </td>
+    </tr>
+    <tr>
+        <th>階級</th>
+        <td class="rank_select">
+            {$this->Form->input('rank_id',['options'=>$ranks, 'label'=>false, 'empty'=>'--'])}
+        </td>
+    </tr>
+    <tr>
         <th>キャラクター名</th>
         <td>{$this->Form->input('name', ['type'=>'text', 'label'=>false])}</td>
     </tr>

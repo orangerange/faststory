@@ -53,8 +53,7 @@ class PartsController extends AppController
 			throw new NotFoundException(NotFoundMessage);
 		}
 		$parts = $this->Parts->findByTemplateId($templateId);
-
-		$this->set(compact('template', 'templateId', 'parts'));
+		$this->set(compact('template', 'templateId', 'parts', 'script'));
 	}
 
 	public function input($templateId=null, $partsCategoryNo=null, $partsNo=null) {

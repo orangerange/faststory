@@ -14,13 +14,9 @@
  */
 namespace App\Controller\AdminAjax;
 
-use Cake\ORM\TableRegistry;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
-use Cake\Core\Configure;
 use App\Controller\AppController;
 use Cake\Http\Exception\NotFoundException;
-use App\Utils\AppUtility;
+
 /**
  * Static content controller
  *
@@ -38,9 +34,8 @@ class PartCategoriesController extends AppController
 
 	public function sort() {
 		$this->autoRender = false;
-		if (!$this->request->is('ajax')) {
-			throw new NotFoundException(NotFoundMessage);
-		}
+        $this->request->allowMethod(['ajax']);
+
 		$items = $this->request->getData('items');
 		$sortIds = explode(',', $items);
 		$sortNo = 1;

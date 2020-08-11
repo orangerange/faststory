@@ -38,6 +38,8 @@ class CharactersController extends AppController
 		$this->loadModel('Parts');
 		$this->loadModel('PartCategories');
 		$this->loadModel('CharacterParts');
+		$this->loadModel('Organizations');
+		$this->loadModel('Ranks');
     }
 
 	public function index() {
@@ -46,6 +48,8 @@ class CharactersController extends AppController
 	}
 
 	public function input() {
+		$organizations = $this->Organizations->find('list')->order(['id'=>'ASC']);
+		$ranks = [];
 		$contents = $this->Contents->find('list')->order(['id'=>'ASC']);
 		$css = $this->Parts->find()->select('css')->order(['id'=>'ASC']);
 		$partCategories = $this->PartCategories->findByTemplateId(Configure::read('object_template_key.face'));
@@ -70,10 +74,12 @@ class CharactersController extends AppController
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('contents', 'partCategories', 'parts', 'css', 'cssString'));
+		$this->set(compact('organizations', 'ranks', 'contents', 'partCategories', 'parts', 'css', 'cssString'));
 	}
 
 	public function edit($id) {
+        $organizations = $this->Organizations->find('list')->order(['id'=>'ASC']);
+        $ranks = [];
 		$contents = $this->Contents->find('list');
 		$css = $this->Parts->find()->select('css')->order(['id'=>'ASC']);
 		$partCategories = $this->PartCategories->findByTemplateId(Configure::read('object_template_key.face'));
@@ -91,6 +97,10 @@ class CharactersController extends AppController
 			$partsSelected = $this->CharacterParts->findListByCharacterId($id)->toArray();
 
 			$character = $this->Characters->moldGetData($character);
+			$organizationId = $character->get('organization_id');
+			if (isset($organizationId)) {
+                $ranks = $this->Ranks->find('list')->where(['organization_id' => $organizationId])->order(['id'=>'ASC']);
+            }
 			if ($this->request->is(['patch', 'post', 'put'])) {
 				$data= $this->Characters->moldSetData($this->request->getData());
 				foreach ($data['character_parts'] as $_key => $_value) {
@@ -135,7 +145,7 @@ class CharactersController extends AppController
 					$this->Flash->error(__('更新に失敗しました'));
 				}
 			}
-			$this->set(compact('contents', 'character', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString'));
+			$this->set(compact('organizations','ranks', 'contents', 'character', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString'));
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}

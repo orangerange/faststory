@@ -7,7 +7,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Characters Model
+ * Organizations Model
  *
  * @method \App\Model\Entity\Content get($primaryKey, $options = [])
  * @method \App\Model\Entity\Content newEntity($data = null, array $options = [])
@@ -20,7 +20,7 @@ use Cake\Validation\Validator;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class CharactersTable extends Table
+class OrganizationsTable extends Table
 {
 
     /**
@@ -33,25 +33,13 @@ class CharactersTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('characters');
+        $this->setTable('organizations');
         $this->setDisplayField('name');
         $this->addBehavior('Timestamp');
-		// Upload Plugin
-        $this->addBehavior('Josegonzalez/Upload.Upload', [
-            'picture' => [
-				'nameCallback' => function ($data, $settings) {
-                    return uniqid().'-'.strtolower($data['name']);
-                }
-			]
-        ]);
-
-		$this->hasMany('CharacterParts', [
-			'foreignKey' => 'character_id'
-		]);
-        $this->belongsTo('Ranks', [
-            'foreignKey' => 'rank_id'
-        ]);
-	}
+//		$this->hasMany('Chapters', [
+//            'foreignKey' => 'content_id'
+//        ]);
+    }
 
     /**
      * Default validation rules.
@@ -60,32 +48,11 @@ class CharactersTable extends Table
      * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator)
-        {
+    {
         $validator
-				->notEmpty('name')
-				->notEmpty('name_color')
-				->allowEmpty('picture')
-		;
-		return $validator;
+            ->notEmpty('name');
+
+        return $validator;
     }
 
-	public function findById($id) {
-		return $this->find()->where(['Characters.id' => $id])->contain(['CharacterParts'])->first();
-    }
-
-	public function moldGetData($data) {
-		$moldData = array();
-		foreach ($data['character_parts'] as $_key => $_value) {
-			$moldData['character_parts'][$_value['parts_category_no']] = $_value;
-		}
-		$data['character_parts'] = $moldData['character_parts'];
-
-		return $data;
-	}
-
-	public function moldSetData($data) {
-		$data['html'] = str_replace('　', '', $data['html']);
-		$data['css'] = str_replace('　', '', $data['css']);
-		return $data;
-	}
 }

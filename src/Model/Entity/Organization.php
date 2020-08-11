@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Character Entity
+ * Organization Entity
  *
  * @property int $id
  * @property string $name
@@ -12,7 +12,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $updated
  * @property bool $deleted
  */
-class Character extends Entity
+class Organization extends Entity
 {
 
     /**
@@ -26,21 +26,9 @@ class Character extends Entity
      */
     protected $_accessible = [
         'id' => true,
-        'content_id' => true,
-        'organization_id' => true,
-        'rank_id' => true,
         'name' => true,
-        'name_color' => true,
-        'foreign_color' => true,
-        'picture' => true,
-        'dir' => true,
-        'type' => true,
-        'size' => true,
-        'html' => true,
-        'css' => true,
         'created' => true,
-        'modified' => true,
-        'deleted' => true,
-        'character_parts' => true,
+        'updated' => true,
+        'deleted' => true
     ];
 }

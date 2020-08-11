@@ -12,7 +12,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $updated
  * @property bool $deleted
  */
-class Character extends Entity
+class Rank extends Entity
 {
 
     /**
@@ -26,21 +26,10 @@ class Character extends Entity
      */
     protected $_accessible = [
         'id' => true,
-        'content_id' => true,
-        'organization_id' => true,
-        'rank_id' => true,
+        'template_id' => true,
+        'badge_left_id' => true,
+        'badge_right_id' => true,
         'name' => true,
-        'name_color' => true,
-        'foreign_color' => true,
-        'picture' => true,
-        'dir' => true,
-        'type' => true,
-        'size' => true,
-        'html' => true,
-        'css' => true,
-        'created' => true,
-        'modified' => true,
-        'deleted' => true,
-        'character_parts' => true,
+        'sort_no' => true,
     ];
 }

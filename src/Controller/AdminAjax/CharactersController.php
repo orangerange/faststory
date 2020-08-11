@@ -12,9 +12,8 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace App\Controller\Ajax;
+namespace App\Controller\AdminAjax;
 
-use Cake\Http\Exception\NotFoundException;
 use App\Controller\AppController;
 
 /**
@@ -24,23 +23,20 @@ use App\Controller\AppController;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class PhrasesController extends AppController
+class CharactersController extends AppController
 {
-	public $helpers = array('Display');
 
 	public function initialize()
     {
         parent::initialize();
-		$this->loadModel('Contents');
-		$this->loadModel('Characters');
-		$this->loadModel('Phrases');
+		$this->loadModel('Ranks');
     }
 
-	public function getOne() {
-		$this->viewBuilder()->layout(false);
-		$chapterId = $this->request->data['chapter_id'];
-		$no = $this->request->data['no'];
-		$phrase = $this->Phrases->getOneByChapterId($chapterId, $no);
-		$this->set(compact('phrase'));
-	}
+    public function getRankOption() {
+        $this->request->allowMethod(['ajax']);
+        $organizationId = $this->request->getData('organization_id');
+        $ranks = $this->Ranks->find('list')->where(['organization_id'=>$organizationId]);
+        $this->set(compact('ranks'));
+        return;
+    }
 }

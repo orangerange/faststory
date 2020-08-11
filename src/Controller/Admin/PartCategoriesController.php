@@ -73,7 +73,6 @@ class PartCategoriesController extends AppController
 			$category->template_id = $templateId;
 			if ($this->PartCategories->save($category)) {
 				$this->Flash->success(__('新規登録しました'));
-				$category = $this->PartCategories->newEntity();
 				return $this->redirect(['action' => 'input']);
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));

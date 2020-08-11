@@ -3,7 +3,9 @@
 <h1>パーツ一覧({$template['name']})</h1>
 <div><a href='/admin/parts/input/{$templateId|escape}/'>新規登録</a></div>
 <div><a href='/admin/characters/input'>キャラクター新規登録</a></div>
-<div><a href='/admin/contents/index'>作品一覧</a></div>
+<div>
+    <a href='/admin/contents/index'>作品一覧</a>
+</div>
 <table>
     {assign var='partName' value=''}
         {foreach from=$parts item=part}

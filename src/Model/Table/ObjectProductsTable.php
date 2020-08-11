@@ -69,11 +69,11 @@ class ObjectProductsTable extends Table
         return $this->find()->where(['ObjectProducts.id' => $id])->first()->name;
     }
 
-    public function findSpeak($characterId)
+    public function findSpeak($character)
     {
         $face = $this->find()->where(
             [
-                'ObjectProducts.character_id' => $characterId,
+                'ObjectProducts.character_id' => $character['id'],
                 'ObjectProducts.template_id' => OBJECT_TEMPLATE_FACE,
                 'ObjectProducts.default_speak_flg' => FLG_ON,
             ]
@@ -82,7 +82,7 @@ class ObjectProductsTable extends Table
             ->first();
         $body = $this->find()->where(
             [
-                'ObjectProducts.character_id' => $characterId,
+                'ObjectProducts.character_id' => $character['id'],
                 'ObjectProducts.template_id' => OBJECT_TEMPLATE_BODY,
                 'ObjectProducts.default_speak_flg' => FLG_ON,
             ]
@@ -96,8 +96,27 @@ class ObjectProductsTable extends Table
         )
             ->contain(['ObjectTemplates'])
             ->first();
-
-        $result = array('face' => $face, 'body' => $body, 'speech'=>$speech);
+        $badgeLeft = false;
+        if (isset($character->rank->badge_left_id)) {
+            $badgeLeft = $this->find()->where(
+                [
+                    'ObjectProducts.id' => $character->rank->badge_left_id,
+                ]
+            )
+                ->contain(['ObjectTemplates'])
+                ->first();
+        }
+        $badgeRight = false;
+        if (isset($character->rank->badge_right_id)) {
+            $badgeRight = $this->find()->where(
+                [
+                    'ObjectProducts.id' => $character->rank->badge_right_id,
+                ]
+            )
+                ->contain(['ObjectTemplates'])
+                ->first();
+        }
+        $result = array('face' => $face, 'body' => $body, 'speech'=>$speech, 'badge_left' => $badgeLeft, 'badge_right' => $badgeRight);
         return $result;
     }
 

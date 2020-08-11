@@ -12,9 +12,8 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $updated
  * @property bool $deleted
  */
-class Character extends Entity
+class RankOrganization extends Entity
 {
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -26,21 +25,9 @@ class Character extends Entity
      */
     protected $_accessible = [
         'id' => true,
-        'content_id' => true,
-        'organization_id' => true,
-        'rank_id' => true,
+        'class_name' => true,
         'name' => true,
-        'name_color' => true,
-        'foreign_color' => true,
-        'picture' => true,
-        'dir' => true,
-        'type' => true,
-        'size' => true,
-        'html' => true,
-        'css' => true,
-        'created' => true,
-        'modified' => true,
-        'deleted' => true,
-        'character_parts' => true,
+        'width' => true,
+        'height' => true,
     ];
 }
