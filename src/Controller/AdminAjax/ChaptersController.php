@@ -47,6 +47,8 @@ class ChaptersController extends AppController
         $speak = $this->ObjectProducts->findSpeak($character);
         $html = false;
         $css = false;
+        $badgeLeftHtml = false;
+        $badgeRightHtml = false;
         if (isset($speak['face']->id) && isset($speak['body']->id)) {
             // html
             $view = $this->createView();
@@ -69,8 +71,6 @@ class ChaptersController extends AppController
             $faceCss = "/*.face.object_{$faceId}_start*/". $this->_makeBaseCss('.face.object_' . $faceId, $faceWidth, $faceHeight, 'face', $faceRelLeft) . ' ' . $faceCss . "/*.face.object_{$faceId}_end*/";
 
             $bodyCss = $speak['body']->css;
-            $badgeLeftHtml = false;
-            $badgeRightHtml = false;
             if ($speak['badge_left']) {
                 $badgeLeftCss = AppUtility::addPreClassToCss($speak['badge_left']->css, '.rank_badge_left');
                 $bodyCss .= $badgeLeftCss;

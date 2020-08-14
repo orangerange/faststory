@@ -145,4 +145,33 @@ $(function () {
                 .find('.' + parts_class)
                 .replaceWith(html);
     });
+
+    // 組織変更による階級選択肢の変更
+    $(document).on("change", ".organization_id", function () {
+        var organization_id = $(this).val();
+        $.ajax({
+            type: "POST",
+            datatype:'text',
+            url: "/admin_ajax/characters/get-rank-option",
+            data: {
+                "organization_id": organization_id,
+            },
+
+            // 正常に処理が実行された場合は、1つ目のパラメータに取得した HTMLが返ってくる
+            success: function(data, status, xhr) {
+                console.log(data);
+                $('.rank_select').html(data);
+            },
+
+            // 正常に処理が行われなかった場合の処理
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                // 返ってきたステータスコードなどをアラートで表示（デバッグ用）
+                alert('Error : ' + errorThrown + "\n" +
+                    XMLHttpRequest.status + "\n" +
+                    XMLHttpRequest.statusText + "\n" +
+                    textStatus );
+            }
+        });
+    });
 })

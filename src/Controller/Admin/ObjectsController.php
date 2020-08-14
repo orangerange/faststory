@@ -114,10 +114,10 @@ class ObjectsController extends AppController
 				if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
 					unset($data['object_parts'][$_key]);
 				}
-			}
+			}\cake\log\log::debug($data);
 			$object = $this->ObjectProducts->patchEntity($object, $data);
 			$this->ObjectParts->deleteByObjectId($id);
-			if ($this->ObjectProducts->save($object)) {
+			if ($this->ObjectProducts->save($object, $data)) {
 				$this->Flash->success(__('更新しました'));
 			} else {
 				$this->Flash->error(__('更新に失敗しました'));

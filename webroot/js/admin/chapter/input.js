@@ -88,8 +88,8 @@ $(function () {
                 // html取得
                 $.ajax({
                     type: "post",
-                    url: "/admin_ajax/chapters/character-speak-html",
-                    dataType: 'text',
+                    url: "/admin_ajax/chapters/character-speak",
+                    dataType: 'json',
                     // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
                     data: {
                         "character_id": character_id,
@@ -99,59 +99,57 @@ $(function () {
                         "sentence_translate": sentence_translate,
                     },
                 }).done(function (data, status, jqXHR) {
-                    var html = data;
-                    if (html) {
+                    var html = data.html;
+                    var css = data.css;
+                    var badge_left_html = data.badge_left_html;
+                    var badge_right_html = data.badge_right_html;
+                    if (html && css) {
+                        // html調整
                         html = wholeReplace(html , 'face object', 'face object_'  + face_object_no);
                         html = wholeReplace(html , 'body object', 'body object_'  + body_object_no);
                         html = wholeReplace(html , 'speech object', 'speech object_'  + speech_object_no);
-                        html_selector.val(html);
+                        // html_selector.val(html);
                         html_show_selector.html(html);
-                        // css取得
+                        // 階級章置き換え
+                        if (badge_left_html) {
+                            html_show_selector.find('.rank_badge_left').html(badge_left_html);
+                        }
+                        if (badge_right_html) {
+                            html_show_selector.find('.rank_badge_right').html(badge_right_html);
+                        }
+                        html_selector.val(html_show_selector.html());
+                        // css調整
+                        css = wholeReplace(css , '.face.object', '.face.object_'  + face_object_no);
+                        css = wholeReplace(css , '.body.object', '.body.object_'  + body_object_no);
+                        css = wholeReplace(css , '.speech.object', '.speech.object_'  + speech_object_no);
+                        css_selector.val(css);
+                        css_show_selector.find('style').html(css);
+                        // オブジェクトNoのインクレメント
+                        face_object_no++;
+                        body_object_no++;
+                        speech_object_no++;
+                        $('#js-popup').find('.object_no' + '.default_speak_face').val(face_object_no);
+                        $('#js-popup').find('.object_no' + '.default_speak_body').val(body_object_no);
+                        $('#js-popup').find('.object_no' + '.default_speak_speech').val(speech_object_no);
+
+                        // CSSレイアウト更新(ajax)
                         $.ajax({
                             type: "post",
-                            url: "/admin_ajax/chapters/character-speak-css",
+                            url: "/admin_ajax/chapters/object-layout",
                             dataType: 'text',
                             // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
                             data: {
-                                "character_id": character_id,
+                                "css": css,
                                 "phrase_no": phrase_no,
                             },
                         }).done(function (data, status, jqXHR) {
-                            var css = data;
-                            css = wholeReplace(css , '.face.object', '.face.object_'  + face_object_no);
-                            css = wholeReplace(css , '.body.object', '.body.object_'  + body_object_no);
-                            css = wholeReplace(css , '.speech.object', '.speech.object_'  + speech_object_no);
-                            css_selector.val(css);
-                            css_show_selector.find('style').html(css);
-                            // オブジェクトNoのインクレメント
-                            face_object_no++;
-                            body_object_no++;
-                            speech_object_no++;
-                            $('#js-popup').find('.object_no' + '.default_speak_face').val(face_object_no);
-                            $('#js-popup').find('.object_no' + '.default_speak_body').val(body_object_no);
-                            $('#js-popup').find('.object_no' + '.default_speak_speech').val(speech_object_no);
-                            // CSSレイアウト更新(ajax)
-                            $.ajax({
-                                type: "post",
-                                url: "/admin_ajax/chapters/object-layout",
-                                dataType: 'text',
-                                // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
-                                data: {
-                                    "css": css,
-                                    "phrase_no": phrase_no,
-                                },
-                            }).done(function (data, status, jqXHR) {
-                                $('.object_layout_input_' + phrase_no).html(data);
-                            }).fail(function (jqXHR, status, error) {
-                                console.log(jqXHR);
-                                console.log(status);
-                                console.log(error);
-                            });
+                            $('.object_layout_input_' + phrase_no).html(data);
                         }).fail(function (jqXHR, status, error) {
                             console.log(jqXHR);
                             console.log(status);
                             console.log(error);
                         });
+
                     } else {
                         alert('対応するパーツが存在しません。');
                         object_speak_check.prop('checked', false);

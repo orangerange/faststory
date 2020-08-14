@@ -1,30 +1,19 @@
 $(function () {
-    var category_ids = JSON.parse($('#category_ids').val());
-    $.each(category_ids, function (index, val) {
-    });
-    var css_obj = $.parseJSON($("#css-string").val());
-
-    //初期htmlの設定
-    var html_sum = $('.parts_sum').html().replace('　', '');
-    $('.html_input').val(html_sum);
-
-    //作品変更によるキャラクタ選択肢の変更
-    $(document).on("change", ".content_id", function () {
-        var content_id = $(this).val();
+    // 作品変更によるキャラクタ選択肢の変更
+    $(document).on("change", ".organization_id", function () {
+        var organization_id = $(this).val();
         $.ajax({
             type: "POST",
             datatype:'text',
-            // 処理をする Ajaxの URLを指定。自サーバ内であればドキュメントルートからのパスでも OK
-            url: "/admin_ajax/objects/get-characters",
-            // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
+            url: "/admin_ajax/characters/get-rank-option",
             data: {
-                "content_id": content_id,
+                "organization_id": organization_id,
             },
 
             // 正常に処理が実行された場合は、1つ目のパラメータに取得した HTMLが返ってくる
             success: function(data, status, xhr){
                 console.log(data);
-                $('.character_select').html(data);
+                $('.rank_select').html(data);
             },
 
             // 正常に処理が行われなかった場合の処理

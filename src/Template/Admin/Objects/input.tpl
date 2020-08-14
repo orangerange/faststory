@@ -18,7 +18,7 @@
     <tr>
         <th>キャラクター</th>
         <td class="character_select">
-            {$this->Form->control('character_id',['class'=>'character_id', 'label'=>false, 'options'=>$characters, 'empty'=>'--', 'class' => 'character_id'])}
+            {$this->Form->input('character_id',['multiple' => 'select', 'class'=>'character_id', 'label'=>false, 'options'=>$characters, 'empty'=>'--'])}
         </td>
     </tr>
     <tr>

@@ -2,11 +2,11 @@
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 /**
  * Characters Model
  *
@@ -73,7 +73,7 @@ class ObjectProductsTable extends Table
     {
         $face = $this->find()->where(
             [
-                'ObjectProducts.character_id' => $character['id'],
+                'ObjectProducts.character_id LIKE' => '%,' . $character['id'] . ',%',
                 'ObjectProducts.template_id' => OBJECT_TEMPLATE_FACE,
                 'ObjectProducts.default_speak_flg' => FLG_ON,
             ]
@@ -82,7 +82,7 @@ class ObjectProductsTable extends Table
             ->first();
         $body = $this->find()->where(
             [
-                'ObjectProducts.character_id' => $character['id'],
+                'ObjectProducts.character_id LIKE' => '%,' . $character['id'] . ',%',
                 'ObjectProducts.template_id' => OBJECT_TEMPLATE_BODY,
                 'ObjectProducts.default_speak_flg' => FLG_ON,
             ]
@@ -123,6 +123,7 @@ class ObjectProductsTable extends Table
     public function moldGetData($data)
     {
         $moldData = array();
+        $data['character_id'] = array_filter(explode(',', $data['character_id']));
         if (isset($data['object_parts'])) {
             foreach ($data['object_parts'] as $_key => $_value) {
                 $moldData['object_parts'][$_value['parts_category_no']] = $_value;
@@ -130,5 +131,10 @@ class ObjectProductsTable extends Table
             $data['object_parts'] = $moldData['object_parts'];
         }
         return $data;
+    }
+
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $entity->set('character_id', ',' . implode(',', $options['character_id']) . ',');
     }
 }
