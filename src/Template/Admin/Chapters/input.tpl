@@ -20,7 +20,7 @@
                         <input type='hidden' class='width' value='{$_value->object_template->width|escape}'>
                         <input type='hidden' class='height' value='{$_value->object_template->height|escape}'>
                         <p>{$_value->name|escape}</p>
-                        オブジェクト番号: <input type='text' class='object_no {if $_value->default_speak_flg}{if $_value->template_id==$smarty.const.OBJECT_TEMPLATE_FACE}default_speak_face{elseif $_value->template_id==$smarty.const.OBJECT_TEMPLATE_BODY}default_speak_body{elseif $_value->template_id==$smarty.const.OBJECT_TEMPLATE_SPEECH}default_speak_speech{/if}{/if}' value={$objectCount[$_value->id]+1|default:'1'}>
+                        オブジェクト番号: <input type='text' class='object_no {if $_value->character_id}{foreach from=","|explode:$_value->character_id item=_val}{if $_val}character_{$_val|escape} {/if}{/foreach}{/if}{if $_value->object_usage}{foreach from=","|explode:$_value->object_usage item=_val}{if $_val}usage_{$_val|escape} {/if}{/foreach}{/if}{if array_key_exists($_value->template_id, $this->Config->read('object_character'))}default_{$this->Config->read('object_character.'|cat:$_value->template_id)}{/if} ' value={$objectCount[$_value->id]+1|default:'1'}>
                         <div class='html_show'>
                             <div class='object_input' style='width:{$_value->object_template->width|escape}%; height:{$_value->object_template->height|escape}%;'>
                                 <div class='object_{$_value->id|escape}'>
@@ -47,6 +47,7 @@
         {$this->Form->end()}
     {/if}
     {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>$smarty.const.PHRASE_MUX_NUM])}
+    {$this->Form->control('object_usage_str', ['type'=>'hidden', 'id'=>'object_usage_str', 'value'=> $objectUsageStr])}
     <h1>{$contentName|escape}チャプター{if $editFlg}編集{else}登録{/if}({$chapterNo})</h1>
     {$this->Form->create($chapter,['enctype' => 'multipart/form-data'])}
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}

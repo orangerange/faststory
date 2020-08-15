@@ -14,10 +14,10 @@
  */
 namespace App\Controller\Admin;
 
-use Cake\Datasource\ConnectionManager;
 use App\Controller\AppController;
+use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\Http\Exception\NotFoundException;
-
 
 /**
  * Static content controller
@@ -55,6 +55,8 @@ class ChaptersController extends AppController
     public function input($contentId = null)
     {
         $chapterNo = $this->Chapters->getLastChapterNo($contentId);
+        $objectUsageArr = array_flip(Configure::read('object_usage_key'));
+        $objectUsageStr = json_encode($objectUsageArr);
         if (preg_match("/^[0-9]+$/", $contentId)) {
             if (!$content = $this->Contents->findById($contentId)->first()) {
                 throw new NotFoundException(NotFoundMessage);
@@ -78,7 +80,7 @@ class ChaptersController extends AppController
                     $this->Flash->error(__('新規登録に失敗しました'));
                 }
             }
-            $this->set(compact('chapterNo', 'characters', 'openFlg', 'contentId', 'contentName', 'objects'));
+            $this->set(compact('chapterNo', 'characters', 'openFlg', 'contentId', 'contentName', 'objects', 'objectUsageArr', 'objectUsageStr'));
         } else {
 			throw new NotFoundException(NotFoundMessage);
 		}
@@ -86,6 +88,8 @@ class ChaptersController extends AppController
 
     public function edit($id)
     {
+        $objectUsageArr = array_flip(Configure::read('object_usage_key'));
+        $objectUsageStr = json_encode($objectUsageArr);
         if (preg_match("/^[0-9]+$/", $id)) {
             if (!$chapter = $this->Chapters->findById($id)) {
                 throw new NotFoundException(NotFoundMessage);
@@ -144,7 +148,7 @@ class ChaptersController extends AppController
                     $connection->rollback();
                 }
             }
-            $this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts', 'objectCount'));
+            $this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts', 'objectCount', 'objectUsageArr', 'objectUsageStr'));
         } else {
             throw new NotFoundException(NotFoundMessage);
         }

@@ -14,7 +14,7 @@
         {$this->Display->css($chapter['phrases'][$i]['css'])}
     </div>
     {$this->Display->adminAnimateJs($i, $chapter['phrases'][$i]['js'])}
-    <div id='html_show_{$i|escape}' class='phrase_object html_show'>
+    <div id='html_show_{$i|escape}' class='phrase_object html_show phrase_object_{$i+1|escape}'>
         {$chapter['phrases'][$i]['html']}
     </div>
     <div class='object_layout_input object_layout_input_{$i}'>

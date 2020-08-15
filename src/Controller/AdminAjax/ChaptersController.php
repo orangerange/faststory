@@ -123,8 +123,8 @@ class ChaptersController extends AppController
     private function _makeBaseCss($baseClass, $width, $height, $speakType, $faceRelLeft, $objectUsage) {
         $this->autoRender = false;
         $baseCss = $baseClass . '{ width:' . $width . '%;' . ' height:' . $height . '%; position:absolute;';
-        $objectusageArr = array_flip(Configure::read('object_usage_key'));
-        $objectUsage = $objectusageArr[$objectUsage];
+        $objectUsageArr = array_flip(Configure::read('object_usage_key'));
+        $objectUsage = $objectUsageArr[$objectUsage];
         switch ($speakType) {
             case 'face':
                 $baseCss .= Configure::read("object_layout.{$objectUsage}.face") . 'left:' . $faceRelLeft . '%;';

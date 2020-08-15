@@ -82,9 +82,11 @@ $(function () {
                 html_show_selector.html('');
                 css_show_selector.find('style').html('');
                 // 各パーツのオブジェクトNoを取得
-                var face_object_no = $('#js-popup').find('.object_no' + '.default_speak_face').val();
-                var body_object_no = $('#js-popup').find('.object_no' + '.default_speak_body').val();
-                var speech_object_no = $('#js-popup').find('.object_no' + '.default_speak_speech').val();
+                var character_class = '.character_' + character_id;
+                var usage_class = '.usage_' + object_usage;
+                var face_object_no = $('#js-popup').find('.object_no' + character_class + usage_class + '.default_face').val();
+                var body_object_no = $('#js-popup').find('.object_no' + character_class + usage_class + '.default_body').val();
+                var speech_object_no = $('#js-popup').find('.object_no' + usage_class + '.default_speech').val();
 
                 // html取得
                 $.ajax({
@@ -132,9 +134,9 @@ $(function () {
                         face_object_no++;
                         body_object_no++;
                         speech_object_no++;
-                        $('#js-popup').find('.object_no' + '.default_speak_face').val(face_object_no);
-                        $('#js-popup').find('.object_no' + '.default_speak_body').val(body_object_no);
-                        $('#js-popup').find('.object_no' + '.default_speak_speech').val(speech_object_no);
+                        $('#js-popup').find('.object_no' + character_class + usage_class + '.default_face').val(face_object_no);
+                        $('#js-popup').find('.object_no' + character_class + usage_class + '.default_body').val(body_object_no);
+                        $('#js-popup').find('.object_no' + character_class + '.default_speech').val(speech_object_no);
 
                         // CSSレイアウト更新(ajax)
                         $.ajax({
@@ -187,7 +189,7 @@ $(function () {
                         $('#html_show_' + i).html('');
                     }
                 }
-                if (value=='css') {
+                if (value =='css') {
                     if ($('*[name="phrases[' + i + ']['+ value +']"]').val()) {
                         $('#css_show_' + j).children('style').html(($('*[name="phrases[' + j + ']['+ value +']"]').val()));
                         $('#css_show_' + i).children('style').html('');
@@ -197,7 +199,7 @@ $(function () {
         }
     })
 
-    $('.sentence').bind('keydown keyup keypress change',function(){
+    $('.sentence').bind('keydown keyup keypress change',function() {
         var thisValueLength = $(this).val().length;
         $(this).closest('.input').prevAll().find('.count').html(thisValueLength);
         // 発話フラグが立っている場合
@@ -328,7 +330,7 @@ $(function () {
     })
     $(document).on("change", ".css_layout", function () {
         var css_after = wholeReplace($(this).val(), '　', '');
-        var css_after = wholeReplace(css_after, ' ', '');
+        css_after = wholeReplace(css_after, ' ', '');
         var css_before = $(this).next('.css_layout_original').val();
         var css = $(this).closest('.object_layout_input').nextAll('.input').find('.css').val();
         var css_replaced = wholeReplace(css, css_before, css_after);
@@ -339,7 +341,9 @@ $(function () {
 
     // 文章置き換え
     function replace_sentence(object_usage, sentence, html_show_selector) {
-        if (object_usage == 2) {
+        var object_usage_str =  $('#object_usage_str').val();
+        var object_usage_arr =  JSON.parse(object_usage_str);
+        if (object_usage_arr[object_usage] == 'introduction') {
             // 肩書紹介の場合
             var arr = sentence.split(/\r\n|\n/);
             if (arr[1]) {
