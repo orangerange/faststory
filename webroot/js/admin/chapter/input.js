@@ -57,23 +57,24 @@ $(function () {
     //     $(this).closest('div').prevAll('script').html(js);
     // })
 
-    $(document).on('click', '.object_speak', function () {
+    $(document).on('click', '.character_object', function () {
         // 共通セレクタ定義
         var html_selector = $(this).closest('.checkbox').nextAll('.textarea').find('.html');
         var css_selector = $(this).closest('.checkbox').nextAll('.textarea').find('.css');
         var html_show_selector = $(this).closest('.checkbox').prevAll('.html_show');
         var css_show_selector = $(this).closest('.checkbox').prevAll('.css_show');
-        var object_speak_check = $(this);
+        var character_object_check = $(this);
         var phrase_no = $(this).closest('.input').prevAll('.phrase_no').val();
         if ($(this).prop('checked')) {
             //キャラクタID取得
             var character_id = $(this).closest('.checkbox').prevAll('.select').find('.character_id').val();
+            var object_usage = $(this).closest('.checkbox').prevAll('.select').find('.object_usage').val();
             var sentence = $(this).closest('.checkbox').prevAll('.input').find('.sentence').val();
             var sentence_kana = $(this).closest('.checkbox').prevAll('.input').find('.sentence_kana').val();
             var sentence_translate = $(this).closest('.checkbox').prevAll('.input').find('.sentence_translate').val();
             if (!character_id) {
                 alert('キャラクターを選択して下さい');
-                object_speak_check.prop('checked', false);
+                character_object_check.prop('checked', false);
             } else {
                 // 値クリア
                 html_selector.val('');
@@ -94,9 +95,10 @@ $(function () {
                     data: {
                         "character_id": character_id,
                         "phrase_no": phrase_no,
-                        "sentence": sentence,
-                        "sentence_kana": sentence_kana,
-                        "sentence_translate": sentence_translate,
+                        "object_usage": object_usage,
+                        // "sentence": sentence,
+                        // "sentence_kana": sentence_kana,
+                        // "sentence_translate": sentence_translate,
                     },
                 }).done(function (data, status, jqXHR) {
                     var html = data.html;
@@ -110,6 +112,8 @@ $(function () {
                         html = wholeReplace(html , 'speech object', 'speech object_'  + speech_object_no);
                         // html_selector.val(html);
                         html_show_selector.html(html);
+                        // 文章置き換え
+                        replace_sentence(object_usage, sentence, html_show_selector);
                         // 階級章置き換え
                         if (badge_left_html) {
                             html_show_selector.find('.rank_badge_left').html(badge_left_html);
@@ -152,7 +156,7 @@ $(function () {
 
                     } else {
                         alert('対応するパーツが存在しません。');
-                        object_speak_check.prop('checked', false);
+                        character_object_check.prop('checked', false);
                     }
                 }).fail(function (jqXHR, status, error) {
                     console.log(jqXHR);
@@ -197,9 +201,13 @@ $(function () {
         var thisValueLength = $(this).val().length;
         $(this).closest('.input').prevAll().find('.count').html(thisValueLength);
         // 発話フラグが立っている場合
-        if ($(this).closest('.input').nextAll('.checkbox').find('.object_speak').prop('checked')) {
-            $(this).closest('.input').nextAll('.html_show').find('.speak').html($(this).val());
-            var html = $(this).closest('.input').nextAll('.html_show').html();
+        if ($(this).closest('.input').nextAll('.checkbox').find('.character_object').prop('checked')) {
+            var sentence = $(this).val();
+            var html_show_selector = $(this).closest('.input').nextAll('.html_show');
+            var object_usage = $(this).closest('.textarea').nextAll('.select').find('.object_usage').val();
+            // 文章置き換え
+            replace_sentence(object_usage, sentence, html_show_selector);
+            var html = html_show_selector.html();
             $(this).closest('.input').nextAll('.input').find('.html').html(html);
         }
     })
@@ -328,4 +336,22 @@ $(function () {
         $(this).closest('.object_layout_input').prevAll('.css_show').find('style').html(css_replaced);
         $(this).next('.css_layout_original').val(css_after);
     })
+
+    // 文章置き換え
+    function replace_sentence(object_usage, sentence, html_show_selector) {
+        if (object_usage == 2) {
+            // 肩書紹介の場合
+            var arr = sentence.split(/\r\n|\n/);
+            if (arr[1]) {
+                html_show_selector.find('.sentence').find('.title').html(arr[0]);
+                html_show_selector.find('.sentence').find('.name').html(arr[1]);
+            } else {
+                html_show_selector.find('.sentence').find('.title').html('');
+                html_show_selector.find('.sentence').find('.name').html(arr[0]);
+            }
+
+        } else {
+            html_show_selector.find('.sentence').html(sentence);
+        }
+    }
 })

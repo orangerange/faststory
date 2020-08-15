@@ -33,6 +33,7 @@ class Phrase extends Entity
         'id' => true,
         'chapter_id' => true,
         'character_id' => true,
+        'object_usage' => true,
         'no' => true,
         'sentence' => true,
         'sentence_kana' => true,

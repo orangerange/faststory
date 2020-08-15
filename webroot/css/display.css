@@ -46,8 +46,14 @@
         bottom: 30px;
         font-size: 12px;
     }
-    .phrase_object_display .speech {
+    .phrase_object_display .speak {
         font-size: 39px;
+    }
+    .phrase_object_display .sentence .title {
+        font-size: 22px;
+    }
+    .phrase_object_display .sentence .name {
+        font-size: 26px;
     }
     .next {
         width:120px;
@@ -113,6 +119,9 @@
 .kana {
     font-size:0.7em;
 }
+.sentence .title{
+
+}
 .html_show {
     /*薄水色*/
     background: aliceblue;
@@ -123,7 +132,12 @@
 .next {
     position: fixed;
 }
-
+.sentence .title {
+    font-size: 11px;
+}
+.sentence .name {
+    font-size: 13px;
+}
 .character_box {
     position: relative;
     width: 100px;
@@ -146,7 +160,6 @@
     display: flex;
     flex-flow: column;
 }
-
 .speech_speak{
     position:absolute;
     width:100%;
@@ -157,4 +170,10 @@
     border:solid thin black;
     top:20%;
     right:100%;
+}
+.sentence .title {
+    font-size: 11px;
+}
+.sentence .name {
+    font-size: 13px;
 }

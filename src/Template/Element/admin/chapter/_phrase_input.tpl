@@ -7,7 +7,7 @@
     <div class="count_display">
         <span class="count">{$chapter['phrases'][$i]['sentence']|count_characters}</span>文字
     </div>
-    {$this->Form->control('phrases.'|cat:$i|cat:'.sentence', ['type'=>'text', 'size'=>150, 'class'=>'sentence'])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.sentence', ['type'=>'textarea', 'size'=>150, 'class'=>'sentence'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence_kana', ['type'=>'text', 'size'=>150, 'class'=>'sentence_kana'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence_translate', ['type'=>'text', 'size'=>150, 'class'=>'sentence_translate'])}
     <div id='css_show_{$i|escape}' class='css_show'>
@@ -28,7 +28,8 @@
     {if $chapter->phrases[$i]->character_id && $chapter->phrases[$i]->html && $chapter->phrases[$i]->css}
         {assign var=checked value='checked'}
     {/if}
-    {$this->Form->control('phrases.'|cat:$i|cat:'.object_speak', ['class'=>'object_speak','type'=>'checkbox', 'checked'=>$checked])}
+    {$this->Form->input('phrases.'|cat:$i|cat:'.object_usage', ['class'=>'object_usage', 'type'=>'select', 'label'=>false, 'options'=>$this->Config->read('object_usage')])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.character_object', ['class'=>'character_object','type'=>'checkbox', 'checked'=>$checked])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.html', ['type'=>'textarea', 'cols'=>50, 'class'=>'html'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.css', ['type'=>'textarea', 'cols'=>50, 'class'=>'css'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.js', ['type'=>'textarea', 'cols'=>50, 'class'=>'js'])}

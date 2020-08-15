@@ -2,11 +2,13 @@
 
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
-use Cake\Validation\Validator;
 use ArrayObject;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
 /**
  * Characters Model
  *
@@ -69,13 +71,13 @@ class ObjectProductsTable extends Table
         return $this->find()->where(['ObjectProducts.id' => $id])->first()->name;
     }
 
-    public function findSpeak($character)
+    public function findSpeak($character, $objectUsage)
     {
         $face = $this->find()->where(
             [
                 'ObjectProducts.character_id LIKE' => '%,' . $character['id'] . ',%',
                 'ObjectProducts.template_id' => OBJECT_TEMPLATE_FACE,
-                'ObjectProducts.default_speak_flg' => FLG_ON,
+                'ObjectProducts.object_usage LIKE' => '%,' . $objectUsage . ',%',
             ]
         )
             ->contain(['ObjectTemplates'])
@@ -84,7 +86,7 @@ class ObjectProductsTable extends Table
             [
                 'ObjectProducts.character_id LIKE' => '%,' . $character['id'] . ',%',
                 'ObjectProducts.template_id' => OBJECT_TEMPLATE_BODY,
-                'ObjectProducts.default_speak_flg' => FLG_ON,
+                'ObjectProducts.object_usage LIKE' => '%,' . $objectUsage . ',%',
             ]
         )
             ->contain(['ObjectTemplates'])
@@ -92,6 +94,7 @@ class ObjectProductsTable extends Table
         $speech = $this->find()->where(
             [
                 'ObjectProducts.template_id' => OBJECT_TEMPLATE_SPEECH,
+                'ObjectProducts.object_usage LIKE' => '%,' . $objectUsage . ',%',
             ]
         )
             ->contain(['ObjectTemplates'])
@@ -117,6 +120,7 @@ class ObjectProductsTable extends Table
                 ->first();
         }
         $result = array('face' => $face, 'body' => $body, 'speech'=>$speech, 'badge_left' => $badgeLeft, 'badge_right' => $badgeRight);
+
         return $result;
     }
 
@@ -124,6 +128,7 @@ class ObjectProductsTable extends Table
     {
         $moldData = array();
         $data['character_id'] = array_filter(explode(',', $data['character_id']));
+        $data['object_usage'] = array_filter(explode(',', $data['object_usage']));
         if (isset($data['object_parts'])) {
             foreach ($data['object_parts'] as $_key => $_value) {
                 $moldData['object_parts'][$_value['parts_category_no']] = $_value;
@@ -135,6 +140,11 @@ class ObjectProductsTable extends Table
 
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        $entity->set('character_id', ',' . implode(',', $options['character_id']) . ',');
+        if (isset($options['character_id']) && is_array($options['character_id'])) {
+            $entity->set('character_id', ',' . implode(',', $options['character_id']) . ',');
+        }
+        if (isset($options['object_usage']) && is_array($options['object_usage'])) {
+            $entity->set('object_usage', ',' . implode(',', $options['object_usage']) . ',');
+        }
     }
 }

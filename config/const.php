@@ -69,6 +69,36 @@ return array(
 			'body'=>'2',
 		)
 	),
+    Configure::write('object_usage',
+        array(
+            '1'=>'発話',
+            '2'=>'紹介',
+            '3'=> 'アクション',
+        )
+    ),
+    Configure::write('object_usage_key',
+        array(
+            'speak'=>'1',
+            'introduction'=>'2',
+            'action'=>'3',
+        )
+    ),
+    Configure::write('object_layout',
+        array(
+            'speak' =>
+                array(
+                    'face' => 'top:12%;',
+                    'body' => 'bottom:0%; left:0%;',
+//                    'speech' => 'top:10%; right:5%;',
+                ),
+            'introduction' =>
+                array(
+                    'face' => 'top:12%;',
+                    'body' => 'bottom:0%; left:0%;',
+//                    'speech' => 'bottom:10%; right:5%;',
+                ),
+        )
+    ),
 	Configure::write('object_template',
 		array(
 			'3'=> array('name' => '顔', 'class_name'=>'face'),

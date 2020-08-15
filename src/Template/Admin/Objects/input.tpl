@@ -18,12 +18,12 @@
     <tr>
         <th>キャラクター</th>
         <td class="character_select">
-            {$this->Form->input('character_id',['multiple' => 'select', 'class'=>'character_id', 'label'=>false, 'options'=>$characters, 'empty'=>'--'])}
+            {$this->Form->input('character_id',['multiple' => 'select', 'class'=>'character_id', 'label'=>false, 'options'=>$characters])}
         </td>
     </tr>
     <tr>
-        <th>デフォルト発話フラグ</th>
-        <td>{$this->Form->input('default_speak_flg', ['type'=>'checkbox', 'label'=>false])}</td>
+        <th>活用場面</th>
+        <td>{$this->Form->input('object_usage', ['multiple'=>'select', 'label'=>false, 'options'=>$this->Config->read('object_usage')])}</td>
     </tr>
     <tr>
         <th>パーツ合成</th>

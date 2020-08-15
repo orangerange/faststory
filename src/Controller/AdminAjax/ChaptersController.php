@@ -15,8 +15,9 @@
 namespace App\Controller\AdminAjax;
 
 use App\Controller\AppController;
-use Cake\Http\Exception\NotFoundException;
 use App\Utils\AppUtility;
+use Cake\Http\Exception\NotFoundException;
+use Cake\Core\Configure;
 /**
  * Static content controller
  *
@@ -43,13 +44,14 @@ class ChaptersController extends AppController
         $characterId = $this->request->getData('character_id');
         $sentence = $this->request->getData('sentence');
         $sentenceTranslate = $this->request->getData('sentence_translate');
-        $character = $this->Characters->find()->where(['Characters.id' => $characterId])->contain(['Ranks'])->first();;
-        $speak = $this->ObjectProducts->findSpeak($character);
+        $character = $this->Characters->find()->where(['Characters.id' => $characterId])->contain(['Ranks'])->first();
+        $objectUsage = $this->request->getData('object_usage');
+        $speak = $this->ObjectProducts->findSpeak($character, $objectUsage);
         $html = false;
         $css = false;
         $badgeLeftHtml = false;
         $badgeRightHtml = false;
-        if (isset($speak['face']->id) && isset($speak['body']->id)) {
+        if (isset($speak['face']->id) && isset($speak['body']->id) && isset($speak['speech']->id)) {
             // html
             $view = $this->createView();
             $view->set(['face'=>$speak['face'], 'body'=>$speak['body'], 'speech'=>$speak['speech'], 'sentence'=>$sentence, 'sentence_translate'=>$sentenceTranslate, 'character'=>$character, 'phraseNo'=>$phraseNo]);
@@ -61,14 +63,16 @@ class ChaptersController extends AppController
             $bodyId = $speak['body']->id;
             $bodyWidth = $speak['body']->object_template->width;
             $bodyHeight = $speak['body']->object_template->height;
+
+            $faceRelLeft = ($bodyWidth - $faceWidth)/2;
+
             $speechId = $speak['speech']->id;
             $speechWidth = $speak['speech']->object_template->width;
             $speechHeight = $speak['speech']->object_template->height;
-            $faceRelLeft = ($bodyWidth - $faceWidth)/2;
 
             $faceCss = $speak['face']->css;
             $faceCss = AppUtility::addPreClassToCss($faceCss, '.face.object_' . $faceId);
-            $faceCss = "/*.face.object_{$faceId}_start*/". $this->_makeBaseCss('.face.object_' . $faceId, $faceWidth, $faceHeight, 'face', $faceRelLeft) . ' ' . $faceCss . "/*.face.object_{$faceId}_end*/";
+            $faceCss = "/*.face.object_{$faceId}_start*/". $this->_makeBaseCss('.face.object_' . $faceId, $faceWidth, $faceHeight, 'face', $faceRelLeft, $objectUsage) . ' ' . $faceCss . "/*.face.object_{$faceId}_end*/";
 
             $bodyCss = $speak['body']->css;
             if ($speak['badge_left']) {
@@ -89,11 +93,11 @@ class ChaptersController extends AppController
                 $badgeRightHtml = $speak['badge_left']->html;
             }
             $bodyCss = AppUtility::addPreClassToCss($bodyCss, '.body.object_' . $bodyId);
-            $bodyCss = "/*.body.object_{$bodyId}_start*/". $this->_makeBaseCss('.body.object_' . $bodyId, $bodyWidth, $bodyHeight, 'body', $faceRelLeft) . ' ' . $bodyCss . "/*.body.object_{$bodyId}_end*/";
+            $bodyCss = "/*.body.object_{$bodyId}_start*/". $this->_makeBaseCss('.body.object_' . $bodyId, $bodyWidth, $bodyHeight, 'body', $faceRelLeft, $objectUsage) . ' ' . $bodyCss . "/*.body.object_{$bodyId}_end*/";
 
             $speechCss = $speak['speech']->css;
             $speechCss = AppUtility::addPreClassToCss($speechCss, '.speech.object_' . $speechId);
-            $speechCss = "/*.speech.object_{$speechId}_start*/". $this->_makeBaseCss('.speech.object_' . $speechId, $speechWidth, $speechHeight, 'speech', $faceRelLeft) . ' ' . $speechCss . "/*.speech.object_{$speechId}_end*/";
+            $speechCss = "/*.speech.object_{$speechId}_start*/". $this->_makeBaseCss('.speech.object_' . $speechId, $speechWidth, $speechHeight, 'speech', $faceRelLeft, $objectUsage) . ' ' . $speechCss . "/*.speech.object_{$speechId}_end*/";
 
             $css ='.character_speak_' . $phraseNo . '{left:10%; width:100%; height:100%; position:absolute;}';
             $css = "/*.character_speak_{$phraseNo}_start*/" . $css . $faceCss . $bodyCss . "/*.character_speak_{$phraseNo}_end*/"  . $speechCss;
@@ -116,18 +120,20 @@ class ChaptersController extends AppController
         }
     }
 
-    private function _makeBaseCss($baseClass, $width, $height, $speakType, $faceRelLeft) {
+    private function _makeBaseCss($baseClass, $width, $height, $speakType, $faceRelLeft, $objectUsage) {
         $this->autoRender = false;
         $baseCss = $baseClass . '{ width:' . $width . '%;' . ' height:' . $height . '%; position:absolute;';
+        $objectusageArr = array_flip(Configure::read('object_usage_key'));
+        $objectUsage = $objectusageArr[$objectUsage];
         switch ($speakType) {
             case 'face':
-                $baseCss .= ' top:12%; left:' . $faceRelLeft . '%;';
+                $baseCss .= Configure::read("object_layout.{$objectUsage}.face") . 'left:' . $faceRelLeft . '%;';
                 break;
             case 'body':
-                $baseCss .= ' bottom:0%; left:0%;';
+                $baseCss .= Configure::read("object_layout.{$objectUsage}.body");
                 break;
             case 'speech':
-                $baseCss .= ' top:10%; right:5%;';
+                $baseCss .= Configure::read("object_layout.{$objectUsage}.speech");
                 break;
             default:
                 break;
@@ -135,5 +141,4 @@ class ChaptersController extends AppController
         $baseCss .= '}';
         return $baseCss;
     }
-
 }

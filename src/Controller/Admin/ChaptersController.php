@@ -14,14 +14,10 @@
  */
 namespace App\Controller\Admin;
 
-use Cake\ORM\TableRegistry;
 use Cake\Datasource\ConnectionManager;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
-use RuntimeException;
 use App\Controller\AppController;
 use Cake\Http\Exception\NotFoundException;
-use App\Utils\AppUtility;
+
 
 /**
  * Static content controller
