@@ -64,12 +64,12 @@ $(function () {
         var popup = document.getElementById('js-popup');
         popup.classList.remove('is-show');
     });
-    $(document).on('change', '.html', function () {
+    $(document).on('change', '.html_input', function () {
         var html = deleteSpace($(this).val());
         $('.html_background').html(html);
     })
 
-    $(document).on('change', '.css', function () {
+    $(document).on('change', '.css_input', function () {
         var css = deleteSpace($(this).val());
         $('.css_background').children('style').html(css);
         //CSSレイアウト更新(ajax)
