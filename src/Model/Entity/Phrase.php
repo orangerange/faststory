@@ -31,6 +31,7 @@ class Phrase extends Entity
      */
     protected $_accessible = [
         'id' => true,
+        'background_id' => true,
         'chapter_id' => true,
         'character_id' => true,
         'object_usage' => true,

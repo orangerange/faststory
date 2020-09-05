@@ -17,7 +17,7 @@
         {$this->Html->css('admin')}
         <title></title>
     </head>
-    <body>
+    <body id="body" {if $background}style="background-color:{$background->body_color}"{/if}>
         {$this->fetch('content')}
     </body>
 </html>

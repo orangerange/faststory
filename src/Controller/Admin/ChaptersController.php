@@ -15,6 +15,7 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Utils\AppUtility;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Http\Exception\NotFoundException;
@@ -33,6 +34,7 @@ class ChaptersController extends AppController
     public function initialize()
     {
         parent::initialize();
+        $this->loadModel('Backgrounds');
         $this->loadModel('Contents');
         $this->loadModel('Characters');
         $this->loadModel('Phrases');
@@ -64,6 +66,7 @@ class ChaptersController extends AppController
             $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $contentId])->order(['ObjectProducts.id' => 'ASC']);
             $contentName = $content['name'];
             $characters = $this->Characters->find('list')->where(['content_id' => $contentId]);
+            $backgrounds = $this->Backgrounds->find('list');
             $chapter = $this->Chapters->newEntity();
             if ($this->request->is('post')) {
                 $this->request->withData('content_id', $contentId);
@@ -80,7 +83,7 @@ class ChaptersController extends AppController
                     $this->Flash->error(__('新規登録に失敗しました'));
                 }
             }
-            $this->set(compact('chapterNo', 'characters', 'openFlg', 'contentId', 'contentName', 'objects', 'objectUsageArr', 'objectUsageStr'));
+            $this->set(compact('chapterNo', 'characters', 'backgrounds', 'openFlg', 'contentId', 'contentName', 'objects', 'objectUsageArr', 'objectUsageStr'));
         } else {
 			throw new NotFoundException(NotFoundMessage);
 		}
@@ -99,7 +102,8 @@ class ChaptersController extends AppController
             $objectCount = array();
             foreach ($chapter['phrases'] as $_key => $_value) {
                 $cssLayout = $_value->css;
-                $layout = $this->Chapters->findObjectLayoutByCss($cssLayout);
+                $Utils = new AppUtility();
+                $layout = $Utils->createObjectLayoutByCss($cssLayout);
                 $layouts[$_key] = $layout;
                 foreach ($layout as $_layout) {
                     if (isset($_layout['id']) && isset($_layout['no'])) {
@@ -114,6 +118,7 @@ class ChaptersController extends AppController
             $contentId = $chapter['content_id'];
             $contentName = $chapter['content']['name'];
             $characters = $this->Characters->find('list')->where(['content_id' => $chapter['content_id']]);
+            $backgrounds = $this->Backgrounds->find('list');
             $phraseNum = count($chapter['phrases']);
             $openFlg = array();
             for ($i = 0; $i < $phraseNum; $i++) {
@@ -148,7 +153,7 @@ class ChaptersController extends AppController
                     $connection->rollback();
                 }
             }
-            $this->set(compact('id', 'openFlg', 'characters', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts', 'objectCount', 'objectUsageArr', 'objectUsageStr'));
+            $this->set(compact('id', 'openFlg', 'characters', 'backgrounds', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts', 'objectCount', 'objectUsageArr', 'objectUsageStr'));
         } else {
             throw new NotFoundException(NotFoundMessage);
         }

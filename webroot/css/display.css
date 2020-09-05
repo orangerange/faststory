@@ -2,13 +2,12 @@
     .phrase_all {
         position: relative;
         width: 700px;
-        padding: 12px;
+        padding-top: 12px;
+        padding-bottom: 12px;
     }
-    .phrase_image {
-        position: relative;
+    .html_background {
         width: 700px;
         height:350px;
-        padding: 12px;
     }
     .character-image {
         position: absolute;
@@ -26,25 +25,30 @@
         margin-bottom: 5px;
     }
     .phrase {
-        /*薄黄色*/
-        background: #ffffcc;
         padding: 20px 20px 20px;
         border-radius: 30px;
+        border:solid 1px black;
+    }
+    .plain_phrase {
+        padding: 20px 20px 20px;
         border:solid 1px black;
     }
     .phrase_object_display {
         height: 350px;
         border:solid 1px black;
+        background-color:white;
         position:relative;
     }
-    .next_out {
+    .push_out {
         padding-left: 650px;
         padding-bottom: 40px;
-        padding-top: 40px;
+        padding-top: 80px;
     }
-    .next {
+    .push {
         bottom: 30px;
         font-size: 12px;
+        width:120px;
+        height:50px;
     }
     .phrase_object_display .speak {
         font-size: 39px;
@@ -55,24 +59,18 @@
     .phrase_object_display .sentence .name {
         font-size: 26px;
     }
-    .next {
-        width:120px;
-        height:50px;
-    }
 }
 @media screen and (max-width: 767px) {
     .phrase_all {
         position: relative;
         /*background: blue;*/
         width: 290px;
-        padding: 7px;
+        padding-top: 7px;
+        padding-bottom: 7px;
     }
-    .phrase_picture {
-        position: relative;
-        /*background: blue;*/
+    .html_background {
         width: 290px;
-        height:135px;
-        padding: 7px;
+        height:145px;
     }
     .character-image {
         position: absolute;
@@ -91,26 +89,37 @@
         font-size: 15px;
     }
     .phrase {
-        /*薄黄色*/
-        background: #ffffcc;
         padding: 10px 10px 10px;
         border-radius: 20px;
+        font-size: 15px;
+        border:solid 1px black;
+    }
+    .plain_phrase {
+        padding: 10px 10px 10px;
         font-size: 15px;
         border:solid 1px black;
     }
     .phrase_object_display {
         height: 145px;
         border:solid 1px black;
+        background-color:white;
         position:relative;
     }
-    .next_out {
+    .push_out {
         padding-left: 130px;
         padding-bottom: 40px;
         padding-top: 40px;
     }
-    .next {
+    .push {
         bottom: 30px;
     }
+}
+.phrase {
+    /*薄黄色*/
+    background: #ffffcc;
+}
+.plain_phrase {
+    background: lightskyblue;
 }
 .foreign {
     font-size:1.3em;
@@ -124,12 +133,12 @@
 }
 .html_show {
     /*薄水色*/
-    background: aliceblue;
+    background: lightsteelblue;
     width: 290px;
     height:145px;
     position:relative;
 }
-.next {
+.push {
     position: fixed;
 }
 .sentence .title {
@@ -176,4 +185,43 @@
 }
 .sentence .name {
     font-size: 13px;
+}
+body {
+    /*background-color:red;*/
+}
+.html_background {
+    position:fixed;
+    z-index:-2147483647;
+}
+.html_background_admin {
+    border:solid 1px black;
+}
+.html_background .square{
+    background-color:blue;
+    width:10%;
+    height:20%;
+    border-radius:50%;
+}
+.html_background .square:nth-of-type(2n) {
+    background-color:purple;
+}
+.html_background .square:nth-of-type(6n+1) {
+    position:absolute;
+    left:0%;
+}
+.html_background .square:nth-of-type(6n+2) {
+    position:absolute;
+    left:50%;
+}
+.html_background .square:nth-of-type(6n+3) {
+    position:absolute;
+    left:100%;
+}
+.html_background .square:nth-of-type(6n+4) {
+    position:absolute;
+    left:150%;
+}
+.html_background .square:nth-of-type(6n+5) {
+    position:absolute;
+    left:200%;
 }

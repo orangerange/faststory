@@ -11,11 +11,12 @@ var phrases = new Vue({
       loading:true,
       phraseNum:0,
   },
-
   mounted() {
       this.phraseNum = document.getElementById("phrase_num").value;
       scrollTo(0, 0);
+      // 最初のフレーズの高さを取得
       this.allHeight= this.$refs.speak_1.clientHeight;
+      // ウィンドウ全体の高さから、「next」ボタンの高さを引いた値
       this.displayHeight = window.innerHeight - this.$refs.next.clientHeight;
       window.addEventListener("scroll", this.handleScroll);
   },
@@ -35,6 +36,9 @@ var phrases = new Vue({
             //         translateX: 250
             //     })
             // }
+            if (this.num == this.phraseNum) {
+                this.buttonShow = false;
+            }
         }
     },
 
@@ -47,11 +51,33 @@ var phrases = new Vue({
         }
     },
     handleScroll: function(e) {
-        var scroll = this.allHeight - this.displayHeight;
-        if(window.scrollY +5 < scroll) {
-            this.buttonShow = false;
-        } else {
-            this.buttonShow = true;
+        if (this.num < this.phraseNum) {
+            var scroll = this.allHeight - this.displayHeight;
+            if (this.background_id != tmp_background_id) {
+                axios.get("/backgrounds/axios-change-background?id=" + tmp_background_id)
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                        var body = document.body;
+                        body.style.backgroundColor = response.data.body_color;
+                        document.getElementById("js_html_background").innerHTML = response.data.html;
+                        document.getElementById("js_css_background").innerHTML = '<style type="text/css">' + response.data.css;
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .finally(function () {
+                        // always executed
+                    });
+                this.background_id = tmp_background_id;
+            }
+            var scroll = this.allHeight - this.displayHeight;
+            if (window.scrollY + 5 < scroll) {
+                this.buttonShow = false;
+            } else {
+                this.buttonShow = true;
+            }
         }
     },
 

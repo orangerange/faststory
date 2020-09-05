@@ -136,13 +136,18 @@ return array(
           buttonShow: true,
           loading:true,
           phraseNum:0,
+          backgrounds:{},
+          background_id:"",
       },
-
       mounted() {
           this.phraseNum = document.getElementById("phrase_num").value;
           scrollTo(0, 0);
+          if (this.$refs.speak_1.dataset.background_id) {
+            this.backgrounds[0] = this.$refs.speak_1.dataset.background_id;
+            this.background_id = this.$refs.speak_1.dataset.background_id;
+          }
           this.allHeight= this.$refs.speak_1.clientHeight;
-          this.displayHeight = window.innerHeight - this.$refs.next.clientHeight;
+          this.displayHeight = window.innerHeight - this.$refs.next.clientHeight - this.$refs.header.clientHeight;
           window.addEventListener("scroll", this.handleScroll);
       },
       destroyed: function () {
@@ -158,9 +163,18 @@ return array(
 
     define('VUE_PHRASE_SCRIPT_LAST', '
             }
+            if (this.num == this.phraseNum) {
+              $(".next_out").remove();
+              $(".next_chapter_out").show();
+            }
         },
         addHeight: function (e) {
             var speak = "speak_" + this.num;
+            if (this.$refs[speak].dataset.background_id) {
+                if (this.$refs[speak].dataset.background_id.match(/^[0-9]*$/)){
+                    this.backgrounds[this.allHeight] = this.$refs[speak].dataset.background_id;
+                }
+            }
             this.allHeight += this.$refs[speak].clientHeight;
             if (this.allHeight > this.displayHeight) {
                 var scroll = this.allHeight - this.displayHeight;
@@ -168,14 +182,27 @@ return array(
             }
         },
         handleScroll: function(e) {
+            var tmp_background_id = "";
+            for (let key in this.backgrounds) {
+                if (window.scrollY >= key) {
+                    tmp_background_id = this.backgrounds[key];
+                }
+            }
+            if (this.background_id != tmp_background_id) {
+            var body_color = document.getElementById("css_background_" + tmp_background_id).dataset.body_color;
+            document.body.style.backgroundColor = body_color;
+//                        body.style.backgroundColor = response.data.body_color;
+//                        document.getElementById("js_html_background").innerHTML = response.data.html;
+
+                    this.background_id = tmp_background_id;
+            }
             var scroll = this.allHeight - this.displayHeight;
-            if(window.scrollY +5 < scroll) {
+            if(window.scrollY + 10 < scroll) {
                 this.buttonShow = false;
             } else {
                 this.buttonShow = true;
             }
         },
-
       },
     })
 '),

@@ -51,6 +51,7 @@ $(function () {
         $(this).nextAll('.input').find('.css').val('');
         $(this).prevAll('.object_layout_input').html('');
     })
+    // 無意味だったので一旦コメントアウト
     // $(document).on('change', '.js', function() {
     //     var phrase_no = $(this).parents().children('.phrase_no').val();
     //     var js ="$(document).on('click', '.object_animate_" + phrase_no + ", function() { " + $(this).val() + "})";

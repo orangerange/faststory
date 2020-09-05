@@ -113,7 +113,8 @@ class ChaptersController extends AppController
         if ($this->request->is("ajax")) {
             $css = $this->request->getData('css');
             $i = $this->request->getData('phrase_no');
-            $layouts = $this->Chapters->findObjectLayoutByCss($css);
+            $Utils = new AppUtility();
+            $layouts = $Utils->createObjectLayoutByCss($css);
             $this->set(compact('layouts', 'i'));
         } else {
             throw new NotFoundException(NotFoundMessage);

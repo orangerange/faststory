@@ -14,15 +14,7 @@
  */
 namespace App\Controller;
 
-use Cake\ORM\TableRegistry;
-use Cake\Datasource\ConnectionManager;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
-use App\Controller\AppController;
 use Cake\Http\Exception\NotFoundException;
-
-// メール送信
-use Cake\Mailer\Email;
 
 /**
  * Static content controller
@@ -41,6 +33,7 @@ class ChaptersController extends AppController
 		$this->loadModel('Contents');
 		$this->loadModel('Characters');
 		$this->loadModel('Phrases');
+		$this->loadModel('Backgrounds');
     }
 
 	public function index($prefix= null) {
@@ -61,16 +54,33 @@ class ChaptersController extends AppController
 			if (!$chapter = $this->Chapters->findByPrefixAndNo($prefix, $no)) {
 				throw new NotFoundException(NotFoundMessage);
 			}
-			// アニメーション用jsの取り出し
-            $scripts = array();
+			$nextFlg = true;
+            if (!$this->Chapters->findByPrefixAndNo($prefix, $no+1)) {
+                $nextFlg = false;
+            }
+            // 背景の取り出し
+            $chapterId = $chapter->get('id');
+			// アニメーション用js及び背景の取り出し
+            $scripts = [];
+            $backgrounds = [];
 			$phraseNum = 1;
             foreach($chapter['phrases'] as $_phrase) {
                 if (!empty($_phrase)) {
                     $scripts[$phraseNum] = $_phrase->js;
+                    if (!empty($_phrase->get('background_id'))) {
+                        $query = $this->Backgrounds->find()->where(['id' => $_phrase->get('background_id')]);
+                        if ($query->count() > 0) {
+                            $backgrounds[$phraseNum]  = $query->first();
+                        }
+                    }
                 }
                 $phraseNum ++;
             }
-			$this->set(compact('chapter', 'scripts'));
+            $firstBackground = null;
+            if (isset($backgrounds[1])) {
+                $firstBackground = $backgrounds[1];
+            }
+			$this->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'firstBackground'));
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
