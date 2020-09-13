@@ -1,4 +1,14 @@
 @media screen and (min-width: 768px) {
+    .header {
+        height: 30px;
+    }
+    .header div {
+        line-height: 30px;
+    }
+    .phrases_body {
+        top: 40px;
+        position:absolute;
+    }
     .phrase_all {
         position: relative;
         width: 700px;
@@ -6,6 +16,7 @@
         padding-bottom: 12px;
     }
     .html_background {
+        top: 20px;
         width: 700px;
         height:350px;
     }
@@ -61,6 +72,16 @@
     }
 }
 @media screen and (max-width: 767px) {
+    .header {
+        height: 25px;
+    }
+    .header div{
+        line-height: 25px;
+    }
+    .phrases_body {
+        top: 35px;
+        position:absolute;
+    }
     .phrase_all {
         position: relative;
         /*background: blue;*/
@@ -69,6 +90,7 @@
         padding-bottom: 7px;
     }
     .html_background {
+        top: 15px;
         width: 290px;
         height:145px;
     }
@@ -117,9 +139,11 @@
 .phrase {
     /*薄黄色*/
     background: #ffffcc;
+    opacity:0.9;
 }
 .plain_phrase {
     background: lightskyblue;
+    opacity:0.9;
 }
 .foreign {
     font-size:1.3em;
@@ -137,6 +161,13 @@
     width: 290px;
     height:145px;
     position:relative;
+}
+.header {
+    top:0px;
+    background-color: gainsboro;
+    opacity: 0.7;
+    position: fixed;
+    z-index:2147483647;
 }
 .push {
     position: fixed;
@@ -195,33 +226,4 @@ body {
 }
 .html_background_admin {
     border:solid 1px black;
-}
-.html_background .square{
-    background-color:blue;
-    width:10%;
-    height:20%;
-    border-radius:50%;
-}
-.html_background .square:nth-of-type(2n) {
-    background-color:purple;
-}
-.html_background .square:nth-of-type(6n+1) {
-    position:absolute;
-    left:0%;
-}
-.html_background .square:nth-of-type(6n+2) {
-    position:absolute;
-    left:50%;
-}
-.html_background .square:nth-of-type(6n+3) {
-    position:absolute;
-    left:100%;
-}
-.html_background .square:nth-of-type(6n+4) {
-    position:absolute;
-    left:150%;
-}
-.html_background .square:nth-of-type(6n+5) {
-    position:absolute;
-    left:200%;
 }

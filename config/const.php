@@ -131,15 +131,46 @@ return array(
       data: {
           num: 1,
           allHeight: 0,
+          shadowHeight: 0,
           scroll: 0,
           displayHeight: 0,
+          headerHeight: 0,
+          nextHeight: 0,
           buttonShow: true,
           loading:true,
           phraseNum:0,
           backgrounds:{},
+          opacityA:{},
+          opacityB:{},
           background_id:"",
       },
       mounted() {
+          this.headerHeight = this.$refs.header.clientHeight;
+          this.nextHeight = this.$refs.next.clientHeight;
+                          // 背景オブジェクトの適宜複製
+          var objects = document.querySelectorAll(".objects");
+          if (objects) {
+            // 行複製
+            for(var obsIndex = 0; obsIndex < objects.length; obsIndex++) {
+                // 列複製
+                var row = objects[obsIndex].firstElementChild;
+                var columnNum = row.dataset.column_num;
+                var columnHtml = row.innerHTML;
+                var columnsHtml = "";
+                for (var columnCount=1; columnCount<=columnNum; columnCount++) {
+                  columnsHtml += columnHtml;
+                }
+                row.innerHTML = columnsHtml;
+                // 行複製
+                var rowNum = objects[obsIndex].dataset.row_num;
+                var rowHtml = objects[obsIndex].innerHTML;
+                var rowsHtml = "";
+                for (var rowCount=1; rowCount<=rowNum; rowCount++) {
+                  rowsHtml += rowHtml;
+                }
+                objects[obsIndex].innerHTML = rowsHtml;
+            }
+           }
           this.phraseNum = document.getElementById("phrase_num").value;
           scrollTo(0, 0);
           if (this.$refs.speak_1.dataset.background_id) {
@@ -147,7 +178,7 @@ return array(
             this.background_id = this.$refs.speak_1.dataset.background_id;
           }
           this.allHeight= this.$refs.speak_1.clientHeight;
-          this.displayHeight = window.innerHeight - this.$refs.next.clientHeight - this.$refs.header.clientHeight;
+          this.displayHeight = window.innerHeight - this.nextHeight;
           window.addEventListener("scroll", this.handleScroll);
       },
       destroyed: function () {
@@ -170,18 +201,52 @@ return array(
         },
         addHeight: function (e) {
             var speak = "speak_" + this.num;
+
+            // 背景変更時のスクロール
             if (this.$refs[speak].dataset.background_id) {
                 if (this.$refs[speak].dataset.background_id.match(/^[0-9]*$/)){
                     this.backgrounds[this.allHeight] = this.$refs[speak].dataset.background_id;
+                    // 一番上までスクロール
+                    this.shadowHeight = this.displayHeight - this.headerHeight - this.$refs[speak].clientHeight;
+                    var scroll = this.allHeight;
+                    setTimeout(function () {scrollTo(0, scroll)}, 10);
+
+                    this.allHeight += this.$refs[speak].clientHeight;
                 }
+            } else {
+                this.allHeight += this.$refs[speak].clientHeight;
+                // 調整用要素の高さを減らす
+                if (this.shadowHeight > 0) {
+                    this.shadowHeight -= this.$refs[speak].clientHeight;
+                }
+                if (this.shadowHeight < 0) {
+                    this.shadowHeight = 0;
+                }
+                // 通常のスクロール
+                var scroll = this.allHeight + this.headerHeight + this.shadowHeight - this.displayHeight;
+                if (scroll > 0) {
+                    setTimeout(function () {scrollTo(0, scroll)}, 10);
+                 }
             }
-            this.allHeight += this.$refs[speak].clientHeight;
-            if (this.allHeight > this.displayHeight) {
-                var scroll = this.allHeight - this.displayHeight;
-                scrollTo(0, scroll);
-            }
+
         },
         handleScroll: function(e) {
+            // ヘッダーと被ったフレーズの透明化
+            var speaks = document.querySelectorAll(".speak");
+            for(var spksIndex = 0; spksIndex < speaks.length; spksIndex++) {
+                var speak = speaks[spksIndex];
+                var top = speak.getBoundingClientRect().top
+                if (top + speak.clientHeight * 3/4 < this.headerHeight) {
+                    speak.style.opacity = 0;
+                } else if (top + speak.clientHeight/3 < this.headerHeight) {
+                    speak.style.opacity = 0.3;
+                } else if (top < this.headerHeight) {
+                    speak.style.opacity = 0.5;
+                } else {
+                    speak.style.opacity = 1;
+                }
+            }
+            // 背景切り替え
             var tmp_background_id = "";
             for (let key in this.backgrounds) {
                 if (window.scrollY >= key) {
@@ -189,14 +254,12 @@ return array(
                 }
             }
             if (this.background_id != tmp_background_id) {
-            var body_color = document.getElementById("css_background_" + tmp_background_id).dataset.body_color;
-            document.body.style.backgroundColor = body_color;
-//                        body.style.backgroundColor = response.data.body_color;
-//                        document.getElementById("js_html_background").innerHTML = response.data.html;
-
-                    this.background_id = tmp_background_id;
+                var body_color = document.getElementById("css_background_" + tmp_background_id).dataset.body_color;
+                document.body.style.backgroundColor = body_color;
+                this.background_id = tmp_background_id;
             }
-            var scroll = this.allHeight - this.displayHeight;
+            // ボタン表示非表示設定
+            var scroll = this.allHeight  + this.shadowHeight - this.displayHeight;
             if(window.scrollY + 10 < scroll) {
                 this.buttonShow = false;
             } else {

@@ -19,32 +19,41 @@
     </div>
 {/foreach}
 <div id="phrases">
-    <div class="header" ref="header">
-        <p>{$chapter['content']->name|escape}</p>
-        <h1>第{$no|escape}話 {$chapter['title']|escape}{if $no > 1}<button onclick="location.href='/chapters/display/{$prefix|escape}/{$no-1|escape}'">前話に戻る</button>{/if}</h1>
-    </div>
     <div class="background">
         {foreach from=$backgrounds key=$_phraseNum item=$_background}
-            <div class="html_background" id="html_background_{$_background->id}" v-if="background_id == {$_background->id}">
+            <div class="html_background" id="html_background_{$_background->id}"
+                 v-show="background_id == {$_background->id}">
                 {$_background->html}
             </div>
         {/foreach}
     </div>
-    {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>count($chapter['phrases'])])}
-    {foreach from=$chapter['phrases'] item=_phrase name=phraseLoop2}
-        <div class="speak" {if $_phrase->background_id}data-background_id="{$_phrase->background_id|escape}"{/if} v-show="num >={$smarty.foreach.phraseLoop2.iteration}" ref="speak_{$smarty.foreach.phraseLoop2.iteration}">
-            {$this->element('phrase/_display', ['character'=>$_phrase->character, 'phrase'=>$_phrase, 'noCharacterCssFlg' => true, 'i' => $smarty.foreach.phraseLoop2.iteration])}
+    <div class="header" ref="header">
+        <div>
+            {$chapter['content']->name|escape}&nbsp;第{$no|escape}話
         </div>
-    {/foreach}
-    <div class="next_out push_out" ref="next">
-        <button v-if="buttonShow" class="next push" @click="next">next!</button>
     </div>
-    <div class="next_chapter_out push_out" style="display:none">
-        {if $nextFlg}
-            <button v-if="buttonShow" onclick="location.href='/chapters/display/{$prefix|escape}/{$no+1|escape}'">
-                次話へ進む
-            </button>
-        {/if}
+    <div class="phrases_body">
+        {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>count($chapter['phrases'])])}
+        {foreach from=$chapter['phrases'] item=_phrase name=phraseLoop2}
+            <div class="speak" {if $_phrase->background_id}data-background_id="{$_phrase->background_id|escape}"{/if}
+                 v-show="num >={$smarty.foreach.phraseLoop2.iteration}"
+                 ref="speak_{$smarty.foreach.phraseLoop2.iteration}">
+                {$this->element('phrase/_display', ['character'=>$_phrase->character, 'phrase'=>$_phrase, 'noCharacterCssFlg' => true, 'i' => $smarty.foreach.phraseLoop2.iteration])}
+            </div>
+        {/foreach}
+        {*背景変更スクロール時の調整用*}
+        <div class="shadow_height" v-show="shadowHeight > 0" v-bind:style="{ height:shadowHeight }">
+        </div>
+        <div class="next_out push_out" ref="next">
+            <button v-if="buttonShow" class="next push" @click="next">next!</button>
+        </div>
+        <div class="next_chapter_out push_out" style="display:none">
+            {if $nextFlg}
+                <button v-if="buttonShow" onclick="location.href='/chapters/display/{$prefix|escape}/{$no+1|escape}'">
+                    次話へ進む
+                </button>
+            {/if}
+        </div>
     </div>
 </div>
 {$this -> Html-> script('axios.min')}
