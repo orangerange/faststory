@@ -125,7 +125,7 @@ return array(
         )
     ),
     define('VUE_PHRASE_SCRIPT_FIRST', '
-        var phrases = new Vue({
+      var phrases = new Vue({
       el: "#phrases",
       delimiters: ["%%", "%%"],
       data: {
@@ -135,7 +135,7 @@ return array(
           scroll: 0,
           displayHeight: 0,
           headerHeight: 0,
-          nextHeight: 0,
+          buttonHeight: 0,
           buttonShow: true,
           loading:true,
           phraseNum:0,
@@ -143,10 +143,11 @@ return array(
           opacityA:{},
           opacityB:{},
           background_id:"",
+          isEnd:false,
       },
       mounted() {
           this.headerHeight = this.$refs.header.clientHeight;
-          this.nextHeight = this.$refs.next.clientHeight;
+          this.buttonHeight = this.$refs.next.clientHeight;
                           // 背景オブジェクトの適宜複製
           var objects = document.querySelectorAll(".objects");
           if (objects) {
@@ -178,13 +179,48 @@ return array(
             this.background_id = this.$refs.speak_1.dataset.background_id;
           }
           this.allHeight= this.$refs.speak_1.clientHeight;
-          this.displayHeight = window.innerHeight - this.nextHeight;
+          this.displayHeight = window.innerHeight - this.buttonHeight;
           window.addEventListener("scroll", this.handleScroll);
+          // ヘッダ押下時の設定
+          document.getElementById("header").onclick = function() {
+            var popup = document.getElementById("js-popup");
+        　　popup.classList.add("is-show");
+          var blackBg = document.getElementById("js-black-bg");
+        　var closeBtn = document.getElementById("js-close-btn");
+        　closePopUp(blackBg);
+        　closePopUp(closeBtn);
+            　function closePopUp(elem) {
+                if (!elem)
+                    return;
+                elem.addEventListener("click", function () {
+                    popup.classList.remove("is-show");
+                })
+            }
+         }
       },
       destroyed: function () {
         window.removeEventListener("scroll", this.handleScroll);
       },
       methods: {
+      header: function (e) {
+           this.isEnd = false;
+            this.showPopUp();
+      },
+      showPopUp: function (e) {
+            var popup = document.getElementById("js-popup");
+        　　popup.classList.add("is-show");
+          var blackBg = document.getElementById("js-black-bg");
+        　var closeBtn = document.getElementById("js-close-btn");
+        　closePopUp(blackBg);
+        　closePopUp(closeBtn);
+            　function closePopUp(elem) {
+                if (!elem)
+                    return;
+                elem.addEventListener("click", function () {
+                    popup.classList.remove("is-show");
+                })
+            }
+      },
         next: function (e) {
             if (this.num < this.phraseNum) {
                 this.num++;
@@ -193,10 +229,11 @@ return array(
             '),
 
     define('VUE_PHRASE_SCRIPT_LAST', '
-            }
-            if (this.num == this.phraseNum) {
-              $(".next_out").remove();
-              $(".next_chapter_out").show();
+            } else {
+            // 全フレーズ表示後のnextボタン押下
+            this.isEnd = true;
+              this.isEnd = true;
+              this.showPopUp();
             }
         },
         addHeight: function (e) {

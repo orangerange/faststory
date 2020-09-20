@@ -1,0 +1,106 @@
+.popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+}
+.popup.is-show {
+    opacity: 1;
+    visibility: visible;
+}
+.popup-inner {
+    position: absolute;
+    background-color: moccasin;
+    left: 0%;
+    top: 0%;
+    width: 60%;
+    z-index: 2;
+}
+.popup-inner th {
+    left: 0%;
+    top: 0%;
+    left:10%;
+}
+.popup-inner table {
+    display: block;
+    overflow-y: scroll;
+    white-space: nowrap;
+}
+.close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+}
+.close-btn i {
+    font-size: 20px;
+    color: #333;
+}
+.black-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.8);
+    z-index: 1;
+    cursor: pointer;
+}
+.close-btn {
+    position:absolute;
+    /*background-color:red;*/
+}
+.close-btn .stick {
+    position:absolute;
+    background-color:black;
+}
+.close-btn .stick_A {
+    transform:rotate(45deg);
+}
+.close-btn .stick_B {
+    transform:rotate(-45deg);
+}
+
+@media screen and (min-width: 768px) {
+    .popup-inner {
+        max-width: 400px;
+    }
+    .popup-inner table{
+        max-height:200px;
+    }
+    .close-btn {
+        width: 50px;
+        height: 50px;
+        right: 30px;
+        top: 0px;
+    }
+    .close-btn .stick {
+        width:60%;
+        height:15%;
+        top:30%;
+        left:20%;
+    }
+}
+@media screen and (max-width: 767px) {
+    .close-btn {
+        width: 25px;
+        height: 25px;
+        right: 0px;
+        top: 0px;
+    }
+    .close-btn .stick {
+        width:60%;
+        height:20%;
+        top:40%;
+        left:20%;
+    }
+}
+

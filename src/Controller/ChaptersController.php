@@ -49,15 +49,15 @@ class ChaptersController extends AppController
 		$this->set(compact('chapters', 'content_id', 'content'));
 	}
 
-	public function display($prefix=null, $no) {
+	public function display($prefix = null, $no) {
 		if (isset($prefix) && preg_match("/^[0-9]+$/", $no)) {
 			if (!$chapter = $this->Chapters->findByPrefixAndNo($prefix, $no)) {
 				throw new NotFoundException(NotFoundMessage);
 			}
-			$nextFlg = true;
-            if (!$this->Chapters->findByPrefixAndNo($prefix, $no+1)) {
-                $nextFlg = false;
-            }
+            // チャプタ一覧取得
+            $query = $this->Chapters->find('prefixAll', ['prefix' => $prefix]);
+            $chapters = $query->all();
+            $chapterCount = $query->count();
             // 背景の取り出し
             $chapterId = $chapter->get('id');
 			// アニメーション用js及び背景の取り出し
@@ -80,7 +80,7 @@ class ChaptersController extends AppController
             if (isset($backgrounds[1])) {
                 $firstBackground = $backgrounds[1];
             }
-			$this->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'firstBackground'));
+			$this->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'firstBackground', 'chapters', 'chapterCount'));
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}

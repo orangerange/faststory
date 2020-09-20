@@ -84,7 +84,6 @@
     }
     .phrase_all {
         position: relative;
-        /*background: blue;*/
         width: 290px;
         padding-top: 7px;
         padding-bottom: 7px;
@@ -167,9 +166,9 @@
     background-color: gainsboro;
     opacity: 0.7;
     position: fixed;
-    z-index:2147483647;
+    z-index:999;
 }
-.push {
+.next {
     position: fixed;
 }
 .sentence .title {
@@ -217,13 +216,13 @@
 .sentence .name {
     font-size: 13px;
 }
-body {
-    /*background-color:red;*/
-}
 .html_background {
     position:fixed;
     z-index:-2147483647;
 }
 .html_background_admin {
     border:solid 1px black;
+}
+.speech {
+    z-index:900;
 }

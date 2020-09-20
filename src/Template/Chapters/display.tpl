@@ -27,7 +27,8 @@
             </div>
         {/foreach}
     </div>
-    <div class="header" ref="header">
+    {$this->element('chapter/_header_titles')}
+    <div class="header" ref="header" id="header" @click="header">
         <div>
             {$chapter['content']->name|escape}&nbsp;第{$no|escape}話
         </div>
@@ -45,14 +46,7 @@
         <div class="shadow_height" v-show="shadowHeight > 0" v-bind:style="{ height:shadowHeight }">
         </div>
         <div class="next_out push_out" ref="next">
-            <button v-if="buttonShow" class="next push" @click="next">next!</button>
-        </div>
-        <div class="next_chapter_out push_out" style="display:none">
-            {if $nextFlg}
-                <button v-if="buttonShow" onclick="location.href='/chapters/display/{$prefix|escape}/{$no+1|escape}'">
-                    次話へ進む
-                </button>
-            {/if}
+            <button v-if="buttonShow" class="next push" @click="next">＋</button>
         </div>
     </div>
 </div>

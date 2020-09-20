@@ -5,6 +5,7 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
 
@@ -85,6 +86,17 @@ class ChaptersTable extends Table {
 	public function findByPrefixAndNo($prefix, $no) {
 		return $this->find()->where(['Contents.prefix'=>$prefix, 'Chapters.no' => $no])->contain(['Phrases.Characters', 'Contents'])->first();
 	}
+
+    public function findPrefixAll(Query $query, array $options = [])
+    {
+        $query->select(['Contents.name', 'Chapters.no', 'Chapters.title']);
+        $query->contain(['Contents']);
+        $query->where([
+            'Contents.prefix' => Hash::get($options, 'prefix', ''),
+        ]);
+
+        return $query;
+    }
 
 	public function deleteById($id) {
 		if (!$this->deleteAll(['id'=>$id])) {
