@@ -40,7 +40,7 @@
 <h1>ロゴ{if $editFlg}編集{else}登録{/if}</h1>
 {$this->Form->create($logo,['enctype' => 'multipart/form-data'])}
 {$this->Form->input('name', ['type'=>'text'])}
-{$this->Form->input('background_color', ['class'=>'background_color', 'type'=>'color'])}
+{$this->Form->input('background_color', ['class'=>'background_color', 'type'=>'color', 'value' => '#ffffff'])}
 <div id="logo" class="html_logo html_logo_admin" {if $logo->background_color}style="background-color:{$logo->background_color}"{/if}>
     {$logo->html}
 </div>

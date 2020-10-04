@@ -43,7 +43,7 @@
 <h1>背景{if $editFlg}編集{else}登録{/if}</h1>
 {$this->Form->create($background,['enctype' => 'multipart/form-data'])}
 {$this->Form->input('name', ['type'=>'text'])}
-{$this->Form->input('body_color', ['class'=>'body_color', 'type'=>'color'])}
+{$this->Form->input('body_color', ['class'=>'body_color', 'type'=>'color', 'value' => '#ffffff'])}
 <button class='object_select' type='button'>選択</button>
 <button class='object_modify' type='button'>微調整</button>
 <button class='object_clear' type='button'>クリア</button>
