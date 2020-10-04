@@ -148,8 +148,8 @@ $(function () {
         $('.html_background').html('');
         $('.css_background').find('style').html('');
         //イラストhtml・cssクリア
-        $('.input').find('.html').val('');
-        $('.input').find('.css').val('');
+        $('.input').find('.html_input').val('');
+        $('.input').find('.css_input').val('');
         $('.object_layout_input').html('');
     })
 })
