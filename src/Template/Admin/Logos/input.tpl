@@ -35,7 +35,7 @@
     <div class='black-background' id='js-black-bg'></div>
 </div>
 <div class='object_layout_input'>
-    {$this->element('admin/logo/_object_layout', ['layouts'=>$layouts])}
+    {$this->element('admin/layout/_object_layout', ['layouts'=>$layouts])}
 </div>
 <h1>ロゴ{if $editFlg}編集{else}登録{/if}</h1>
 {$this->Form->create($logo,['enctype' => 'multipart/form-data'])}

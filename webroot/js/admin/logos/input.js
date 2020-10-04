@@ -46,7 +46,7 @@ $(function () {
         // CSSレイアウト更新(ajax)
         $.ajax({
             type: "post",
-            url: "/admin_ajax/logos/object-layout",
+            url: "/admin_ajax/layouts/object-layout",
             dataType: 'text',
             // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
             data: {
@@ -74,7 +74,7 @@ $(function () {
         //CSSレイアウト更新(ajax)
         $.ajax({
             type: "post",
-            url: "/admin_ajax/logos/object-layout",
+            url: "/admin_ajax/layouts/object-layout",
             dataType: 'text',
             // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
             data: {

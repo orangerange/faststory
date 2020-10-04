@@ -23,14 +23,12 @@ use App\Utils\AppUtility;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class ContentsController extends AppController
+class LogosController extends AppController
 {
 
 	public function initialize()
     {
         parent::initialize();
-		$this->loadModel('ObjectProducts');
-		$this->loadModel('Characters');
     }
 
     public function objectLayout() {

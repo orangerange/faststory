@@ -42,7 +42,7 @@
     {$content['thumbnail_html']}
 </div>
 <div class='object_layout_input'>
-    {$this->element('admin/contents/_object_layout', ['layouts'=>$layouts])}
+    {$this->element('admin/layout/_object_layout', ['layouts'=>$layouts])}
 </div>
 <button class='object_select' type='button'>選択</button>
 <button class='object_modify' type='button'>微調整</button>

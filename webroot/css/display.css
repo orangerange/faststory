@@ -98,15 +98,18 @@
 .html_logo_admin {
     border:solid 1px black;
 }
-.html_logo_base {
-    position:relative;
-    width: 386px;
-    height:193px;
+.html_icon_admin {
+    border:solid 1px black;
 }
 .html_logo {
     position:relative;
     width: 579px;
     height:193px;
+}
+.html_icon {
+    position:relative;
+    width: 134px;
+    height:134px;
 }
 .icon_circle {
   position:relative;

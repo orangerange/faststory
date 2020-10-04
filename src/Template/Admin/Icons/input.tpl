@@ -1,10 +1,7 @@
 {$this->Flash->render()}
-{$this->Html->script('admin/backgrounds/input.js', ['block'=>'script'])}
-<div class='css_background'>
-    {$this->Display->css($background->css)}
-</div>
-<div class="html_background html_background_admin">
- {$background->html}
+{$this->Html->script('admin/icons/input.js', ['block'=>'script'])}
+<div class='css_icon'>
+    {$this->Display->css($icon->css)}
 </div>
 <div class='popup' id='js-popup'>
     <div class='popup-inner'>
@@ -40,10 +37,14 @@
 <div class='object_layout_input'>
     {$this->element('admin/layout/_object_layout', ['layouts'=>$layouts])}
 </div>
-<h1>背景{if $editFlg}編集{else}登録{/if}</h1>
-{$this->Form->create($background,['enctype' => 'multipart/form-data'])}
+<h1>アイコン{if $editFlg}編集{else}登録{/if}</h1>
+{$this->Form->create($icon,['enctype' => 'multipart/form-data'])}
 {$this->Form->input('name', ['type'=>'text'])}
-{$this->Form->input('body_color', ['class'=>'body_color', 'type'=>'color', 'value' => '#ffffff'])}
+{$this->Form->input('background_color', ['class'=>'background_color', 'type'=>'color', 'value' => '#ffffff'])}
+<div id="icon" class="html_icon html_icon_admin" {if $icon->background_color}style="background-color:{$icon->background_color}"{/if}>
+    {$icon->html}
+</div>
+<div class="icon_circle"></div>
 <button class='object_select' type='button'>選択</button>
 <button class='object_modify' type='button'>微調整</button>
 <button class='object_clear' type='button'>クリア</button>
@@ -51,4 +52,4 @@
 {$this->Form->input('css', ['class' => 'css_input', 'type'=>'textarea', 'cols'=>50])}
 {$this->Form->button('登録')}
 {$this->Form->end()}
-<div><a href='/admin/backgrounds/index'>一覧に戻る</a></div>
+<div><a href='/admin/icons/index'>一覧に戻る</a></div>
