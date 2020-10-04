@@ -99,6 +99,9 @@ class PartsController extends AppController
 			$part = $this->Parts->newEntity($data);
 			if($this->Parts->save($part)) {
 				$this->Flash->success(__('新規登録しました'));
+                return $this->redirect(
+                    ['controller' => 'Parts', 'action' => 'index', $templateId]
+                );
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}

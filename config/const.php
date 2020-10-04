@@ -109,6 +109,7 @@ return array(
 			'face'=>'3',
 		)
 	),
+	define('INDEX_BODY_COLOR', 'lightblue'),
 	define('PHRASE_MUX_NUM', 50),
 	define('NotFoundMessage', '不正な遷移です'),
     define('FLG_OFF', 0),

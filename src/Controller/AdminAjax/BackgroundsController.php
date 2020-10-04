@@ -16,8 +16,6 @@ namespace App\Controller\AdminAjax;
 
 use App\Controller\AppController;
 use App\Utils\AppUtility;
-use Cake\Http\Exception\NotFoundException;
-use Cake\Core\Configure;
 /**
  * Static content controller
  *

@@ -176,4 +176,33 @@ $(function () {
                 .find('.' + parts_class)
                 .replaceWith(html);
     });
+
+    $(document).on('click', '.parts_clear', function () {
+        var parts_category_no = $(this).closest('td').find('.parts_category_no').val();
+        var parts_class = $(this).closest('td').find('.parts_class').val();
+        var html = '<div class="' + parts_class + '"></div>';
+        var css = '';
+        $('.object_input_' + parts_category_no).html(html);
+        $('.css_' + parts_category_no).find('style').html(css);
+        $('.parts_css_'+ parts_category_no).val(css);
+        //その時点における全体cssを取得
+        var css_sum ='';
+        $.each(category_ids, function (index, val) {
+            if ($('.parts_css_' + val).val() != '') {
+                css_sum += $('.parts_css_' + val).val();
+            }
+        });
+        $('.css_input').val(css_sum);
+        var css_sum_add_class = addPreClassToCss(
+            css_sum
+                .replace('　', ''),
+            '.parts_sum'
+        );
+        $('.css_sum')
+            .find('style')
+            .html(css_sum_add_class);
+        $('.parts_sum')
+            .find('.' + parts_class)
+            .replaceWith(html);
+    });
 })

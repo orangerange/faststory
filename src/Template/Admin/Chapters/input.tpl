@@ -19,11 +19,12 @@
                         <input type='hidden' class='object_id' value={$_value->id|escape}>
                         <input type='hidden' class='width' value='{$_value->object_template->width|escape}'>
                         <input type='hidden' class='height' value='{$_value->object_template->height|escape}'>
+                        <input type='hidden' class='class_name' value='{$_value->object_template->class_name|escape}'>
                         <p>{$_value->name|escape}</p>
                         オブジェクト番号: <input type='text' class='object_no {if $_value->character_id}{foreach from=","|explode:$_value->character_id item=_val}{if $_val}character_{$_val|escape} {/if}{/foreach}{/if}{if $_value->object_usage}{foreach from=","|explode:$_value->object_usage item=_val}{if $_val}usage_{$_val|escape} {/if}{/foreach}{/if}{if array_key_exists($_value->template_id, $this->Config->read('object_character'))}default_{$this->Config->read('object_character.'|cat:$_value->template_id)}{/if} ' value={$objectCount[$_value->id]+1|default:'1'}>
                         <div class='html_show'>
                             <div class='object_input' style='width:{$_value->object_template->width|escape}%; height:{$_value->object_template->height|escape}%;'>
-                                <div class='object_{$_value->id|escape}'>
+                                <div class='{$_value->object_template->class_name|escape} object_{$_value->id|escape}'>
                                     {$_value->html}
                                 </div>
                             </div>

@@ -18,13 +18,13 @@ use App\Controller\AppController;
 use App\Utils\AppUtility;
 
 /**
- * Static content controller
+ * Static Logo controller
  *
  * This controller will render views from Template/Pages/
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class ContentsController extends AppController
+class LogosController extends AppController
 {
 	public function initialize()
     {
@@ -34,44 +34,43 @@ class ContentsController extends AppController
     }
 
 	public function index() {
-		//ini_set('default_charset', 'euc-jp');
-		$contents = $this->Contents->find('all');
-		$this->set(compact('contents'));
+		$logos = $this->Logos->find('all');
+		$this->set(compact('logos'));
 	}
 
 	public function input() {
         $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
-		$content =$this->Contents->newEntity();
+		$logo =$this->Logos->newEntity();
 		if($this->request->is('post')) {
-			$content = $this->Contents->patchEntity($content, $this->request->getData());
-			if($this->Contents->save($content)) {
+			$Logo = $this->Logos->patchEntity($logo, $this->request->getData());
+			if ($this->Logos->save($logo)) {
 				$this->Flash->success(__('新規登録しました'));
 				return $this->redirect(['action' => 'index']);
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('content', 'objects'));
+		$this->set(compact('logo', 'objects'));
 	}
 
 	public function edit($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
-			if(!$content = $this->Contents->findById($id)->first()) {
+			if(!$logo = $this->Logos->findById($id)->first()) {
 				throw new NotFoundException(NotFoundMessage);
 			}
             $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
             $Utils = new AppUtility();
-            $layouts = $Utils->createObjectLayoutByCss($content->get('thumbnail_css'));
+            $layouts = $Utils->createObjectLayoutByCss($logo->get('css'));
 			if($this->request->is(['patch', 'post', 'put'])) {
-				$content = $this->Contents->patchEntity($content, $this->request->getData());
-				if ($this->Contents->save($content)) {
+				$logo = $this->Logos->patchEntity($logo, $this->request->getData());
+				if ($this->Logos->save($logo)) {
 					$this->Flash->success(__('更新しました'));
 //					return $this->redirect(['action' => 'index']);
 				} else {
 					$this->Flash->error(__('更新に失敗しました'));
 				}
 			}
-			$this->set(compact('content', 'objects', 'layouts'));
+			$this->set(compact('logo','objects', 'layouts'));
 		} else{
 			throw new NotFoundException(NotFoundMessage);
 		}
@@ -79,16 +78,27 @@ class ContentsController extends AppController
 		$this->render('input');
 	}
 
-	public function delete($id) {
-		if (preg_match("/^[0-9]+$/", $id)) {
-			die('削除');
-//			$content = $this->Contents->get($id);
-//			$this->Contents->delete($id);
-		} else {
-			die('存在しない');
-		}
-		$this->render(false,false);
-	}
+    public function detail($id) {
+        if (preg_match("/^[0-9]+$/", $id)) {
+            if (!$logo = $this->Logos->findById($id)->first()) {
+                throw new NotFoundException(NotFoundMessage);
+            }
+            $this->set(compact('logo'));
+        } else{
+            throw new NotFoundException(NotFoundMessage);
+        }
+    }
+
+//	public function delete($id) {
+//		if (preg_match("/^[0-9]+$/", $id)) {
+//			die('削除');
+////			$Logo = $this->Logos->get($id);
+////			$this->Logos->delete($id);
+//		} else {
+//			die('存在しない');
+//		}
+//		$this->render(false,false);
+//	}
 
 
 }

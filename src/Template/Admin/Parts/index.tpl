@@ -2,10 +2,7 @@
 {$this->Html->script('admin/part/index.js', ['block'=>'script'])}
 <h1>パーツ一覧({$template['name']})</h1>
 <div><a href='/admin/parts/input/{$templateId|escape}/'>新規登録</a></div>
-<div><a href='/admin/characters/input'>キャラクター新規登録</a></div>
-<div>
-    <a href='/admin/contents/index'>作品一覧</a>
-</div>
+<div><a href='/admin/objects/input/{$templateId|escape}/'>オブジェクトを作成する</a></div>
 <table>
     {assign var='partName' value=''}
         {foreach from=$parts item=part}
@@ -23,14 +20,14 @@
                     {/strip}
                 </div>
                 {if $template['class_name'] == 'face'}
-                    <div class='character_box object_input'>
+                    <div class='face character_box object_input'>
                         {strip}
                             {$part->html}
                         {/strip}
                     </div>
                 {else}
                     <div class='html_show'>
-                        <div class='object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                        <div class='{$template->class_name|escape} object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                             {$part->html}
                         </div>
                     </div>

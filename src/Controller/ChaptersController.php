@@ -36,18 +36,20 @@ class ChaptersController extends AppController
 		$this->loadModel('Backgrounds');
     }
 
-	public function index($prefix= null) {
-		if (isset($prefix)) {
-			if (!$this->Contents->exists(['prefix'=>$prefix])) {
-				throw new NotFoundException(NotFoundMessage);
-			}
-			$content = $this->Contents->find('all')->where(['prefix'=>$prefix])->first();
-			$chapters = $this->Chapters->find('all')->where(['content_id'=>$content->id])->toArray();
-		} else {
-			throw new NotFoundException(NotFoundMessage);
-		}
-		$this->set(compact('chapters', 'content_id', 'content'));
-	}
+//	public function index($prefix= null) {
+//		if (isset($prefix)) {
+//			if (!$this->Contents->exists(['prefix'=>$prefix])) {
+//				throw new NotFoundException(NotFoundMessage);
+//			}
+//			$content = $this->Contents->find('all')->where(['prefix'=>$prefix])->first();
+//			$chapters = $this->Chapters->find('all')->where(['content_id'=>$content->id])->toArray();
+//		} else {
+//			throw new NotFoundException(NotFoundMessage);
+//		}
+//		// 背景色の設定
+//		$bodyColor = INDEX_BODY_COLOR;
+//		$this->set(compact('chapters', 'content_id', 'content', 'bodyColor'));
+//	}
 
 	public function display($prefix = null, $no) {
 		if (isset($prefix) && preg_match("/^[0-9]+$/", $no)) {
@@ -76,15 +78,39 @@ class ChaptersController extends AppController
                 }
                 $phraseNum ++;
             }
-            $firstBackground = null;
+            $bodyColor = null;
             if (isset($backgrounds[1])) {
                 $firstBackground = $backgrounds[1];
+                $bodyColor = $firstBackground->get('body_color');
             }
-			$this->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'firstBackground', 'chapters', 'chapterCount'));
+			$this->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'bodyColor', 'chapters', 'chapterCount'));
 		} else {
 			throw new NotFoundException(NotFoundMessage);
 		}
 		$this->render('display');
 	}
 
+    public function axiosList() {
+        $this->viewBuilder()->setLayout(false);
+        $this->autoRender = false;
+
+        $isSuccess = false;
+        $html = '';
+        $content = null;
+
+        $contentId = $this->getRequest()->getQuery('content_id');
+        if (preg_match('/^[0-9]+$/', $contentId)) {
+            $query = $this->Chapters->find()->where(['content_id' => $contentId]);
+//            if ($query->count() > 0) {
+                $chapters = $query->all();
+                $isSuccess = true;
+                $content = $this->Contents->get($contentId);
+                $view = $this->createView();
+                $view->set(['chapters'=>$chapters, 'content' => $content]);
+                $html = $view->render('Chapters/axios_list');
+//            }
+        }
+        $result = ['html' => $html, 'content' => $content, 'is_success' => $isSuccess];
+        $this->response->getBody()->write(json_encode($result));
+    }
 }

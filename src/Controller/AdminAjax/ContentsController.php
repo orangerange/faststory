@@ -12,8 +12,10 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace App\Controller;
+namespace App\Controller\AdminAjax;
 
+use App\Controller\AppController;
+use App\Utils\AppUtility;
 /**
  * Static content controller
  *
@@ -21,23 +23,22 @@ namespace App\Controller;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class OrdersController extends AppController
+class ContentsController extends AppController
 {
-	public function index() {
-		
-	}
 
-	public function input() {
-		$order =$this->Orders->newEntity();
-		if ($this->request->is('post')) {
-            $order = $this->Orders->patchEntity($order, $this->request->data, ['associated' => ['Items']]);
-            if ($this->Orders->save($order)) {
-                $this->Flash->success(__('The order has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The order could not be saved. Please, try again.'));
-            }
-        }
-		$this->set(compact('orders'));
-	}
+	public function initialize()
+    {
+        parent::initialize();
+		$this->loadModel('ObjectProducts');
+		$this->loadModel('Characters');
+    }
+
+    public function objectLayout() {
+        $this->viewBuilder()->setLayout(false);
+        $this->request->allowMethod(['ajax']);
+        $css = $this->request->getData('css');
+        $Utils = new AppUtility();
+        $layouts = $Utils->createObjectLayoutByCss($css);
+        $this->set(compact('layouts'));
+    }
 }

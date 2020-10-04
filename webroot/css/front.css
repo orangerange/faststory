@@ -17,7 +17,7 @@
     background-color: moccasin;
     left: 0%;
     top: 0%;
-    width: 60%;
+    width: 70%;
     z-index: 2;
 }
 .popup-inner th {
@@ -29,20 +29,6 @@
     display: block;
     overflow-y: scroll;
     white-space: nowrap;
-}
-.close-btn {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    cursor: pointer;
-}
-.close-btn i {
-    font-size: 20px;
-    color: #333;
 }
 .black-background {
     position: absolute;
@@ -56,7 +42,6 @@
 }
 .close-btn {
     position:absolute;
-    /*background-color:red;*/
 }
 .close-btn .stick {
     position:absolute;
@@ -68,18 +53,46 @@
 .close-btn .stick_B {
     transform:rotate(-45deg);
 }
-
+.next {
+    position: fixed;
+    background-color:blue;
+    border-radius:20%;
+}
+.next_chapter {
+    background-color:pink;
+    border-radius:20%;
+}
+.chapter_end {
+    font-size:90%;
+}
+.chapter_list {
+    color:red;
+    font-size:120%;
+}
+#contents {
+    display:flex;
+    flex-wrap: wrap;
+    /*justify-content: space-around;*/
+}
+.copy {
+    position:relative;
+    background-color:gray;
+    font-size:90%;
+    width:90%;
+    padding: 5%;
+    border-radius:10%;
+}
 @media screen and (min-width: 768px) {
     .popup-inner {
-        max-width: 400px;
+        width: 500px;
     }
     .popup-inner table{
-        max-height:200px;
+        max-height:400px;
     }
     .close-btn {
         width: 50px;
         height: 50px;
-        right: 30px;
+        right: 25px;
         top: 0px;
     }
     .close-btn .stick {
@@ -88,19 +101,99 @@
         top:30%;
         left:20%;
     }
+    .next_out {
+        padding-left: 650px;
+        padding-bottom: 40px;
+        padding-top: 80px;
+    }
+    .next {
+        bottom: 30px;
+        width:120px;
+        height:50px;
+        line-height:40px;
+        font-size:40px;
+    }
+    .content_title {
+        margin-top:2px;
+        margin-left:40px;
+    }
+    .chapter_end {
+        margin-left:10px;
+    }
+    .chapter_list {
+        margin-top:6px;
+        margin-bottom:10px;
+        margin-left:60px;
+    }
+    .chapter_list_link {
+        margin-left:30px;
+    }
+    .next_chapter {
+        height:40px;
+        margin-left:10px;
+    }
+    .thumbnail {
+        margin:10px 15px;
+    }
+    .copy {
+        margin-left: 50px;
+    }
 }
 @media screen and (max-width: 767px) {
+    .popup-inner {
+        width: 100%;
+    }
+    .popup-inner table{
+        max-height:100%;
+    }
     .close-btn {
-        width: 25px;
-        height: 25px;
-        right: 0px;
-        top: 0px;
+        width: 40px;
+        height: 40px;
+        right: 2px;
+        top: 2px;
     }
     .close-btn .stick {
         width:60%;
         height:20%;
         top:40%;
         left:20%;
+    }
+    .next_out {
+        padding-left: 130px;
+        padding-bottom: 40px;
+        padding-top: 40px;
+    }
+    .next {
+        bottom: 30px;
+        width:80px;
+        height:40px;
+        line-height:30px;
+        font-size:30px;
+    }
+    .content_title {
+         margin-top:1px;
+         margin-left:40px;
+     }
+    .chapter_end {
+         margin-left:5px;
+     }
+    .chapter_list {
+        margin-top:3px;
+        margin-bottom:5px;
+        margin-left:30px;
+    }
+    .chapter_list_link {
+        margin-left:15px;
+    }
+    .next_chapter {
+        height:30px;
+        margin-left:5px;
+    }
+    .thumbnail {
+        margin:5px 15px;
+    }
+    .copy {
+        margin-left: 25px;
     }
 }
 

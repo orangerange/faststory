@@ -18,6 +18,7 @@
         {$this->Display->css($_background->css, '#html_background_'|cat:$_background->id)}
     </div>
 {/foreach}
+{$this->Display->css($chapter->content->thumbnail_css, '#thumbnail_html_display_'|cat:$chapter->content->id)}
 <div id="phrases">
     <div class="background">
         {foreach from=$backgrounds key=$_phraseNum item=$_background}

@@ -1,3 +1,119 @@
+.phrase {
+    /*薄黄色*/
+    background: #ffffcc;
+    opacity:0.9;
+}
+.plain_phrase {
+    background: lightskyblue;
+    opacity:0.9;
+}
+.foreign {
+    font-size:1.3em;
+    font-style:italic;
+}
+.kana {
+    font-size:0.7em;
+}
+.sentence .title{
+
+}
+.html_show {
+    /*薄水色*/
+    background: lightsteelblue;
+    width: 290px;
+    height:145px;
+    position:relative;
+}
+.thumbnail_html_show {
+    border:solid 1px black;
+    width: 290px;
+    height:145px;
+    position:relative;
+}
+.thumbnail_html_display {
+    position:relative;
+}
+.thumbnail_html_display_title {
+    position:relative;
+}
+.header {
+    top:0px;
+    background-color: gainsboro;
+    opacity: 0.7;
+    position: fixed;
+    z-index:999;
+}
+.sentence .title {
+    font-size: 11px;
+}
+.sentence .name {
+    font-size: 13px;
+}
+.character_box {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: #ffffe0;
+    z-index: -2;
+}
+.body_box {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    background-color: #ffffe0;
+    z-index: -2;
+}
+.row {
+    display: flex;
+}
+
+.column {
+    display: flex;
+    flex-flow: column;
+}
+.speech_speak{
+    position:absolute;
+    width:100%;
+    height:100%;
+    position:absolute;
+    border-radius:50%;
+    background-color:ghostwhite;
+    border:solid thin black;
+    top:20%;
+    right:100%;
+}
+.sentence .title {
+    font-size: 11px;
+}
+.sentence .name {
+    font-size: 13px;
+}
+.html_background {
+    position:fixed;
+    z-index:-2147483647;
+}
+.html_background_admin {
+    border:solid 1px black;
+}
+.html_logo_admin {
+    border:solid 1px black;
+}
+.html_logo_base {
+    position:relative;
+    width: 386px;
+    height:193px;
+}
+.html_logo {
+    position:relative;
+    width: 579px;
+    height:193px;
+}
+.icon_circle {
+  position:relative;
+}
+.speech {
+    z-index:900;
+}
 @media screen and (min-width: 768px) {
     .header {
         height: 30px;
@@ -50,17 +166,6 @@
         background-color:white;
         position:relative;
     }
-    .push_out {
-        padding-left: 650px;
-        padding-bottom: 40px;
-        padding-top: 80px;
-    }
-    .push {
-        bottom: 30px;
-        font-size: 12px;
-        width:120px;
-        height:50px;
-    }
     .phrase_object_display .speak {
         font-size: 39px;
     }
@@ -69,6 +174,17 @@
     }
     .phrase_object_display .sentence .name {
         font-size: 26px;
+    }
+    .thumbnail_html_display {
+        border:solid 1px black;
+        width: 290px;
+        height:145px;
+    }
+    .thumbnail_html_display_title {
+        border:solid 1px black;
+        width: 260px;
+        height:130px;
+        margin-left: 100px;
     }
 }
 @media screen and (max-width: 767px) {
@@ -126,103 +242,15 @@
         background-color:white;
         position:relative;
     }
-    .push_out {
-        padding-left: 130px;
-        padding-bottom: 40px;
-        padding-top: 40px;
+    .thumbnail_html_display {
+        border:solid 1px black;
+        width: 290px;
+        height:145px;
     }
-    .push {
-        bottom: 30px;
+    .thumbnail_html_display_title {
+        border:solid 1px black;
+        width: 240px;
+        height:120px;
+        margin-left: 70px;
     }
-}
-.phrase {
-    /*薄黄色*/
-    background: #ffffcc;
-    opacity:0.9;
-}
-.plain_phrase {
-    background: lightskyblue;
-    opacity:0.9;
-}
-.foreign {
-    font-size:1.3em;
-    font-style:italic;
-}
-.kana {
-    font-size:0.7em;
-}
-.sentence .title{
-
-}
-.html_show {
-    /*薄水色*/
-    background: lightsteelblue;
-    width: 290px;
-    height:145px;
-    position:relative;
-}
-.header {
-    top:0px;
-    background-color: gainsboro;
-    opacity: 0.7;
-    position: fixed;
-    z-index:999;
-}
-.next {
-    position: fixed;
-}
-.sentence .title {
-    font-size: 11px;
-}
-.sentence .name {
-    font-size: 13px;
-}
-.character_box {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    background-color: #ffffe0;
-    z-index: -2;
-}
-.body_box {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    background-color: #ffffe0;
-    z-index: -2;
-}
-.row {
-    display: flex;
-}
-
-.column {
-    display: flex;
-    flex-flow: column;
-}
-.speech_speak{
-    position:absolute;
-    width:100%;
-    height:100%;
-    position:absolute;
-    border-radius:50%;
-    background-color:ghostwhite;
-    border:solid thin black;
-    top:20%;
-    right:100%;
-}
-.sentence .title {
-    font-size: 11px;
-}
-.sentence .name {
-    font-size: 13px;
-}
-.html_background {
-    position:fixed;
-    z-index:-2147483647;
-}
-.html_background_admin {
-    border:solid 1px black;
-}
-.speech {
-    z-index:900;
 }

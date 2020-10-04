@@ -1,7 +1,6 @@
 $(function () {
-    // 作品変更によるキャラクタ選択肢の変更
-    $(document).on("change", ".body_color", function () {
-        document.getElementById('body').style.backgroundColor = $(this).val();
+    $(document).on("change", ".background_color", function () {
+        document.getElementById('logo').style.backgroundColor = $(this).val();
     })
 
     $(document).on("click", ".object_select", function () {
@@ -22,7 +21,7 @@ $(function () {
     $(document).on('click', '.object_decide', function () {
         var object_id = $(this).closest('td').find('.object_id').val();
         var object_no = $(this).closest('td').find('.object_no').val();
-        var width = $(this).closest('td').find('.width').val();
+        var width = $(this).closest('td').find('.width').val() * 2 / 3; // 登録時の基準値との差異を調整
         var height = $(this).closest('td').find('.height').val();
         var class_name = $(this).closest('td').find('.class_name').val();
         var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
@@ -30,7 +29,6 @@ $(function () {
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
         var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
-        // var css_add = '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
         var html_input = $('.html_input').val();
         var css_input = $('.css_input').val();
         var css_end_add = '/*.object_'  + object_no + '_' + object_id + '_end*/';
@@ -40,15 +38,15 @@ $(function () {
 
         $('.html_input').val(html);
         $('.css_input').val(css);
-        $('.html_background').html(html);
-        $('.css_background').children('style').html(css);
+        $('.html_logo').html(html);
+        $('.css_logo').children('style').html(css);
         //オブジェクト数カウント
         object_no ++;
         $(this).closest('td').find('.object_no').val(object_no);
         // CSSレイアウト更新(ajax)
         $.ajax({
             type: "post",
-            url: "/admin_ajax/backgrounds/object-layout",
+            url: "/admin_ajax/logos/object-layout",
             dataType: 'text',
             // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
             data: {
@@ -67,16 +65,16 @@ $(function () {
     });
     $(document).on('change', '.html_input', function () {
         var html = deleteSpace($(this).val());
-        $('.html_background').html(html);
+        $('.html_logo').html(html);
     })
 
     $(document).on('change', '.css_input', function () {
         var css = deleteSpace($(this).val());
-        $('.css_background').children('style').html(css);
+        $('.css_logo').children('style').html(css);
         //CSSレイアウト更新(ajax)
         $.ajax({
             type: "post",
-            url: "/admin_ajax/backgrounds/object-layout",
+            url: "/admin_ajax/logos/object-layout",
             dataType: 'text',
             // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
             data: {
@@ -97,7 +95,7 @@ $(function () {
         var css = $('.css_input').val();
         var css_replaced = wholeReplace(css, css_before, css_after);
         $('.css_input').val(css_replaced);
-        $('.css_background').find('style').html(css_replaced);
+        $('.css_logo').find('style').html(css_replaced);
         $(this).next('.css_layout_original').val(css_after);
     })
     // オブジェクト削除
@@ -114,13 +112,13 @@ $(function () {
             // 通常オブジェクト
             object_class = '.object_' + object_no + '_' + object_id;
 
-            $('.html_background').find(object_class).remove();
+            $('.html_logo').find(object_class).remove();
             var css = $('.css_input').val();
             var regexp = new RegExp('/\\*' + '([\\.face|\\.body|\\.speech]*)' + object_class + '_start' + '\\*/' + '([\\s\\S]*)' + '/\\*' + '(.*)' + object_class + '_end' + '\\*/' , 'g');
             var css_replaced = css.replace(regexp, '');
             $('.css_input').val(css_replaced);
             $('.object_layout_input').prevAll('.css_show').find('style').html(css_replaced);
-            var html = $('.html_background').html();
+            var html = $('.html_logo').html();
             $('.html_input').val(html);
             $(this).parent('td').remove();
         }
@@ -145,11 +143,11 @@ $(function () {
     });
     $(document).on('click', '.object_clear', function(){
         //イラストクリア
-        $('.html_background').html('');
-        $('.css_background').find('style').html('');
+        $('.html_logo').html('');
+        $('.css_logo').find('style').html('');
         //イラストhtml・cssクリア
-        $('.input').find('.html').val('');
-        $('.input').find('.css').val('');
+        $('.input').find('.html_input').val('');
+        $('.input').find('.css_input').val('');
         $('.object_layout_input').html('');
     })
 })

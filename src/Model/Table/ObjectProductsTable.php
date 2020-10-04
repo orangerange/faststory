@@ -133,7 +133,9 @@ class ObjectProductsTable extends Table
             foreach ($data['object_parts'] as $_key => $_value) {
                 $moldData['object_parts'][$_value['parts_category_no']] = $_value;
             }
-            $data['object_parts'] = $moldData['object_parts'];
+            if (isset($moldData['object_parts'])) {
+                $data['object_parts'] = $moldData['object_parts'];
+            }
         }
         return $data;
     }

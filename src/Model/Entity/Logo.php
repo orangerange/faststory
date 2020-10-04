@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Content Entity
+ * Logo Entity
  *
  * @property int $id
  * @property string $name
@@ -12,7 +12,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $updated
  * @property bool $deleted
  */
-class Content extends Entity
+class Logo extends Entity
 {
 
     /**
@@ -27,14 +27,8 @@ class Content extends Entity
     protected $_accessible = [
         'id' => true,
         'name' => true,
-        'prefix' => true,
-        'thumbnail_html' => true,
-        'thumbnail_css' => true,
-        'thumbnail_background_color' => true,
-        'copy' => true,
-        'summary' => true,
-        'created' => true,
-        'updated' => true,
-        'deleted' => true
+        'background_color' => true,
+        'html' => true,
+        'css' => true,
     ];
 }

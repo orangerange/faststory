@@ -95,7 +95,9 @@ class ObjectsController extends AppController
 		$object = $this->ObjectProducts->findById($id);
 		$partsSelected = $this->ObjectParts->findListByObjectId($id)->toArray();
 		$object = $this->ObjectProducts->moldGetData($object);
-        $characters = $this->Characters->find('list')->where(['content_id'=>$object->content_id]);
+		if (isset($object->content_id)) {
+            $characters = $this->Characters->find('list')->where(['content_id' => $object->content_id]);
+        }
 		$templateId = $object->template_id;
 		$template = $this->ObjectTemplates->findById($templateId)->first();
 		$contents = $this->Contents->find('list');

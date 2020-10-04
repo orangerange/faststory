@@ -9,6 +9,9 @@
         <tr>
             <th>ID</th>
             <th>オブジェクト名</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -18,8 +21,8 @@
                 <td>{$_object->name|escape}</td>
                 <td><a href='/admin/objects/edit/{$_object->id}'>編集</a></td>
                 <td><a href='/admin/objects/detail/{$_object->id}'>詳細</a></td>
-                <td><button onclick="window.open('/admin/objects/detail/{$_object->id}', 'preview', 'width=600, height=300, menubar=no, toolbar=no')">プレビュー</button></td> 
-                <td><a href='/admin/objects/delete/{$_object->id}'>削除</a></td>
+                <td><button onclick="window.open('/admin/objects/detail/{$_object->id}', 'preview', 'width=600, height=300, menubar=no, toolbar=no')">プレビュー</button></td>
+{*                <td><a href='/admin/objects/delete/{$_object->id}'>削除</a></td>*}
             </tr>
         {/foreach}
     </tbody>

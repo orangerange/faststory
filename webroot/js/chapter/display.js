@@ -29,13 +29,7 @@ var phrases = new Vue({
             this.num++;
             var _this = this;
             setTimeout(function () {_this.addHeight()}, 10);
-            // if (this.num == 5) {
-            //     var elem = document.getElementsByClassName ("object_4_10");
-            //     anime({
-            //         targets: elem,
-            //         translateX: 250
-            //     })
-            // }
+
             if (this.num == this.phraseNum) {
                 this.buttonShow = false;
             }

@@ -25,6 +25,8 @@ class ContentsController extends AppController
 {
 	public function index() {
 		$contents = $this->Contents->find('all');
-		$this->set(compact('contents'));
+        // 背景色の設定
+        $bodyColor = INDEX_BODY_COLOR;
+		$this->set(compact('contents', 'bodyColor'));
 	}
 }

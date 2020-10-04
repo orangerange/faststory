@@ -23,24 +23,24 @@ namespace App\Controller;
  */
 class BackgroundsController extends AppController
 {
-	public function axiosChangeBackground() {
-        $this->viewBuilder()->setLayout(false);
-        $this->autoRender = false;
-        $bodyColor = '';
-        $html = '';
-        $css = '';
-
-        $id = $this->getRequest()->getQuery('id');
-        if (preg_match('/^[0-9]+$/', $id)) {
-            $query = $this->Backgrounds->find()->where(['id' => $id]);
-            if ($query->count() > 0) {
-                $background = $query->first();
-                $bodyColor = $background->get('body_color');
-                $html = $background->get('html');
-                $css = $background->get('css');
-            }
-        }
-        $result = ['body_color' => $bodyColor, 'html' => $html, 'css' => $css];
-        $this->response->getBody()->write(json_encode($result));
-	}
+//	public function axiosChangeBackground() {
+//        $this->viewBuilder()->setLayout(false);
+//        $this->autoRender = false;
+//        $bodyColor = '';
+//        $html = '';
+//        $css = '';
+//
+//        $id = $this->getRequest()->getQuery('id');
+//        if (preg_match('/^[0-9]+$/', $id)) {
+//            $query = $this->Backgrounds->find()->where(['id' => $id]);
+//            if ($query->count() > 0) {
+//                $background = $query->first();
+//                $bodyColor = $background->get('body_color');
+//                $html = $background->get('html');
+//                $css = $background->get('css');
+//            }
+//        }
+//        $result = ['body_color' => $bodyColor, 'html' => $html, 'css' => $css];
+//        $this->response->getBody()->write(json_encode($result));
+//	}
 }

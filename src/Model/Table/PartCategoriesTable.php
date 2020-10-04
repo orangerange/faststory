@@ -33,8 +33,11 @@ class PartCategoriesTable extends Table {
 		parent::initialize($config);
 		$this->setTable('part_categories');
 		$this->hasMany('Parts', [
-			'foreignKey' => 'parts_category_no'
-		]);
+            'foreignKey' => 'parts_category_no'
+        ]);
+        $this->belongsTo('ObjectTemplates', [
+            'foreignKey' => 'template_id'
+        ]);
 	}
 
 	public function findNextSortNo($templateId = null) {

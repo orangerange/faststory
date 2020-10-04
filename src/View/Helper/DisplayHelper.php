@@ -18,10 +18,10 @@ class DisplayHelper extends Helper {
 	public function baseClassCss() {
 		$this->modelFactory('Table', ['Cake\ORM\TableRegistry', 'get']);
 		$this->loadModel('PartCategories');
-		$partCategories = $this->PartCategories->find()->order('sort_no')->all();
+		$partCategories = $this->PartCategories->find()->contain('ObjectTemplates')->order('sort_no')->all();
 		$content = '';
 		foreach($partCategories as $_category) {
-			$content .= '.' . $_category->class_name . '{ ' . 'position: absolute; ' . 'z-index: ' . $_category->z_index . '; }';
+			$content .= '.' . $_category->object_template->class_name . ' .' . $_category->class_name . '{ ' . 'position: absolute; ' . 'z-index: ' . $_category->z_index . '; }';
 		}
 		return '<style type="text/css">' . $content . '</style>';
 	}

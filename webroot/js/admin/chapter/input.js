@@ -237,9 +237,10 @@ $(function () {
         var object_no = $(this).closest('td').find('.object_no').val();
         var width = $(this).closest('td').find('.width').val();
         var height = $(this).closest('td').find('.height').val();
+        var class_name = $(this).closest('td').find('.class_name').val();
 
         var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
-        html_select = wholeReplace(html_select , 'object_' + object_id, 'object object_'  + object_no + '_' + object_id)
+        html_select = wholeReplace(html_select , 'object_' + object_id, class_name + ' object object_'  + object_no + '_' + object_id)
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
         var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';

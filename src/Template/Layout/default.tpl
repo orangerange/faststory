@@ -14,7 +14,7 @@
         {$this -> Html-> script('anime.min')}
         <title></title>
     </head>
-    <body id="body" {if $firstBackground}style="background-color:{$firstBackground->body_color}"{/if}>
+    <body id="body" {if $bodyColor}style="background-color:{$bodyColor}"{/if}>
         {$this->fetch('content')}
         {$this->Fetch('script')}
     </body>

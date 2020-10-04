@@ -10,7 +10,7 @@
         {/if}
         {if $character->html && $character->css}
             {assign var='nameClass' value='character-name'}
-            <div class="character-image character_{$character->id}">
+            <div class="face character-image character_{$character->id}">
                 {$character->html}
             </div>
         {/if}

@@ -12,13 +12,10 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace App\Controller;
+namespace App\Controller\AdminAjax;
 
-use Cake\Core\Configure;
-use Cake\Http\Exception\ForbiddenException;
-use Cake\Http\Exception\NotFoundException;
-use Cake\View\Exception\MissingTemplateException;
-
+use App\Controller\AppController;
+use App\Utils\AppUtility;
 /**
  * Static content controller
  *
@@ -26,25 +23,20 @@ use Cake\View\Exception\MissingTemplateException;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class TestsController extends AppController
+class LogosController extends AppController
 {
 
-    /**
-     * Displays a view
-     *
-     * @param array ...$path Path segments.
-     * @return \Cake\Http\Response|null
-     * @throws \Cake\Http\Exception\ForbiddenException When a directory traversal attempt.
-     * @throws \Cake\Http\Exception\NotFoundException When the view file could not
-     *   be found or \Cake\View\Exception\MissingTemplateException in debug mode.
-     */
-    public function picture($name = '')
+	public function initialize()
     {
-		if ($name) {
-			$this->render('picture_' .$name);
-		}
-		else {
-			$this->render('picture');
-		}
+        parent::initialize();
+    }
+
+    public function objectLayout() {
+        $this->viewBuilder()->setLayout(false);
+        $this->request->allowMethod(['ajax']);
+        $css = $this->request->getData('css');
+        $Utils = new AppUtility();
+        $layouts = $Utils->createObjectLayoutByCss($css);
+        $this->set(compact('layouts'));
     }
 }

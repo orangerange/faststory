@@ -22,13 +22,13 @@
             </div>
             {if $template['class_name'] == 'face'}
                 <div class='character_box html_show'>
-                    <div class='character'>
+                    <div class='face character'>
                         {$part->html}
                     </div>
                 </div>
             {else}
                 <div class='phrase_object html_show'>
-                    <div class='object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                    <div class='{$template->class_name|escape} object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
                         {$part->html}
                     </div>
                 </div>
