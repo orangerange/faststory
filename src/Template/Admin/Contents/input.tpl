@@ -47,7 +47,11 @@
 <button class='object_select' type='button'>選択</button>
 <button class='object_modify' type='button'>微調整</button>
 <button class='object_clear' type='button'>イラストクリア</button>
-{$this->Form->input('thumbnail_background_color', ['class'=>'thumbnail_background_color', 'type'=>'color'])}
+{assign var='backgroundColor' value='#ffffff'}
+{if $content->body_color}
+    {assign var='backgroundColor' value=$content->background_color|escape}
+{/if}
+{$this->Form->input('thumbnail_background_color', ['class'=>'thumbnail_background_color', 'type'=>'color', 'value'=>$backgroundColor])}
 {$this->Form->input('thumbnail_html', ['class' => 'thumbnail_html_input', 'type'=>'textarea', 'cols'=>50])}
 {$this->Form->input('thumbnail_css', ['class' => 'thumbnail_css_input', 'type'=>'textarea', 'cols'=>50])}
 {$this->Form->input('copy', ['class' => 'copy', 'type'=>'textarea', 'cols'=>50])}

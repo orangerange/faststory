@@ -1,4 +1,7 @@
 $(function () {
+    // 背景オブジェクトの複製
+    copyObjects();
+
     // 作品変更によるキャラクタ選択肢の変更
     $(document).on("change", ".body_color", function () {
         document.getElementById('body').style.backgroundColor = $(this).val();
@@ -23,24 +26,50 @@ $(function () {
         var object_id = $(this).closest('td').find('.object_id').val();
         var object_no = $(this).closest('td').find('.object_no').val();
         var width = $(this).closest('td').find('.width').val();
-        var height = $(this).closest('td').find('.height').val();
+        var height = Math.round($(this).closest('td').find('.height').val() * 1 / 2); // 登録時の基準値との差異を調整
         var class_name = $(this).closest('td').find('.class_name').val();
         var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
         html_select = wholeReplace(html_select , 'object_' + object_id, class_name + ' object object_'  + object_no + '_' + object_id)
+
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
         var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
-        // var css_add = '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
         var html_input = $('.html_input').val();
         var css_input = $('.css_input').val();
         var css_end_add = '/*.object_'  + object_no + '_' + object_id + '_end*/';
         var html = html_select + html_input;
         var css  = css_add + css_select + css_end_add + css_input ;
-        // var css  = css_add + css_select + css_input ;
-
+        // 集合対応
+        var is_mass = $(this).closest('td').find('.is_mass').prop('checked');
+        if (is_mass) {
+            var row_num = $(this).closest('td').find('.row_num').val();
+            var column_num = $(this).closest('td').find('.column_num').val();
+            var html_objects = '<div class="objects objects_' + object_no + '_' + object_id + '" data-row_num="' + row_num + '">';
+            var html_rows = '<div class="object_row object_row_' + object_no + '_' + object_id + '" data-column_num="' + column_num + '">';
+            html = html_objects + html_rows + html + '</div>' + '</div>';
+            // css
+            var css_mass = '';
+            var height_div = Math.round(100 / row_num);
+            var first_top = Math.round(height_div / 2);
+            for (let i = 1; i <= row_num; i++) {
+                var top_div = first_top + height_div * (i - 1);
+                css_mass += '.object_row_' + object_no + '_' + object_id + ':nth-child(' + row_num + 'n+' + i + ') .object_'  + object_no + '_' + object_id + ' {\n' +
+                    ' top:' + top_div + '%;\n' +
+                    '}\n';
+            }
+            var width_div = Math.round(100 / column_num);
+            var first_left = Math.round(width_div / 2);
+            for (let j = 1; j <= column_num; j++) {
+                var left_div = first_left + width_div * (j - 1);
+                css_mass += '.object_' + object_no + '_' + object_id + ':nth-child(' + column_num + 'n+' + j + ') {\n' +
+                    ' left:' + left_div + '%;\n' +
+                    '}\n';
+            }
+            css = css_mass + css;
+        }
         $('.html_input').val(html);
         $('.css_input').val(css);
-        $('.html_background').html(html);
+        $('.html_background_admin').html(html);
         $('.css_background').children('style').html(css);
         //オブジェクト数カウント
         object_no ++;
@@ -61,6 +90,8 @@ $(function () {
             console.log(status);
             console.log(error);
         });
+        // チェックボックスを外す
+        $(this).closest('td').find('.is_mass').prop('checked', false);
         //ポップアップを閉じる
         var popup = document.getElementById('js-popup');
         popup.classList.remove('is-show');
@@ -145,7 +176,7 @@ $(function () {
     });
     $(document).on('click', '.object_clear', function(){
         //イラストクリア
-        $('.html_background').html('');
+        $('.html_background_admin').html('');
         $('.css_background').find('style').html('');
         //イラストhtml・cssクリア
         $('.input').find('.html_input').val('');

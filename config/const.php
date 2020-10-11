@@ -149,30 +149,8 @@ return array(
       mounted() {
           this.headerHeight = this.$refs.header.clientHeight;
           this.buttonHeight = this.$refs.next.clientHeight;
-                          // 背景オブジェクトの適宜複製
-          var objects = document.querySelectorAll(".objects");
-          if (objects) {
-            // 行複製
-            for(var obsIndex = 0; obsIndex < objects.length; obsIndex++) {
-                // 列複製
-                var row = objects[obsIndex].firstElementChild;
-                var columnNum = row.dataset.column_num;
-                var columnHtml = row.innerHTML;
-                var columnsHtml = "";
-                for (var columnCount=1; columnCount<=columnNum; columnCount++) {
-                  columnsHtml += columnHtml;
-                }
-                row.innerHTML = columnsHtml;
-                // 行複製
-                var rowNum = objects[obsIndex].dataset.row_num;
-                var rowHtml = objects[obsIndex].innerHTML;
-                var rowsHtml = "";
-                for (var rowCount=1; rowCount<=rowNum; rowCount++) {
-                  rowsHtml += rowHtml;
-                }
-                objects[obsIndex].innerHTML = rowsHtml;
-            }
-           }
+          // 背景オブジェクトの複製
+          copyObjects();
           this.phraseNum = document.getElementById("phrase_num").value;
           scrollTo(0, 0);
           if (this.$refs.speak_1.dataset.background_id) {
@@ -253,18 +231,19 @@ return array(
                 }
             } else {
                 this.allHeight += this.$refs[speak].clientHeight;
-                // 調整用要素の高さを減らす
+                // 通常のスクロール
+                var scroll = this.allHeight + this.headerHeight + this.shadowHeight - this.displayHeight;
+                if (scroll > 0) {
+//                    scrollTo(0, scroll);
+                     setTimeout(function () {scrollTo(0, scroll)}, 10);
+                 }
+                 // 調整用要素の高さを減らす
                 if (this.shadowHeight > 0) {
                     this.shadowHeight -= this.$refs[speak].clientHeight;
                 }
                 if (this.shadowHeight < 0) {
                     this.shadowHeight = 0;
                 }
-                // 通常のスクロール
-                var scroll = this.allHeight + this.headerHeight + this.shadowHeight - this.displayHeight;
-                if (scroll > 0) {
-                    setTimeout(function () {scrollTo(0, scroll)}, 10);
-                 }
             }
 
         },

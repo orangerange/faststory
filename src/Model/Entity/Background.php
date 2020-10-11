@@ -30,5 +30,6 @@ class Background extends Entity
         'body_color' => true,
         'html' => true,
         'css' => true,
+        'is_sum' => true,
     ];
 }

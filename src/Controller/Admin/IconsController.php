@@ -18,13 +18,13 @@ use App\Controller\AppController;
 use App\Utils\AppUtility;
 
 /**
- * Static Logo controller
+ * Static Icon controller
  *
  * This controller will render views from Template/Pages/
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class LogosController extends AppController
+class IconsController extends AppController
 {
 	public function initialize()
     {
@@ -34,43 +34,43 @@ class LogosController extends AppController
     }
 
 	public function index() {
-		$logos = $this->Logos->find('all');
-		$this->set(compact('logos'));
+		$icons = $this->Icons->find('all');
+		$this->set(compact('icons'));
 	}
 
 	public function input() {
         $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
-		$logo =$this->Logos->newEntity();
+		$icon =$this->Icons->newEntity();
 		if($this->request->is('post')) {
-			$Logo = $this->Logos->patchEntity($logo, $this->request->getData());
-			if ($this->Logos->save($logo)) {
+			$Icon = $this->Icons->patchEntity($icon, $this->request->getData());
+			if ($this->Icons->save($icon)) {
 				$this->Flash->success(__('新規登録しました'));
 				return $this->redirect(['action' => 'index']);
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('logo', 'objects'));
+		$this->set(compact('icon', 'objects'));
 	}
 
 	public function edit($id) {
 		if (preg_match("/^[0-9]+$/", $id)) {
-			if(!$logo = $this->Logos->findById($id)->first()) {
+			if(!$icon = $this->Icons->findById($id)->first()) {
 				throw new NotFoundException(NotFoundMessage);
 			}
             $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
             $Utils = new AppUtility();
-            $layouts = $Utils->createObjectLayoutByCss($logo->get('css'));
+            $layouts = $Utils->createObjectLayoutByCss($icon->get('css'));
 			if($this->request->is(['patch', 'post', 'put'])) {
-				$logo = $this->Logos->patchEntity($logo, $this->request->getData());
-				if ($this->Logos->save($logo)) {
+				$icon = $this->Icons->patchEntity($icon, $this->request->getData());
+				if ($this->Icons->save($icon)) {
 					$this->Flash->success(__('更新しました'));
 //					return $this->redirect(['action' => 'index']);
 				} else {
 					$this->Flash->error(__('更新に失敗しました'));
 				}
 			}
-			$this->set(compact('logo','objects', 'layouts'));
+			$this->set(compact('icon','objects', 'layouts'));
 		} else{
 			throw new NotFoundException(NotFoundMessage);
 		}
@@ -80,10 +80,10 @@ class LogosController extends AppController
 
     public function detail($id) {
         if (preg_match("/^[0-9]+$/", $id)) {
-            if (!$logo = $this->Logos->findById($id)->first()) {
+            if (!$icon = $this->Icons->findById($id)->first()) {
                 throw new NotFoundException(NotFoundMessage);
             }
-            $this->set(compact('logo'));
+            $this->set(compact('icon'));
         } else{
             throw new NotFoundException(NotFoundMessage);
         }
@@ -92,8 +92,8 @@ class LogosController extends AppController
 //	public function delete($id) {
 //		if (preg_match("/^[0-9]+$/", $id)) {
 //			die('削除');
-////			$Logo = $this->Logos->get($id);
-////			$this->Logos->delete($id);
+////			$Icon = $this->Icons->get($id);
+////			$this->Icons->delete($id);
 //		} else {
 //			die('存在しない');
 //		}

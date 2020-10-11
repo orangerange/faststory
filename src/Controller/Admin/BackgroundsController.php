@@ -43,9 +43,9 @@ class BackgroundsController extends AppController
 		$background =$this->Backgrounds->newEntity();
 		if($this->request->is('post')) {
 			$background = $this->Backgrounds->patchEntity($background, $this->request->getData());
-			if ($this->Backgrounds->save($background)) {
+			if ($entity = $this->Backgrounds->save($background)) {
 				$this->Flash->success(__('新規登録しました'));
-				return $this->redirect(['action' => 'index']);
+				return $this->redirect('/admin/backgrounds/edit/' . $entity->get('id'));
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}

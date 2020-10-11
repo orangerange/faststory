@@ -40,7 +40,11 @@
 <h1>アイコン{if $editFlg}編集{else}登録{/if}</h1>
 {$this->Form->create($icon,['enctype' => 'multipart/form-data'])}
 {$this->Form->input('name', ['type'=>'text'])}
-{$this->Form->input('background_color', ['class'=>'background_color', 'type'=>'color', 'value' => '#ffffff'])}
+{assign var='backgroundColor' value='#ffffff'}
+{if $icon->background_color}
+    {assign var='backgroundColor' value=$icon->background_color|escape}
+{/if}
+{$this->Form->input('background_color', ['class'=>'background_color', 'type'=>'color', 'value' => $backgroundColor|escape])}
 <div id="icon" class="html_icon html_icon_admin" {if $icon->background_color}style="background-color:{$icon->background_color}"{/if}>
     {$icon->html}
 </div>

@@ -15,3 +15,4 @@ function wholeReplace(value, search, replace) {
     value = value.split(search).join(replace);
     return value;
 }
+

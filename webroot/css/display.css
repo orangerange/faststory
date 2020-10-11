@@ -41,7 +41,7 @@
     background-color: gainsboro;
     opacity: 0.7;
     position: fixed;
-    z-index:999;
+    z-index:100;
 }
 .sentence .title {
     font-size: 11px;
@@ -88,12 +88,23 @@
 .sentence .name {
     font-size: 13px;
 }
-.html_background {
+.html_background , .html_background_admin, .html_background_sp_admin {
     position:fixed;
     z-index:-2147483647;
 }
 .html_background_admin {
     border:solid 1px black;
+    top: 25px;
+    width: 290px;
+    height:290px;
+    left: 529.5px;
+}
+.html_background_sp_admin {
+    top: 315px;
+    width: 290px;
+    height:203px;
+    left: 529.5px;
+    border:solid 1px red;
 }
 .html_logo_admin {
     border:solid 1px black;
@@ -115,7 +126,7 @@
   position:relative;
 }
 .speech {
-    z-index:900;
+    z-index:50;
 }
 @media screen and (min-width: 768px) {
     .header {
@@ -127,17 +138,19 @@
     .phrases_body {
         top: 40px;
         position:absolute;
+        left:424.5px;
     }
     .phrase_all {
         position: relative;
-        width: 700px;
+        width: 500px;
         padding-top: 12px;
         padding-bottom: 12px;
     }
     .html_background {
-        top: 20px;
-        width: 700px;
-        height:350px;
+        top: 30px;
+        width: 500px;
+        height: 500px;
+        left: 424.5px;
     }
     .character-image {
         position: absolute;
@@ -164,19 +177,19 @@
         border:solid 1px black;
     }
     .phrase_object_display {
-        height: 350px;
+        height: 250px;
         border:solid 1px black;
         background-color:white;
         position:relative;
     }
     .phrase_object_display .speak {
-        font-size: 39px;
+        font-size: 28px;
     }
     .phrase_object_display .sentence .title {
-        font-size: 22px;
+        font-size: 16px;
     }
     .phrase_object_display .sentence .name {
-        font-size: 26px;
+        font-size: 18.5px;
     }
     .thumbnail_html_display {
         border:solid 1px black;
@@ -199,6 +212,7 @@
     }
     .phrases_body {
         top: 35px;
+        left: 34.5px;
         position:absolute;
     }
     .phrase_all {
@@ -208,9 +222,10 @@
         padding-bottom: 7px;
     }
     .html_background {
-        top: 15px;
+        top: 25px;
         width: 290px;
-        height:145px;
+        height:290px;
+        left: 34.5px;
     }
     .character-image {
         position: absolute;

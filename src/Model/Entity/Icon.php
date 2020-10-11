@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Logo Entity
+ * Icon Entity
  *
  * @property int $id
  * @property string $name
@@ -12,7 +12,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $updated
  * @property bool $deleted
  */
-class Logo extends Entity
+class Icon extends Entity
 {
 
     /**

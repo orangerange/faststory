@@ -21,8 +21,8 @@ $(function () {
     $(document).on('click', '.object_decide', function () {
         var object_id = $(this).closest('td').find('.object_id').val();
         var object_no = $(this).closest('td').find('.object_no').val();
-        var width = $(this).closest('td').find('.width').val() * 2; // 登録時の基準値との差異を調整
-        var height = $(this).closest('td').find('.height').val();
+        var width = $(this).closest('td').find('.width').val();
+        var height = Math.round($(this).closest('td').find('.height').val() / 2); // 登録時の基準値との差異を調整
         var class_name = $(this).closest('td').find('.class_name').val();
         var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
         html_select = wholeReplace(html_select , 'object_' + object_id, class_name + ' object object_'  + object_no + '_' + object_id)

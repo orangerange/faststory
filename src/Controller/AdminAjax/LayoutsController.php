@@ -23,7 +23,7 @@ use App\Utils\AppUtility;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class LogosController extends AppController
+class LayoutsController extends AppController
 {
 
 	public function initialize()

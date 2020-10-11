@@ -102,7 +102,7 @@
         left:20%;
     }
     .next_out {
-        padding-left: 650px;
+        padding-left: 190px;
         padding-bottom: 40px;
         padding-top: 80px;
     }
@@ -112,6 +112,7 @@
         height:50px;
         line-height:40px;
         font-size:40px;
+        z-index:100;
     }
     .content_title {
         margin-top:2px;

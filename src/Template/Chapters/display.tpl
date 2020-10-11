@@ -1,6 +1,7 @@
 {* 元々読み込んでいたページめくり用jsファイルを、アニメーション用スクリプトを埋め込むために設定ファイル化(ヘルパー化)*}
 {*{$this->Html->script('chapter/display.js', ['block'=>true])}*}
 {$this->Html->script('config.js', ['block'=>true])}
+{$this->Html->script('copy_objects.js', ['block'=>true])}
 {$this->Display->baseClassCss()}
 {assign var='characterIds' value=","|explode:""}
 {capture name="garbage"}{$characterIds|@array_pop}{/capture}
@@ -15,14 +16,14 @@
 {/foreach}
 {foreach from=$backgrounds key=$_phraseNum item=$_background}
     <div id="css_background_{$_background->id}" data-body_color="{$_background->body_color}">
-        {$this->Display->css($_background->css, '#html_background_'|cat:$_background->id)}
+        {$this->Display->css($_background->css, '.html_background_'|cat:$_background->id)}
     </div>
 {/foreach}
 {$this->Display->css($chapter->content->thumbnail_css, '#thumbnail_html_display_'|cat:$chapter->content->id)}
 <div id="phrases">
     <div class="background">
         {foreach from=$backgrounds key=$_phraseNum item=$_background}
-            <div class="html_background" id="html_background_{$_background->id}"
+            <div class="html_background html_background_{$_background->id}"
                  v-show="background_id == {$_background->id}">
                 {$_background->html}
             </div>

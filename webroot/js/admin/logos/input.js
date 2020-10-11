@@ -21,7 +21,7 @@ $(function () {
     $(document).on('click', '.object_decide', function () {
         var object_id = $(this).closest('td').find('.object_id').val();
         var object_no = $(this).closest('td').find('.object_no').val();
-        var width = $(this).closest('td').find('.width').val() * 2 / 3; // 登録時の基準値との差異を調整
+        var width = Math.round($(this).closest('td').find('.width').val() * 2 / 3); // 登録時の基準値との差異を調整
         var height = $(this).closest('td').find('.height').val();
         var class_name = $(this).closest('td').find('.class_name').val();
         var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
