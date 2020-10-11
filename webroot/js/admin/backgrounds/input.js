@@ -50,17 +50,15 @@ $(function () {
             // css
             var css_mass = '';
             var height_div = Math.round(100 / row_num);
-            var first_top = Math.round(height_div / 2);
             for (let i = 1; i <= row_num; i++) {
-                var top_div = first_top + height_div * (i - 1);
+                var top_div = height_div * (i - 1);
                 css_mass += '.object_row_' + object_no + '_' + object_id + ':nth-child(' + row_num + 'n+' + i + ') .object_'  + object_no + '_' + object_id + ' {\n' +
                     ' top:' + top_div + '%;\n' +
                     '}\n';
             }
             var width_div = Math.round(100 / column_num);
-            var first_left = Math.round(width_div / 2);
             for (let j = 1; j <= column_num; j++) {
-                var left_div = first_left + width_div * (j - 1);
+                var left_div = width_div * (j - 1);
                 css_mass += '.object_' + object_no + '_' + object_id + ':nth-child(' + column_num + 'n+' + j + ') {\n' +
                     ' left:' + left_div + '%;\n' +
                     '}\n';
