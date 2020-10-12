@@ -61,7 +61,7 @@ $(function () {
                 var left_div = width_div * (j - 1);
                 css_mass += '.object_' + object_no + '_' + object_id + ':nth-child(' + column_num + 'n+' + j + ') {\n' +
                     ' left:' + left_div + '%;\n' +
-                    '}\n';
+                    '}';
             }
             css = css_mass + css;
         }
