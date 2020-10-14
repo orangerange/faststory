@@ -1,6 +1,6 @@
 {* 元々読み込んでいたページめくり用jsファイルを、アニメーション用スクリプトを埋め込むために設定ファイル化(ヘルパー化)*}
 {*{$this->Html->script('chapter/display.js', ['block'=>true])}*}
-{$this->Html->script('config.js', ['block'=>true])}
+{$this->Html->script('config.js')}
 {$this->Html->script('copy_objects.js', ['block'=>true])}
 {$this->Display->baseClassCss()}
 {assign var='characterIds' value=","|explode:""}
