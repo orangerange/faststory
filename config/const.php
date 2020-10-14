@@ -230,13 +230,6 @@ return array(
                     this.allHeight += this.$refs[speak].clientHeight;
                 }
             } else {
-                this.allHeight += this.$refs[speak].clientHeight;
-                // 通常のスクロール
-                var scroll = this.allHeight + this.headerHeight + this.shadowHeight - this.displayHeight;
-                if (scroll > 0) {
-//                    scrollTo(0, scroll);
-                     setTimeout(function () {scrollTo(0, scroll)}, 10);
-                 }
                  // 調整用要素の高さを減らす
                 if (this.shadowHeight > 0) {
                     this.shadowHeight -= this.$refs[speak].clientHeight;
@@ -244,8 +237,14 @@ return array(
                 if (this.shadowHeight < 0) {
                     this.shadowHeight = 0;
                 }
+                this.allHeight += this.$refs[speak].clientHeight;
+                // 通常のスクロール
+                var scroll = this.allHeight + this.headerHeight + this.shadowHeight - this.displayHeight;
+                if (scroll > 0) {
+//                    scrollTo(0, scroll);
+                     setTimeout(function () {scrollTo(0, scroll)}, 10);
+                 }
             }
-
         },
         handleScroll: function(e) {
             // ヘッダーと被ったフレーズの透明化
@@ -277,7 +276,7 @@ return array(
             }
             // ボタン表示非表示設定
             var scroll = this.allHeight  + this.shadowHeight - this.displayHeight;
-            if(window.scrollY + 10 < scroll) {
+            if(window.scrollY < scroll) {
                 this.buttonShow = false;
             } else {
                 this.buttonShow = true;
