@@ -8,15 +8,14 @@
         <meta http-equiv="Content-Style-Type" content="text/css">
         <meta name="description" content="">
         <meta name="keywords" content="" />
-        {$this->fetch('script')}
-        {$this->fetch('css')}
         {$this -> Html -> script('jquery-1.8.3')}
         {$this -> Html-> script('anime.min')}
         {$this -> Html -> script('admin/common')}
-        {$this->Fetch('script')}
+        {$this->fetch('script')}
         {$this->Display->baseClassCss()}
         {$this->Html->css('display')}
         {$this->Html->css('admin')}
+        {$this->fetch('css')}
         <title></title>
     </head>
     <body id="body" {if $background}style="background-color:{$background->body_color}"{/if}>

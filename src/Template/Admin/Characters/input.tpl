@@ -52,7 +52,7 @@
                         <div class='css css_sum'>
                             {$this->Display->css($character->css, '.parts_sum')}
                         </div>
-                        <div class='character_box parts_sum'>
+                        <div class='face character_box parts_sum'>
                             {if $character->html}
                                 {$character->html}
                             {else}
@@ -90,7 +90,7 @@
                     {$this->Form->input('css_string', ['type'=>hidden, 'value'=>$cssString])}
                     {foreach from=$partCategories key=_key item=_value}
                         <td>
-                            <div class='character_box character_box_{$_value->id}'>
+                            <div class='face character_box character_box_{$_value->id}'>
                                 {$parts[$_value->id][$partsSelected[$_value->id]]}
                             </div>
                             {$_value->name}({$_value->z_index|escape})
@@ -116,7 +116,7 @@
                                                     <input type='hidden' class='parts_category_no' value={$_value->id|escape}>
                                                     <input type='hidden' class='parts_no' value={$_partsNo|escape}>
                                                     <input type='hidden' class='parts_class' value={$_value->class_name|escape}>
-                                                    <div class='character_box'>
+                                                    <div class='face character_box'>
                                                         {$_html}
                                                     </div>
                                                     <button type='button' class='parts_box_select'>決定</button>
