@@ -1,4 +1,5 @@
-<div {if $i>1 && !$openFlg[$i]}style='display:none;' {/if}class='phrase_control'>
+<div {if $i>1 && !$openFlg[$i]}style='display:none;' {/if}class='phrase_control {if $i is even}phrase_control_A{else}phrase_control_B{/if}'>
+    <div class="phrase_num_show">{$i + 1}</div>
     <button class='insert' type='button'>挿入</button>
     {$this->Form->control('phrase_no',['type'=>'hidden', 'class'=>'phrase_no', 'value'=>$i])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.background_id',['options'=>$backgrounds, 'empty'=>'--', 'class' => 'background_id'])}

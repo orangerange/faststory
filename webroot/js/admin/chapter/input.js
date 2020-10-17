@@ -180,7 +180,7 @@ $(function () {
         var phrase_num = $('#phrase_num').val();
         for (var i = phrase_num -2 ; i >= phrase_no; i--) {
             var j = i+1;
-            var columns = ['character_id', 'speaker_name', 'speaker_color', 'sentence', 'picture_before', 'dir_before', 'picture_delete', 'html', 'css', 'background_id', 'object_usage'];
+            var columns = ['character_id', 'speaker_name', 'speaker_color', 'sentence', 'picture_before', 'dir_before', 'picture_delete', 'html', 'css', 'background_id', 'object_usage', 'character_object'];
             $.each(columns, function (index, value) {
                 $('*[name="phrases[' + j + ']['+ value +']"]').val($('*[name="phrases[' + i + ']['+ value +']"]').val());
                 $('*[name="phrases[' + i + ']['+ value +']"]').val('');

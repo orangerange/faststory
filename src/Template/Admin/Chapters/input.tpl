@@ -46,6 +46,7 @@
         {$this->Form->control('chapter_id', ['type'=>'hidden', 'value'=>$id])}
         <button type='submit'>このチャプターを削除</button>
         {$this->Form->end()}
+        <button type='button' onclick="window.open('/admin/chapters/display/{$chapter->content->prefix|escape}/{$chapter->no|escape}/')">公開側表示を確認</button>
     {/if}
     {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>$smarty.const.PHRASE_MUX_NUM])}
     {$this->Form->control('object_usage_str', ['type'=>'hidden', 'id'=>'object_usage_str', 'value'=> $objectUsageStr])}
@@ -54,7 +55,7 @@
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}
     {*divタグを入れ子構造にする*}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
-            {$this->element('admin/chapter/_phrase_input', ['i'=>$i])}
+        {$this->element('admin/chapter/_phrase_input', ['i'=>$i])}
     {/for}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
     </div>

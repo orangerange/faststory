@@ -18,7 +18,7 @@
         {$this->fetch('css')}
         <title></title>
     </head>
-    <body id="body" {if $background}style="background-color:{$background->body_color}"{/if}>
+    <body id="body" {if $bodyColor}style="background-color:{$bodyColor}"{/if}>
         {$this->fetch('content')}
     </body>
 </html>

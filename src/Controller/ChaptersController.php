@@ -34,6 +34,7 @@ class ChaptersController extends AppController
 		$this->loadModel('Characters');
 		$this->loadModel('Phrases');
 		$this->loadModel('Backgrounds');
+        $this->loadComponent('Display',['template' => 'display', 'is_admin' => false]);
     }
 
 //	public function index($prefix= null) {
@@ -52,42 +53,7 @@ class ChaptersController extends AppController
 //	}
 
 	public function display($prefix = null, $no) {
-		if (isset($prefix) && preg_match("/^[0-9]+$/", $no)) {
-			if (!$chapter = $this->Chapters->findByPrefixAndNo($prefix, $no)) {
-				throw new NotFoundException(NotFoundMessage);
-			}
-            // チャプタ一覧取得
-            $query = $this->Chapters->find('prefixAll', ['prefix' => $prefix]);
-            $chapters = $query->all();
-            $chapterCount = $query->count();
-            // 背景の取り出し
-            $chapterId = $chapter->get('id');
-			// アニメーション用js及び背景の取り出し
-            $scripts = [];
-            $backgrounds = [];
-			$phraseNum = 1;
-            foreach($chapter['phrases'] as $_phrase) {
-                if (!empty($_phrase)) {
-                    $scripts[$phraseNum] = $_phrase->js;
-                    if (!empty($_phrase->get('background_id'))) {
-                        $query = $this->Backgrounds->find()->where(['id' => $_phrase->get('background_id')]);
-                        if ($query->count() > 0) {
-                            $backgrounds[$phraseNum]  = $query->first();
-                        }
-                    }
-                }
-                $phraseNum ++;
-            }
-            $bodyColor = null;
-            if (isset($backgrounds[1])) {
-                $firstBackground = $backgrounds[1];
-                $bodyColor = $firstBackground->get('body_color');
-            }
-			$this->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'bodyColor', 'chapters', 'chapterCount'));
-		} else {
-			throw new NotFoundException(NotFoundMessage);
-		}
-		$this->render('display');
+	    $this->Display->display($prefix, $no);
 	}
 
     public function axiosList() {

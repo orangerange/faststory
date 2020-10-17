@@ -39,6 +39,8 @@ class ChaptersController extends AppController
         $this->loadModel('Characters');
         $this->loadModel('Phrases');
         $this->loadModel('ObjectProducts');
+
+        $this->loadComponent('Display',['template' => '/Chapters/display', 'is_admin' => true]);
     }
 
     public function index($contentId = null)
@@ -200,4 +202,9 @@ class ChaptersController extends AppController
         $this->render(false, false);
     }
 
+    // 管理側表示用メソッド
+    public function display($prefix = null, $no) {
+        $this->viewBuilder()->setLayout('default');
+        $this->Display->display($prefix, $no);
+    }
 }

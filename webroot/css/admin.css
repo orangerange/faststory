@@ -71,3 +71,15 @@
 .count_display {
     color:red;
 }
+.phrase_control_A {
+    background-color:pink;
+}
+.phrase_control_B {
+    background-color:yellow;
+}
+.phrase_num_show {
+    position:absolute;
+    right:20%;
+    font-size:300%;
+    font-weight:bold;
+}

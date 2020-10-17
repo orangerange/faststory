@@ -41,6 +41,7 @@ class BackgroundsController extends AppController
 	public function input() {
         $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
 		$background =$this->Backgrounds->newEntity();
+		$bodyColor = $background->get('body_color');
 		if($this->request->is('post')) {
 			$background = $this->Backgrounds->patchEntity($background, $this->request->getData());
 			if ($entity = $this->Backgrounds->save($background)) {
@@ -50,7 +51,7 @@ class BackgroundsController extends AppController
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('background', 'objects'));
+		$this->set(compact('background', 'bodyColor', 'objects'));
 	}
 
 	public function edit($id) {
