@@ -14,7 +14,7 @@
  */
 namespace App\Controller\Admin;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 use App\Utils\AppUtility;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -27,10 +27,26 @@ use Cake\Http\Exception\NotFoundException;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class ChaptersController extends AppController
+class ChaptersController extends AdminAppController
 {
     public $helpers = array('Display');
 
+    public $_displayColumns = [
+        'background_id',
+        'chapter_id',
+        'no',
+        'character_id',
+        'object_usage',
+        'speaker_name',
+        'speaker_color',
+        'sentence_color',
+        'sentence',
+        'sentence_translate',
+        'sentence_kana',
+        'html',
+        'css',
+        'js',
+    ];
     public function initialize()
     {
         parent::initialize();
@@ -39,7 +55,7 @@ class ChaptersController extends AppController
         $this->loadModel('Characters');
         $this->loadModel('Phrases');
         $this->loadModel('ObjectProducts');
-
+        $this->Phrases->setTable('admin_phrases');
         $this->loadComponent('Display',['template' => '/Chapters/display', 'is_admin' => true]);
     }
 
@@ -70,15 +86,16 @@ class ChaptersController extends AppController
             $characters = $this->Characters->find('list')->where(['content_id' => $contentId]);
             $backgrounds = $this->Backgrounds->find('list');
             $chapter = $this->Chapters->newEntity();
-            if ($this->request->is('post')) {
-                $this->request->withData('content_id', $contentId);
-                $this->request->withData('no', $chapterNo);
-                $result = $this->Phrases->unsetEmptyDatum($this->request->getData('phrases'));
-                $this->request->withData('phrases', $result['datum']);
+            if ($this->getRequest()->is('post')) {
+                $this->getRequest()->withData('content_id', $contentId);
+                $this->getRequest()->withData('no', $chapterNo);
+                $result = $this->Phrases->unsetEmptyDatum($this->getRequest()->getData('phrases'));
+                $this->getRequest()->withData('phrases', $result['datum']);
                 $openFlg = $result['open_flg'];
-//                $chapter = $this->Chapters->patchEntity($chapter, $this->request->getData(), ['associated' => ['Phrases']]);
-//                $chapter = $this->Chapters->patchEntity($chapter, $this->request->getData());
-                $chapter = $this->Chapters->newEntity($this->request->getData(), ['associated' => ['Phrases']]);
+                $chapter = $this->Chapters->patchEntity($chapter, $this->getRequest()->getData(), ['associated' => ['Phrases']]);
+//                $chapter = $this->Chapters->patchEntity($chapter, $this->getRequest()->getData());
+//                $chapter = $this->Chapters->newEntity($this->getRequest()->getData(), ['associated' => ['Phrases']]);
+                var_dump($this->getRequest()->getData());die();
                 if ($this->Chapters->save($chapter)) {
                     $this->Flash->success(__('新規登録しました'));
                 } else {
@@ -126,16 +143,16 @@ class ChaptersController extends AppController
             for ($i = 0; $i < $phraseNum; $i++) {
                 $openFlg[$i] = true;
             }
-            if ($this->request->is(['patch', 'post', 'put'])) {
-                $postData = $this->request->getData();
+            if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+                $postData = $this->getRequest()->getData();
                 $result = $this->Phrases->unsetEmptyDatum($postData['phrases']);
-                $this->request->withData('phrases', $result['datum']);
+                $this->getRequest()->withData('phrases', $result['datum']);
                 $postData['phrases'] = $result['datum'];
                 $openFlg = $result['open_flg'];
                 //更新処理により削除されるレコードのID
                 $deleteIds = $result['delete_ids'];
                 $chapter = $this->Chapters->patchEntity($chapter, $postData);
-
+var_dump($chapter);die();
 
                 $connection = ConnectionManager::get('default');
                 // トランザクション開始
@@ -175,29 +192,52 @@ class ChaptersController extends AppController
 
     public function delete()
     {
-        if ($this->request->is('post')) {
-            $contentId = $this->request->data('content_id');
-            $chapterId = $this->request->data('chapter_id');
-            $connection = ConnectionManager::get('default');
-            // トランザクション開始
-            $connection->begin();
-            try {
-                if (!$this->Chapters->deleteById($chapterId)) {
-                    throw new NotFoundException(NotFoundMessage);
-                };
-                if (!$this->Phrases->deleteByChapterId($chapterId)) {
-                    throw new NotFoundException(NotFoundMessage);
-                };
-                $connection->commit();
-                $this->Flash->success(__('削除しました'));
-                return $this->redirect(['controller' => 'chapters', 'action' => 'index', $contentId]);
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-                // ロールバック
-                $connection->rollback();
-            }
-        } else {
-            throw new NotFoundException(NotFoundMessage);
+        $this->getRequest()->allowMethod(['post']);
+        $contentId = $this->getRequest()->data('content_id');
+        $chapterId = $this->getRequest()->data('chapter_id');
+        $connection = ConnectionManager::get('default');
+        // トランザクション開始
+        $connection->begin();
+        try {
+            if (!$this->Chapters->deleteById($chapterId)) {
+                throw new NotFoundException(NotFoundMessage);
+            };
+            if (!$this->Phrases->deleteByChapterId($chapterId)) {
+                throw new NotFoundException(NotFoundMessage);
+            };
+            $connection->commit();
+            $this->Flash->success(__('削除しました'));
+            return $this->redirect(['controller' => 'chapters', 'action' => 'index', $contentId]);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            // ロールバック
+            $connection->rollback();
+        }
+        $this->render(false, false);
+    }
+
+    public function frontCopy()
+    {
+//        $this->getRequest()->allowMethod(['post']);
+        $contentId = $this->getRequest()->getData('content_id');
+        $chapterId = $this->getRequest()->getData('chapter_id');
+        $connection = ConnectionManager::get('default');
+        // トランザクション開始
+        $connection->begin();
+        try {
+            // テーブル削除
+            $sql = 'DELETE FROM phrases WHERE chapter_id = ' .  (integer)$chapterId;
+            $results = $connection->execute($sql);
+            // テーブルコピー
+            $sql = 'INSERT INTO phrases (' . implode(',', $this->_displayColumns) . ') SELECT ' . implode(',', $this->_displayColumns) . ' FROM admin_phrases WHERE chapter_id = ' .  (integer)$chapterId;
+            $results = $connection->execute($sql);
+            $connection->commit();
+            $this->Flash->success(__('反映しました'));
+            return $this->redirect(['controller' => 'chapters', 'action' => 'edit', $chapterId]);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            // ロールバック
+            $connection->rollback();
         }
         $this->render(false, false);
     }

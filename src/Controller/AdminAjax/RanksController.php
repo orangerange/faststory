@@ -14,7 +14,7 @@
  */
 namespace App\Controller\AdminAjax;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 use Cake\Http\Exception\NotFoundException;
 /**
  * Static content controller
@@ -23,7 +23,7 @@ use Cake\Http\Exception\NotFoundException;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class RanksController extends AppController
+class RanksController extends AdminAppController
 {
 
 	public function initialize()

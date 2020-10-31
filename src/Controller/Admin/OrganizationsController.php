@@ -14,7 +14,7 @@
  */
 namespace App\Controller\Admin;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 
 /**
  * Static organization controller
@@ -23,7 +23,7 @@ use App\Controller\AppController;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class OrganizationsController extends AppController
+class OrganizationsController extends AdminAppController
 {
 	public function initialize()
     {

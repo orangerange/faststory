@@ -14,7 +14,7 @@
  */
 namespace App\Controller\Admin;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 
 /**
  * Static content controller
@@ -23,7 +23,7 @@ use App\Controller\AppController;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class IndexController extends AppController
+class IndexController extends AdminAppController
 {
 
 	public function index() {

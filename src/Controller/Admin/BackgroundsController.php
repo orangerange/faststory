@@ -14,7 +14,7 @@
  */
 namespace App\Controller\Admin;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 use App\Utils\AppUtility;
 
 /**
@@ -24,7 +24,7 @@ use App\Utils\AppUtility;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class BackgroundsController extends AppController
+class BackgroundsController extends AdminAppController
 {
 	public function initialize()
     {

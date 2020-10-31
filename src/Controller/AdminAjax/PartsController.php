@@ -18,7 +18,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 use Cake\Core\Configure;
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 use Cake\Http\Exception\NotFoundException;
 use App\Utils\AppUtility;
 /**
@@ -28,7 +28,7 @@ use App\Utils\AppUtility;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class PartsController extends AppController
+class PartsController extends AdminAppController
 {
 
 	public function initialize()

@@ -14,7 +14,7 @@
  */
 namespace App\Controller\AdminAjax;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 use App\Utils\AppUtility;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Core\Configure;
@@ -25,7 +25,7 @@ use Cake\Core\Configure;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class ChaptersController extends AppController
+class ChaptersController extends AdminAppController
 {
 
 	public function initialize()

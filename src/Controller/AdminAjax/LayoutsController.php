@@ -14,7 +14,7 @@
  */
 namespace App\Controller\AdminAjax;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 use App\Utils\AppUtility;
 /**
  * Static content controller
@@ -23,7 +23,7 @@ use App\Utils\AppUtility;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class LayoutsController extends AppController
+class LayoutsController extends AdminAppController
 {
 
 	public function initialize()

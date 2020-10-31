@@ -18,7 +18,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 use Cake\Core\Configure;
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 use Cake\Http\Exception\NotFoundException;
 /**
  * Static content controller
@@ -27,7 +27,7 @@ use Cake\Http\Exception\NotFoundException;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class PartCategoriesController extends AppController
+class PartCategoriesController extends AdminAppController
 {
 	public function initialize() {
 		parent::initialize();

@@ -118,6 +118,7 @@ return array(
     define('OBJECT_TEMPLATE_FACE', 3),
     define('OBJECT_TEMPLATE_SPEECH', 4),
     define('OBJECT_TEMPLATE_BADGE', 6),
+    define('ADMIN_IP_ADDRESS', '192.168.33.2'),
     Configure::write('object_character',
         array(
             OBJECT_TEMPLATE_BODY=>'body',

@@ -15,7 +15,7 @@
 namespace App\Controller\Admin;
 use Cake\Core\Configure;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AdminAppController;
 
 /**
  * Static content controller
@@ -24,7 +24,7 @@ use App\Controller\AppController;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class WordsController extends AppController
+class WordsController extends AdminAppController
 {
 	    public function initialize()
     {
@@ -117,6 +117,6 @@ class WordsController extends AppController
 		}
 		$this->render(false,false);
 	}
-	
+
 
 }
