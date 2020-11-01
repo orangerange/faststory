@@ -4,10 +4,6 @@
             {$phrase->html}
         </div>
     {else}
-        {if $character->dir}
-            <image class="character-image" src="{$this->Display->imagePath($character)}">
-            {assign var='nameClass' value='character-name'}
-        {/if}
         {if $character->html && $character->css}
             {assign var='nameClass' value='character-name'}
             <div class="face character-image character_{$character->id}">
