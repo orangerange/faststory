@@ -87,14 +87,16 @@ class ChaptersController extends AdminAppController
             $backgrounds = $this->Backgrounds->find('list');
             $chapter = $this->Chapters->newEntity();
             if ($this->getRequest()->is('post')) {
-                $this->getRequest()->withData('content_id', $contentId);
-                $this->getRequest()->withData('no', $chapterNo);
-                $result = $this->Phrases->unsetEmptyDatum($this->getRequest()->getData('phrases'));
-                $this->getRequest()->withData('phrases', $result['datum']);
+                $postData = $this->getRequest()->getData();
+                $postData['content_id'] = $contentId;
+                $postData['no'] = $chapterNo;
+                $result = $this->Phrases->unsetEmptyDatum($postData['phrases']);
+                $postData['phrases'] = $result['datum'];
                 $openFlg = $result['open_flg'];
-                $chapter = $this->Chapters->patchEntity($chapter, $this->getRequest()->getData(), ['associated' => ['Phrases']]);
+                $chapter = $this->Chapters->patchEntity($chapter, $postData, ['associated' => ['Phrases']]);
                 if ($this->Chapters->save($chapter)) {
                     $this->Flash->success(__('新規登録しました'));
+                    return $this->redirect(['controller' => 'chapters', 'action' => 'index', $contentId]);
                 } else {
                     $this->Flash->error(__('新規登録に失敗しました'));
                 }
@@ -143,7 +145,6 @@ class ChaptersController extends AdminAppController
             if ($this->getRequest()->is(['patch', 'post', 'put'])) {
                 $postData = $this->getRequest()->getData();
                 $result = $this->Phrases->unsetEmptyDatum($postData['phrases']);
-                $this->getRequest()->withData('phrases', $result['datum']);
                 $postData['phrases'] = $result['datum'];
                 $openFlg = $result['open_flg'];
                 //更新処理により削除されるレコードのID
@@ -188,9 +189,8 @@ class ChaptersController extends AdminAppController
 
     public function delete()
     {
-        $this->getRequest()->allowMethod(['post']);
-        $contentId = $this->getRequest()->data('content_id');
-        $chapterId = $this->getRequest()->data('chapter_id');
+        $contentId = $this->getRequest()->getData('content_id');
+        $chapterId = $this->getRequest()->getData('chapter_id');
         $connection = ConnectionManager::get('default');
         // トランザクション開始
         $connection->begin();
