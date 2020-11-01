@@ -14,7 +14,7 @@
             <tr>
                 <td>{$content->id}</td>
                 <td>{$content->name|escape}</td>
-                <td><a href='/admin/contents/edit/{$content->id}'>編集</a></td> 
+                <td><a href='/admin/contents/edit/{$content->id}'>編集</a></td>
                 <td><a href='/admin/chapters/index/{$content->id}'>チャプター一覧へ</a></td> 
 {*                <td><a href='/admin/contents/delete/{$content->id}'>削除</a></td>*}
             </tr>

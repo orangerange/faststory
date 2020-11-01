@@ -3,6 +3,9 @@
         function deleteCheck() {
             return confirm("削除します。よろしいですか。");
         }
+        function frontCopyCheck() {
+            return confirm("公開側に反映します。よろしいですか。");
+        }
     </script>
 {/literal}
 <div class='popup' id='js-popup'>
@@ -47,12 +50,19 @@
         <button type='submit'>このチャプターを削除</button>
         {$this->Form->end()}
         <button type='button' onclick="window.open('/admin/chapters/display/{$chapter->content->prefix|escape}/{$chapter->no|escape}/')">公開側表示を確認</button>
+        {$this->Form->create($chapter, ['method'=>'post', 'url'=>'/admin/chapters/front-copy', 'onSubmit'=>"return  frontCopyCheck()"])}
+        {$this->Form->control('content_id', ['type'=>'hidden', 'value'=>$contentId])}
+        {$this->Form->control('chapter_id', ['type'=>'hidden', 'value'=>$id])}
+        <button type='submit'>このチャプターを公開側に反映</button>
+        {$this->Form->end()}
     {/if}
     {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>$smarty.const.PHRASE_MUX_NUM])}
     {$this->Form->control('object_usage_str', ['type'=>'hidden', 'id'=>'object_usage_str', 'value'=> $objectUsageStr])}
     <h1>{$contentName|escape}チャプター{if $editFlg}編集{else}登録{/if}({$chapterNo})</h1>
     {$this->Form->create($chapter,['enctype' => 'multipart/form-data'])}
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}
+{*    {$this->Form->control('content_id', ['type'=>'hidden', 'value'=>$contentId])}*}
+{*    {$this->Form->control('chapter_id', ['type'=>'hidden', 'value'=>$id])}*}
     {*divタグを入れ子構造にする*}
     {for $i=0 to $smarty.const.PHRASE_MUX_NUM-1}
         {$this->element('admin/chapter/_phrase_input', ['i'=>$i])}
