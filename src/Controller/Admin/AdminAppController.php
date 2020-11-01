@@ -23,14 +23,16 @@ namespace App\Controller\Admin;
  * @link https://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
 use Cake\Routing\Router;
+use Cake\Core\Configure;
 use App\Controller\AppController;
 class AdminAppController extends AppController
 {
     public function initialize()
     {
         parent::initialize();
+        $adminIps = Configure::read('admin_ip_addresses');
         $clientIp = $this->getRequest()->clientIP();
-        if ($clientIp != ADMIN_IP_ADDRESS) {
+        if (!in_array($clientIp, $adminIps)) {
             throw new ForbiddenException();
         }
 	}
