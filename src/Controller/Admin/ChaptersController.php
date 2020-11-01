@@ -93,9 +93,6 @@ class ChaptersController extends AdminAppController
                 $this->getRequest()->withData('phrases', $result['datum']);
                 $openFlg = $result['open_flg'];
                 $chapter = $this->Chapters->patchEntity($chapter, $this->getRequest()->getData(), ['associated' => ['Phrases']]);
-//                $chapter = $this->Chapters->patchEntity($chapter, $this->getRequest()->getData());
-//                $chapter = $this->Chapters->newEntity($this->getRequest()->getData(), ['associated' => ['Phrases']]);
-                var_dump($this->getRequest()->getData());die();
                 if ($this->Chapters->save($chapter)) {
                     $this->Flash->success(__('新規登録しました'));
                 } else {
@@ -152,7 +149,6 @@ class ChaptersController extends AdminAppController
                 //更新処理により削除されるレコードのID
                 $deleteIds = $result['delete_ids'];
                 $chapter = $this->Chapters->patchEntity($chapter, $postData);
-var_dump($chapter);die();
 
                 $connection = ConnectionManager::get('default');
                 // トランザクション開始
