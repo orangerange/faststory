@@ -142,11 +142,15 @@ class ObjectProductsTable extends Table
 
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (isset($options['character_id']) && is_array($options['character_id'])) {
+        if (isset($options['character_id']) && is_array($options['character_id']) && count($options['character_id'] > 0)) {
             $entity->set('character_id', ',' . implode(',', $options['character_id']) . ',');
+        } else {
+            $entity->set('character_id', null);
         }
-        if (isset($options['object_usage']) && is_array($options['object_usage'])) {
+        if (isset($options['object_usage']) && is_array($options['object_usage']) && count($options['object_usage'] > 0)) {
             $entity->set('object_usage', ',' . implode(',', $options['object_usage']) . ',');
+        } else {
+            $entity->set('object_usage', null);
         }
     }
 }

@@ -79,7 +79,7 @@ class ObjectsController extends AdminAppController
 				}
 			}
 			$object = $this->ObjectProducts->newEntity($data, ['associated' => ['ObjectParts']]);
-			if($this->ObjectProducts->save($object)) {
+			if($this->ObjectProducts->save($object, $data)) {
 				$this->Flash->success(__('新規登録しました'));
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
@@ -116,7 +116,7 @@ class ObjectsController extends AdminAppController
 				if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
 					unset($data['object_parts'][$_key]);
 				}
-			}\cake\log\log::debug($data);
+			}
 			$object = $this->ObjectProducts->patchEntity($object, $data);
 			$this->ObjectParts->deleteByObjectId($id);
 			if ($this->ObjectProducts->save($object, $data)) {
