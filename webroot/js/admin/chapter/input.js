@@ -243,7 +243,7 @@ $(function () {
         html_select = wholeReplace(html_select , 'object_' + object_id, class_name + ' object object_'  + object_no + '_' + object_id)
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
-        var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
+        var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%; --object_width:calc(var(--phrase_object_width) * ' + width / 100 + '); --object_height:calc(var(--phrase_object_height) * ' + height / 100 + ');}';
         var html_input = $('#phrases-'+phrase_no+'-html').val();
         var css_input = $('#phrases-'+phrase_no+'-css').val();
         var css_end_add = '/*.object_'  + object_no + '_' + object_id + '_end*/';

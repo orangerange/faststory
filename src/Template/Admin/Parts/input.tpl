@@ -1,5 +1,6 @@
 {$this->Flash->render()}
 {$this->Html->script('admin/part/input.js', ['block'=>'script'])}
+{$this->Display->css('', null, 'object', $template->width, $template->height)}
 <div><a href='/admin/parts/index/{$templateId|escape}/{$objectType|escape}'>パーツ一覧</a></div>
 <h1>パーツ{if $editFlg}個別編集{else}登録{/if}({$template['name']})</h1>
 <div>

@@ -25,7 +25,18 @@ class DisplayHelper extends Helper {
 		}
 		return '<style type="text/css">' . $content . '</style>';
 	}
-	public function css($content, $preClass = null) {
+	public function css($content, $preClass = null, $objName = null, $objWidth = null, $objHeight = null) {
+        if (isset($objName)) {
+            $root = ':root {';
+            if (isset($objWidth)) {
+                $root .= '--' . $objName . '_width:calc(var(--phrase_object_width) * ' . $objWidth / 100 . ');';
+            }
+            if (isset($objHeight)) {
+                $root .= '--' . $objName . '_height:calc(var(--phrase_object_height) * ' . $objHeight / 100 . ');';
+            }
+            $root .= '}';
+        }
+        $content = !empty($content) ? $root . ' ' . $content : $root;
 		$content = AppUtility::addPreClassToCss($content, $preClass);
 		return '<style type="text/css">' . $content . '</style>';
 	}

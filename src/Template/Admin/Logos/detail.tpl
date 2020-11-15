@@ -1,3 +1,4 @@
+{$this->Html->css('config_logo', ['block'=>'css'])}
 <h1>ロゴ詳細</h1>
 <div class='css css_sum'>
     {$this->Display->css($logo->css)}

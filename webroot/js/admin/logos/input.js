@@ -21,14 +21,15 @@ $(function () {
     $(document).on('click', '.object_decide', function () {
         var object_id = $(this).closest('td').find('.object_id').val();
         var object_no = $(this).closest('td').find('.object_no').val();
-        var width = Math.round($(this).closest('td').find('.width').val() * 2 / 3); // 登録時の基準値との差異を調整
+        var width_original = $(this).closest('td').find('.width').val();
+        var width = Math.round(width_original * 2 / 3); // 登録時の基準値との差異を調整
         var height = $(this).closest('td').find('.height').val();
         var class_name = $(this).closest('td').find('.class_name').val();
         var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
-        html_select = wholeReplace(html_select , 'object_' + object_id, class_name + ' object object_'  + object_no + '_' + object_id)
+        html_select = wholeReplace(html_select , 'object_' + object_id, class_name + ' object object_'  + object_no + '_' + object_id);
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
-        var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%;}';
+        var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%; --object_width:calc(var(--phrase_object_width) * ' + width_original / 100 + '); --object_height:calc(var(--phrase_object_height) * ' + height / 100 + ');}';
         var html_input = $('.html_input').val();
         var css_input = $('.css_input').val();
         var css_end_add = '/*.object_'  + object_no + '_' + object_id + '_end*/';

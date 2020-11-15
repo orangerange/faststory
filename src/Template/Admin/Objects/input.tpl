@@ -1,5 +1,6 @@
 {$this->Flash->render()}
 {$this->Html->script('admin/object/input.js', ['block'=>'script'])}
+{$this->Display->css('', null, 'object', $template->width, $template->height)}
 {foreach from=$css item=_css}
     {$this->Display->css($_css.css)}
 {/foreach}

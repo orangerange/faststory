@@ -15,6 +15,7 @@
         {$this->Display->baseClassCss()}
         {$this->Html->css('display')}
         {$this->Html->css('admin')}
+        {$this->Html->css('config_admin')}
         {$this->fetch('css')}
         <title></title>
     </head>

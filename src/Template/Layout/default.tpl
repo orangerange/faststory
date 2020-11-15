@@ -10,6 +10,7 @@
         <meta name="keywords" content="" />
         {$this->Html->css('display')}
         {$this->Html->css('front')}
+        {$this->Html->css('config')}
         {$this -> Html -> script('jquery-1.8.3')}
         {$this -> Html-> script('anime.min')}
         {$this->fetch('script')}

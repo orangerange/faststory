@@ -1,5 +1,6 @@
 {$this->Flash->render()}
 {$this->Html->script('admin/icons/input.js', ['block'=>'script'])}
+{$this->Html->css('config_icon', ['block'=>'css'])}
 <div class='css_icon'>
     {$this->Display->css($icon->css)}
 </div>
@@ -9,6 +10,7 @@
         <table class="scroll_x">
             <tr>
                 {foreach from=$objects key=_key item=_value}
+                    {$this->Display->css('', null, 'object', $_value->object_template->width, $_value->object_template->height)}
                     <td>
                         <div class='css css_object_{$_value->id|escape}'>
                             {$this->Display->css($_value->css, '.object_'|cat:$_value->id)}

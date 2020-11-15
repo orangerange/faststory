@@ -1,3 +1,4 @@
+{$this->Html->css('config_icon', ['block'=>'css'])}
 <h1>アイコン詳細</h1>
 <div class='css css_sum'>
     {$this->Display->css($icon->css)}

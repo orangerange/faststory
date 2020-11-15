@@ -90,7 +90,7 @@ class ChaptersTable extends Table {
     public function findPrefixAll(Query $query, array $options = [])
     {
         $query->select(['Contents.name', 'Chapters.no', 'Chapters.title']);
-        $query->contain(['Contents']);
+        $query->contain(['Contents', 'Phrases']);
         $query->where([
             'Contents.prefix' => Hash::get($options, 'prefix', ''),
         ]);

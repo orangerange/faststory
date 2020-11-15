@@ -1,5 +1,6 @@
 {$this->Flash->render()}
 {$this->Html->script('admin/part/index.js', ['block'=>'script'])}
+{$this->Display->css('', null, 'object', $template->width, $template->height)}
 <h1>パーツ一覧({$template['name']})</h1>
 <div><a href='/admin/parts/input/{$templateId|escape}/'>新規登録</a></div>
 <div><a href='/admin/objects/input/{$templateId|escape}/'>オブジェクトを作成する</a></div>

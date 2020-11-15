@@ -1,0 +1,12 @@
+@media screen and (min-width: 768px) {
+    :root {
+        --phrase_object_width: 500px;
+        --phrase_object_height: 250px;
+    }
+}
+@media screen and (max-width: 767px) {
+    :root {
+        --phrase_object_width: 290px;
+        --phrase_object_height: 145px;
+    }
+}
