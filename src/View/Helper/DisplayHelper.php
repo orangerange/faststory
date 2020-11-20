@@ -26,6 +26,7 @@ class DisplayHelper extends Helper {
 		return '<style type="text/css">' . $content . '</style>';
 	}
 	public function css($content, $preClass = null, $objName = null, $objWidth = null, $objHeight = null) {
+        $content = AppUtility::addPreClassToCss($content, $preClass);
         if (isset($objName)) {
             $root = ':root {';
             if (isset($objWidth)) {
@@ -35,9 +36,8 @@ class DisplayHelper extends Helper {
                 $root .= '--' . $objName . '_height:calc(var(--phrase_object_height) * ' . $objHeight / 100 . ');';
             }
             $root .= '}';
+            $content = !empty($content) ? $root . ' ' . $content : $root;
         }
-        $content = !empty($content) ? $root . ' ' . $content : $root;
-		$content = AppUtility::addPreClassToCss($content, $preClass);
 		return '<style type="text/css">' . $content . '</style>';
 	}
 
