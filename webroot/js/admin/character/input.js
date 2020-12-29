@@ -144,6 +144,8 @@ $(function () {
         $('.parts_sum')
                 .find('.' + parts_class)
                 .replaceWith(html);
+        var html_sum = $('.parts_sum').html().replace('　', '');
+        $('.html_input').val(html_sum);
     });
 
     // 組織変更による階級選択肢の変更

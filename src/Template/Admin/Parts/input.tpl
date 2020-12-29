@@ -22,7 +22,7 @@
                 {$this->Display->css($part->css)}
             </div>
             {if $template['class_name'] == 'face'}
-                <div class='character_box html_show'>
+                <div class='character_box html_show object_input'>
                     <div class='face character'>
                         {$part->html}
                     </div>

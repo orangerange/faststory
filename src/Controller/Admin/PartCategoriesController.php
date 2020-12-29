@@ -73,7 +73,7 @@ class PartCategoriesController extends AdminAppController
 			$category->template_id = $templateId;
 			if ($this->PartCategories->save($category)) {
 				$this->Flash->success(__('新規登録しました'));
-				return $this->redirect(['action' => 'index']);
+				return $this->redirect(['action' => 'index', $templateId]);
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
