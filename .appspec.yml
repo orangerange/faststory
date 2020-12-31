@@ -3,8 +3,3 @@ os: linux
 files:
   - source: /
     destination: /var/www/html/faststory
-hooks:
-  BeforeInstall:
-    - location: shells/initialize.sh
-  AfterInstall:
-    - location: shells/update.sh
