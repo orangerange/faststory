@@ -5,8 +5,7 @@ files:
     destination: /var/www/html/faststory
 permissions:
   - object: /var/www/html/faststory/logs
+    pattern: "**"
     owner: root
     group: root
     mode: 777
-    type:
-      - directory
