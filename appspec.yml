@@ -9,3 +9,8 @@ permissions:
     owner: root
     group: root
     mode: 777
+  - object: /var/www/html/faststory/tmp/cache
+   pattern: "**"
+   owner: root
+   group: root
+   mode: 777
