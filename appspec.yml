@@ -4,13 +4,8 @@ files:
   - source: /
     destination: /var/www/html/faststory
 permissions:
-  - object: /var/www/html/faststory/logs
+  - object: /var/www/html/faststory/logs /var/www/html/faststory/tmp/cache
     pattern: "**"
     owner: root
     group: root
     mode: 777
-  - object: /var/www/html/faststory/tmp/cache
-   pattern: "**"
-   owner: root
-   group: root
-   mode: 777
