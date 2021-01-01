@@ -1,6 +1,6 @@
 {$this -> Html -> script('jquery-1.8.3', ['block'=>true])}
-{*{$this->Html->script('contents/index.js', ['block'=>true])}*}
-{$this->Html->script('contents/index_ajax.js', ['block'=>true])}
+{$this->Html->script('contents/index.js', ['block'=>true])}
+{*{$this->Html->script('contents/index_ajax.js', ['block'=>true])}*}
 {$this->Display->baseClassCss()}
 {foreach from=$contents item=content}
     {if $content->thumbnail_css}
