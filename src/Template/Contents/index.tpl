@@ -7,7 +7,7 @@
         {$this->Display->css($content->thumbnail_css, '#thumbnail_html_display_'|cat:$content->id)}
     {/if}
 {/foreach}
-<h1>チャット小説公開中</h1>
+<h1>チャット小説公開中更新</h1>
 <h2>作品一覧</h2>
 <div id="contents">
     {foreach from=$contents item=content}
