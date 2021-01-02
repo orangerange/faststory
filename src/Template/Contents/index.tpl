@@ -8,7 +8,7 @@
     {/if}
 {/foreach}
 {*<h1>このサイトでは自作の物語を、チャット小説形式で公開しています。</h1>*}
-<h1>チャット小説公開中</h1>
+<h1>チャット小説公開中更新</h1>
 <h2>作品一覧</h2>
 <div id="contents">
     {foreach from=$contents item=content}
