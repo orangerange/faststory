@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test
-    env:
-      SECRET_KEY: ${{ secrets.PRIVATE_KEY }}
-      EC2_USER: ${{ secrets.USER_NAME }}
-      EC2_HOST: ${{ secrets.HOST_NAME }}
-      run:
-        echo "$SECRET_KEY" > secret_key
-        chmod 600 secret_key
-        ssh -oStrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} -i secret_key "cd /var/www/html/faststory && git pull origin master"
+        env:
+          SECRET_KEY: ${{ secrets.PRIVATE_KEY }}
+          EC2_USER: ${{ secrets.USER_NAME }}
+          EC2_HOST: ${{ secrets.HOST_NAME }}
+        run:
+          echo "$SECRET_KEY" > secret_key
+          chmod 600 secret_key
+          ssh -oStrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} -i secret_key "cd /var/www/html/faststory && git pull origin master"
