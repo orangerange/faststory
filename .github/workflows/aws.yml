@@ -1,0 +1,44 @@
+name: TestDeploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Public IP
+        id: ip
+        uses: haythem/public-ip@v1
+
+      - uses: actions/checkout@v2
+      - name: Deploy
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          USER_NAME: ${{ secrets.USER_NAME }}
+          HOST_NAME: ${{ secrets.HOST_NAME }}
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+          SECURITY_GROUP: ${{ secrets.SECURITY_GROUP }}
+        run: |
+          # https://github.com/haythem/public-ip
+          IP_ADDRESS=`echo ${{ steps.ip.outputs.ipv4 }}`
+
+          # SSHポートを開放する
+          aws --profile eyemovic-dev ec2 authorize-security-group-ingress --group-id ${SECURITY_GROUP} --protocol tcp --port 22 --cidr "$IP_ADDRESS"/32
+
+          # SSH接続して、git pullする
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOST_NAME} '
+          cd /home/ec2-user/Gitプロジェクト &&
+          git checkout master &&
+          git fetch --all &&
+          git reset --hard origin/master &&
+          git pull origin master
+          '
+
+          # SSHのポートを閉じる
+          aws --profile eyemovic-dev ec2 revoke-security-group-ingress --group-id ${SECURITY_GROUP} --protocol tcp --port 22 --cidr "$IP_ADDRESS"/32
