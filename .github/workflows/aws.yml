@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@maste
+        uses: actions/checkout@hotfix/1
       - name: test
         env:
           SECRET_KEY: ${{ secrets.PRIVATE_KEY }}
