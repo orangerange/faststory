@@ -1,0 +1,12 @@
+:root {
+    --phrase_object_width: 1349px;
+    --phrase_object_height: 674.5px;
+}
+body {
+    margin:0;
+    overflow: hidden;
+}
+.speech,.sentence {
+    font-size: 50;
+}
+

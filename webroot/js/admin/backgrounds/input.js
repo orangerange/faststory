@@ -2,7 +2,6 @@ $(function () {
     // 背景オブジェクトの複製
     copyObjects();
 
-    // 作品変更によるキャラクタ選択肢の変更
     $(document).on("change", ".body_color", function () {
         document.getElementById('body').style.backgroundColor = $(this).val();
     })

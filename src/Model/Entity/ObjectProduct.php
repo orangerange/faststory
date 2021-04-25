@@ -37,6 +37,8 @@ class ObjectProduct extends Entity
 		'deleted' => true,
 		'object_parts' => true,
 		'object_templates' => true,
+		'picture_content' => true,
+		'mime' => true,
 	];
 
 }

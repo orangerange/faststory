@@ -12,23 +12,36 @@
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence', ['type'=>'textarea', 'size'=>150, 'class'=>'sentence'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence_kana', ['type'=>'text', 'size'=>150, 'class'=>'sentence_kana'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence_translate', ['type'=>'text', 'size'=>150, 'class'=>'sentence_translate'])}
+
+    {$this->Form->control('phrases.'|cat:$i|cat:'.picture', ['type'=>'file', 'class'=>'picture'])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.picture_del', ['class'=>'picture_del','type'=>'checkbox'])}
+    {if $chapter['phrases'][$i]['picture_content']}
+        {$this->Form->control('phrases.'|cat:$i|cat:'.picture_content_id', ['class'=>'picture_content_id','type'=>'hidden', 'value'=>$chapter['phrases'][$i]['id']])}
+    {/if}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.mime', ['class'=>'mime','type'=>'hidden', 'value'=>$chapter['phrases'][$i]['mime']])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.movie_time', ['type'=>'text', 'class' => 'movie_time'])}
     <div id='css_show_{$i|escape}' class='css_show'>
         {$this->Display->css($chapter['phrases'][$i]['css'])}
     </div>
     {$this->Display->adminAnimateJs($i, $chapter['phrases'][$i]['js'])}
-    <div id='html_show_{$i|escape}' class='phrase_object html_show phrase_object_{$i+1|escape}'>
+    <div id='html_show_{$i|escape}' class='phrase_object_chapter_input html_show phrase_object_{$i+1|escape}' style='{if $chapter['phrases'][$i]['color']}background-color:{$chapter['phrases'][$i]['color']};{/if}{if $chapter['phrases'][$i]['picture_content']}background-image: url("/chapters/picture/{$chapter['phrases'][$i]['id']|escape}/1");background-size: cover;{/if}'>
         {$chapter['phrases'][$i]['html']}
     </div>
     <div class='object_layout_input object_layout_input_{$i}'>
         {$this->element('admin/chapter/_object_layout', ['layouts'=>$layouts[$i]])}
     </div>
+    {assign var='color' value='#ffffff'}
+    {if $chapter['phrases'][$i]['color']}
+        {assign var='color' value=$chapter['phrases'][$i]['color']|escape}
+    {/if}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.color', ['type'=>'color', 'class' => 'color', 'value' => {$color}])}
     <button class='object_select' type='button'>選択</button>
     <button class='object_modify' type='button'>微調整</button>
     <button class='object_clear' type='button'>イラストクリア</button>
     <button class='object_animate object_animate_{$i}' type='button'>アニメーション実行</button>
     {assign var='checked' value=''}
     {if $chapter->phrases[$i]->character_id && $chapter->phrases[$i]->html && $chapter->phrases[$i]->css}
-        {assign var=checked value='checked'}
+        {assign var='checked' value='checked'}
     {/if}
     {$this->Form->input('phrases.'|cat:$i|cat:'.object_usage', ['class'=>'object_usage', 'type'=>'select', 'label'=>false, 'options'=>$this->Config->read('object_usage')])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.character_object', ['class'=>'character_object','type'=>'checkbox', 'checked'=>$checked])}

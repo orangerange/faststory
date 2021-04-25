@@ -15,6 +15,8 @@
             <th>チャプター番号</th>
             <th>タイトル</th>
             <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -22,8 +24,13 @@
             <tr>
                 <td>{$chapter->no}</td>
                 <td>{$chapter->title|escape}</td>
-                <td><a href='/admin/chapters/edit/{$chapter->id}'>編集</a></td> 
+                <td><a href='/admin/chapters/edit/{$chapter->id}'>編集</a></td>
                 <td>
+                    <button type='button' onclick="window.open('/admin/chapters/display/{$content->prefix|escape}/{$chapter->no|escape}/')">公開側表示を確認</button>
+                </td>
+                <td>
+                    <button type='button' onclick="window.open('/admin/chapters/movie/{$content->prefix|escape}/{$chapter->no|escape}/')">ムービーを表示</button>
+                </td>
                     {$this->Form->create($chapte, ['method'=>'post', 'url'=>'/admin/chapters/delete', 'onSubmit'=>"return  deleteCheck()"])}
                     {$this->Form->control('content_id', ['type'=>'hidden', 'value'=>$contentId])}
                     {$this->Form->control('chapter_id', ['type'=>'hidden', 'value'=>$chapter->id])}

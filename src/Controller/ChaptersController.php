@@ -79,4 +79,20 @@ class ChaptersController extends AppController
         $result = ['html' => $html, 'content' => $content, 'is_success' => $isSuccess];
         $this->response->getBody()->write(json_encode($result));
     }
+
+    public function picture($phraseId, $isAdmin = false) {
+        $this->autoRender = false;
+	    if ($isAdmin) {
+            $this->Phrases->setTable('admin_phrases');
+        }
+        $query = $this->Phrases->find()->select(['picture_content', 'mime'])->where(['id' => $phraseId]);
+        $picture = $query->first();
+
+        $pictureContent = $picture->get('picture_content');
+        $mime = $picture->get('mime');
+
+        $response = $this->response->withType($mime);
+        $response->getBody()->write(stream_get_contents($pictureContent));
+        return $response;
+    }
 }

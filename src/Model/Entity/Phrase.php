@@ -44,5 +44,9 @@ class Phrase extends Entity
         'html' => true,
         'css' => true,
         'js' => true,
+        'picture_content' => true,
+        'mime' => true,
+        'movie_time' => true,
+        'color' => true,
     ];
 }

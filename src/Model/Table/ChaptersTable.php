@@ -2,6 +2,9 @@
 
 namespace App\Model\Table;
 
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -105,4 +108,15 @@ class ChaptersTable extends Table {
 		return true;
 	}
 
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    {
+//        if (isset($options['picture']['tmp_name'])) {
+//            $file = new File($options['picture']['tmp_name']);
+//            $pictureContent = $file->read();
+//            $pictureContent = 'aaa';
+//            $entity->set('picture_content', $pictureContent);
+//        } else {
+//            $entity->set('picture_content', null);
+//        }
+    }
 }

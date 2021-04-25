@@ -6,6 +6,7 @@ use ArrayObject;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
+use Cake\Filesystem\File;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -37,7 +38,7 @@ class ObjectProductsTable extends Table
         parent::initialize($config);
 
         $this->setTable('objects');
-        $this->setDisplayField('name');
+//        $this->setDisplayField('name');
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('ObjectTemplates', [
@@ -91,6 +92,15 @@ class ObjectProductsTable extends Table
         )
             ->contain(['ObjectTemplates'])
             ->first();
+        $rightArm = $this->find()->where(
+            [
+                'ObjectProducts.character_id LIKE' => '%,' . $character['id'] . ',%',
+                'ObjectProducts.template_id' => OBJECT_TEMPLATE_RIGHT_ARM,
+                'ObjectProducts.object_usage LIKE' => '%,' . $objectUsage . ',%',
+            ]
+        )
+            ->contain(['ObjectTemplates'])
+            ->first();
         $speech = $this->find()->where(
             [
                 'ObjectProducts.template_id' => OBJECT_TEMPLATE_SPEECH,
@@ -119,7 +129,7 @@ class ObjectProductsTable extends Table
                 ->contain(['ObjectTemplates'])
                 ->first();
         }
-        $result = array('face' => $face, 'body' => $body, 'speech'=>$speech, 'badge_left' => $badgeLeft, 'badge_right' => $badgeRight);
+        $result = array('face' => $face, 'body' => $body, 'right_arm' => $rightArm, 'speech'=>$speech, 'badge_left' => $badgeLeft, 'badge_right' => $badgeRight);
 
         return $result;
     }
@@ -140,6 +150,12 @@ class ObjectProductsTable extends Table
         return $data;
     }
 
+    public function findPictureCOntentById($id) {
+        $result = $this->find()->where(['id' => $id])->first();
+
+        return $result->get('picture_content');
+    }
+
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
         if (isset($options['character_id']) && is_array($options['character_id']) && count($options['character_id'] > 0)) {
@@ -151,6 +167,17 @@ class ObjectProductsTable extends Table
             $entity->set('object_usage', ',' . implode(',', $options['object_usage']) . ',');
         } else {
             $entity->set('object_usage', null);
+        }
+
+        // 画像登録
+        if (!empty($options['picture']['tmp_name'])) {
+            $file = new File($options['picture']['tmp_name']);
+            $pictureContent = $file->read();
+            $mime = $file->mime();
+            $entity->set('picture_content', $pictureContent);
+            $entity->set('mime', $mime);
+        } elseif(!empty($options['picture_content_id']) && empty($options['picture_del'])) {
+            $options['picture_content'] = $this->findPictureContentByID($options['picture_content_id']);
         }
     }
 }

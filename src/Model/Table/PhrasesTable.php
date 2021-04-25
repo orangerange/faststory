@@ -1,6 +1,10 @@
 <?php
 namespace App\Model\Table;
 
+use ArrayObject;
+use Cake\Filesystem\File;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -76,16 +80,12 @@ class PhrasesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-//        $rules->add($rules->existsIn(['content_id'], 'Contents'));
-//        $rules->add($rules->existsIn(['chapter_id'], 'Chapters'));
-//        $rules->add($rules->existsIn(['character_id'], 'Characters'));
         return $rules;
     }
 
 	public function isEmpty($data) {
-		
-//		return  empty($data['sentence']) && empty($data['picture']['name']) && empty($data['dir_before']);
-		return  empty($data['sentence']) && empty($data['picture']['name']) && empty($data['html']) && empty($data['css']) && empty($data['js']);
+
+		return  empty($data['sentence']) && empty($data['picture']['tmp_name']) && empty($data['html']) && empty($data['css']) && empty($data['js'])&& empty($data['picture_content']) && empty($data['mime']);
 	}
 
 	public function unsetEmptyDatum($datum) {
@@ -96,6 +96,16 @@ class PhrasesTable extends Table
 		foreach($datum as $key => $data) {
 			if (!$this->isEmpty($data)) {
 				$data['no'] = $i;
+				// 画像登録
+				if (!empty($data['picture']['tmp_name'])) {
+                    $file = new File($data['picture']['tmp_name']);
+                    $pictureContent = $file->read();
+                    $mime = $file->mime();
+                    $data['picture_content'] = $pictureContent;
+                    $data['mime'] = $mime;
+                } elseif(!empty($data['picture_content_id']) && empty($data['picture_del'])) {
+                    $data['picture_content'] = $this->findPictureContentByID($data['picture_content_id']);
+                }
 				$result[] = $data;
 				$openFlg[] = true;
 				$i ++;
@@ -127,4 +137,24 @@ class PhrasesTable extends Table
 	public function findFiratByChapterId($chapterId) {
 		return $this->find()->where(['chapter_id' => $chapterId])->contain(['Characters'])->order(['no' => 'ASC'])->first();
 	}
+
+    public function findPictureCOntentById($id) {
+        $result = $this->find()->where(['id' => $id])->first();
+
+        return $result->get('picture_content');
+    }
+
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    {
+//        var_dump($entity);
+//        var_dump($options);
+//        if (isset($options['picture']['tmp_name'])) {
+//            $file = new File($options['picture']['tmp_name']);
+//            $pictureContent = $file->read();
+//            $pictureContent = 'aaa';
+//            $entity->set('picture_content', $pictureContent);
+//        } else {
+//            $entity->set('picture_content', null);
+//        }
+    }
 }

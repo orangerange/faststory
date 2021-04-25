@@ -10,14 +10,20 @@ use Cake\ORM\TableRegistry;
 class DisplayComponent extends Component
 {
     private $_template = '';
+    private $_movieTemplate = '';
     private $_isAdmin = '';
 
     public function initialize(array $config) {
-        $this->_template = $config['template'];
+        if (isset($config['template'])) {
+            $this->_template = $config['template'];
+        }
+        if (isset($config['movie_template'])) {
+            $this->_movieTemplate = $config['movie_template'];
+        }
         $this->_isAdmin = $config['is_admin'];
     }
 
-    public function display($prefix = null, $no)
+    public function display($prefix = null, $no, $isMovie = false)
     {
         $Chapters = TableRegistry::getTableLocator()->get('Chapters');
         $Backgrounds = TableRegistry::getTableLocator()->get('Backgrounds');
@@ -58,6 +64,11 @@ class DisplayComponent extends Component
         } else {
             throw new NotFoundException(NotFoundMessage);
         }
-        $this->getController()->render($this->_template);
+        if ($isMovie) {
+            $this->getController()->viewBuilder()->setLayout('movie');
+            $this->getController()->render($this->_movieTemplate);
+        } else {
+            $this->getController()->render($this->_template);
+        }
     }
 }

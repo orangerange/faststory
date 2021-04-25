@@ -1,6 +1,6 @@
 <div class='phrase_all'>
     {if $phrase->html && $phrase->css}
-        <div class='phrase_object phrase_object_display phrase_object_{$i|escape}'>
+        <div class='phrase_object phrase_object_display phrase_object_{$i|escape}'style='{if $phrase->color}background-color:{$phrase->color};{/if}{if $phrase->picture_content}background-image: url("/chapters/picture/{$phrase->id|escape}/1");background-size: cover;{/if}'>
             {$phrase->html}
         </div>
     {else}

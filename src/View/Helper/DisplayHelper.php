@@ -51,8 +51,23 @@ class DisplayHelper extends Helper {
         $js .= VUE_PHRASE_SCRIPT_LAST . '</script>';
         return $js;
     }
+    public function movieJs($scripts = array()) {
+        $js = '<script type="text/javascript">' . VUE_MOVIE_SCRIPT_FIRST;
+        foreach($scripts as $_phraseNum => $_script) {
+            $js.= 'if (this.num ==' .  $_phraseNum . ') {';
+            $js.= $_script;
+            $js.= '}';
+        }
+        $js .= VUE_MOVIE_SCRIPT_LAST . '</script>';
+        return $js;
+    }
     public function adminAnimateJs($i, $script = '') {
         $js = '<script type="text/javascript">' . "$(document).on('click', '.object_animate_" . $i . "', function() { " . $script . "})" . "</script>";
         return $js;
+    }
+    //画像データをBASE64でエンコード(jpg)
+    function convertImageSource($imgData) {
+        header('Content-type:image/jpg');
+        echo $imgData;
     }
 }

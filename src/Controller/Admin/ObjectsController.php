@@ -78,6 +78,18 @@ class ObjectsController extends AdminAppController
 					unset($data['object_parts'][$_key]);
 				}
 			}
+
+            // 画像登録
+//            if (!empty($data['picture']['tmp_name'])) {
+//                $file = new File($data['picture']['tmp_name']);
+//                $pictureContent = $file->read();
+//                $mime = $file->mime();
+//                $data['picture_content'] = $pictureContent;
+//                $data['mime'] = $mime;
+//            } elseif(!empty($data['picture_content_id']) && empty($data['picture_del'])) {
+//                $data['picture_content'] = $this->ObjectProducts->findPictureContentByID($data['picture_content_id']);
+//            }
+
 			$object = $this->ObjectProducts->newEntity($data, ['associated' => ['ObjectParts']]);
 			if($this->ObjectProducts->save($object, $data)) {
 				$this->Flash->success(__('新規登録しました'));
@@ -117,7 +129,18 @@ class ObjectsController extends AdminAppController
 					unset($data['object_parts'][$_key]);
 				}
 			}
-			$object = $this->ObjectProducts->patchEntity($object, $data);
+            // 画像登録
+//            if (!empty($data['picture']['tmp_name'])) {
+//                $file = new File($data['picture']['tmp_name']);
+//                $pictureContent = $file->read();
+//                $mime = $file->mime();
+//                $data['picture_content'] = $pictureContent;
+//                $data['mime'] = $mime;
+//            } elseif(!empty($data['picture_content_id']) && empty($data['picture_del'])) {
+//                $data['picture_content'] = $this->ObjectProducts->findPictureContentByID($data['picture_content_id']);
+//            }
+
+            $object = $this->ObjectProducts->patchEntity($object, $data);
 			$this->ObjectParts->deleteByObjectId($id);
 			if ($this->ObjectProducts->save($object, $data)) {
 				$this->Flash->success(__('更新しました'));

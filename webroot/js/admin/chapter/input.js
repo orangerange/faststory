@@ -1,4 +1,9 @@
 $(function () {
+    $(document).on("change", ".color", function () {
+        $(this).parent().prevAll('.html_show').css({
+            'background-color': $(this).val()
+        });
+    })
     $(document).on('click', '.slide', function(){
         if($(this).parent().children('.phrase_control').is(':visible')) {
             $(this).parent().children('.phrase_control').slideUp();
@@ -180,14 +185,18 @@ $(function () {
         var phrase_num = $('#phrase_num').val();
         for (var i = phrase_num -2 ; i >= phrase_no; i--) {
             var j = i+1;
-            var columns = ['character_id', 'speaker_name', 'speaker_color', 'sentence', 'picture_before', 'dir_before', 'picture_delete', 'html', 'css', 'background_id', 'object_usage', 'character_object'];
+            var columns = ['character_id', 'speaker_name', 'speaker_color', 'sentence', 'picture_before', 'dir_before', 'picture_delete', 'html', 'css', 'background_id', 'object_usage', 'character_object', 'movie_time', 'color'];
             $.each(columns, function (index, value) {
                 $('*[name="phrases[' + j + ']['+ value +']"]').val($('*[name="phrases[' + i + ']['+ value +']"]').val());
                 $('*[name="phrases[' + i + ']['+ value +']"]').val('');
-                if (value=='html') {
+                if (value == 'color') {
                     if ($('*[name="phrases[' + j + ']['+ value +']"]').val()) {
-                        $('#html_show_' + j).html($('*[name="phrases[' + j + ']['+ value +']"]').val());
-                        $('#html_show_' + i).html('');
+                        $('#html_show_' + j).css({
+                            'background-color': $('*[name="phrases[' + j + ']['+ value +']"]').val()
+                        });
+                        $('#html_show_' + i).css({
+                            'background-color': ''
+                        });
                     }
                 }
                 if (value =='css') {

@@ -10,14 +10,14 @@
         <meta name="keywords" content="" />
         {$this->Html->css('display')}
         {$this->Html->css('front')}
-        {$this->Html->css('config')}
+        {$this->Html->css('config_movie')}
         {$this -> Html -> script('jquery-1.8.3')}
         {$this -> Html-> script('anime.min')}
         {$this->fetch('script')}
         {$this->fetch('css')}
         <title></title>
     </head>
-    <body id="body" {if $bodyColor}style="background-color:{$bodyColor}"{/if}>
+    <body id="body">
         {$this->fetch('content')}
     </body>
 </html>

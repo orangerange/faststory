@@ -7,6 +7,10 @@
 <div><a href='/admin/parts/index/{$templateId|escape}'>パーツ一覧</a></div>
 <h1>{$template->name|escape}オブジェクト{if $editFlg}編集{else}登録{/if}</h1>
 {$this->Form->create($object,['enctype' => 'multipart/form-data'])}
+{if $object->picture_content}
+    {$this->Form->control('picture_content_id', ['class'=>'picture_content_id','type'=>'hidden', 'value'=>$object->id])}
+{/if}
+{$this->Form->control('mime', ['class'=>'mime','type'=>'hidden', 'value'=>$object->mime])}
 <table>
     <tr>
         <th>作品</th>
@@ -44,7 +48,7 @@
                             {$this->Display->css($object->css, '.parts_sum')}
                         </div>
                         <div class="{$template->class_name|escape} phrase_object html_show">
-                            <div class='object_input parts_sum' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                            <div class='object_input parts_sum' style='width:{$template->width|escape}%; height:{$template->height|escape}%;{if $object->picture_content}background-image: url("/objects/picture/{$object->id|escape}");background-size: cover;{/if}'>
                                 {if $object->html}
                                     {$object->html}
                                 {else}
@@ -152,6 +156,13 @@
                     {/foreach}
                 </tr>
             </table>
+        </td>
+    </tr>
+    <tr>
+        <th>画像</th>
+        <td>
+            {$this->Form->input('picture', ['type'=>'file', 'class'=>'picture', 'label'=>false])}
+            画像削除{$this->Form->input('picture_del', ['class'=>'picture_del','type'=>'checkbox', 'label'=>false])}
         </td>
     </tr>
 </table>

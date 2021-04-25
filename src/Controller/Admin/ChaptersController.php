@@ -46,6 +46,7 @@ class ChaptersController extends AdminAppController
         'html',
         'css',
         'js',
+        'picture',
     ];
     public function initialize()
     {
@@ -56,7 +57,7 @@ class ChaptersController extends AdminAppController
         $this->loadModel('Phrases');
         $this->loadModel('ObjectProducts');
         $this->Phrases->setTable('admin_phrases');
-        $this->loadComponent('Display',['template' => '/Chapters/display', 'is_admin' => true]);
+        $this->loadComponent('Display',['template' => '/Chapters/display', 'movie_template' => '/Chapters/movie', 'is_admin' => true]);
     }
 
     public function index($contentId = null)
@@ -242,5 +243,10 @@ class ChaptersController extends AdminAppController
     public function display($prefix = null, $no) {
         $this->viewBuilder()->setLayout('default');
         $this->Display->display($prefix, $no);
+    }
+
+    public function movie($prefix = null, $no) {
+        $this->viewBuilder()->setLayout('default');
+        $this->Display->display($prefix, $no, true);
     }
 }

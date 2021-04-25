@@ -2,6 +2,7 @@
 
 namespace App\Model\Table;
 
+use Cake\Filesystem\File;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;

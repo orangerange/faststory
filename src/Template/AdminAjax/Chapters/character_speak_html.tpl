@@ -1,26 +1,24 @@
-<div class="character_speak_{$phraseNo}">
-    <div class="face object_{$face->id}">
-        {$face->html}
+{if $face || $body || $rightArm}
+    <div class="character_speak_{$phraseNo}">
+        {if $rightArm}
+            <div class="right_arm object_{$rightArm->id}">
+                {$rightArm->html}
+            </div>
+        {/if}
+        {if $face}
+            <div class="face object_{$face->id}">
+                {$face->html}
+            </div>
+        {/if}
+        {if $body}
+            <div class="body object_{$body->id}">
+                {$body->html}
+            </div>
+        {/if}
     </div>
-    <div class="body object_{$body->id}">
-        {$body->html}
+{/if}
+{if $speech}
+    <div class="speech object_{$speech->id}">
+        {$speech->html}
     </div>
-</div>
-<div class="speech object_{$speech->id}">
-    {$speech->html}
-{*    <div class="main_1">*}
-{*        {if $sentence_translate}*}
-{*            <div style="color:{$character->foreign_color};">*}
-{*                {if $sentence_kana}*}
-{*                    <div class="kana">{$sentence_kana|escape|nl2br}</div>*}
-{*                {/if}*}
-{*                <div class="foreign">{$sentence|escape|nl2br}</div>*}
-{*            </div>*}
-{*            ({$sentence_translate})*}
-{*        {else}*}
-{*            <div class="sentence">*}
-{*                {$sentence|escape|nl2br}*}
-{*            </div>*}
-{*        {/if}*}
-{*    </div>*}
-</div>
+{/if}
