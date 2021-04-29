@@ -9,4 +9,7 @@ body {
 .speech,.sentence {
     font-size: 50;
 }
+.speech,.sentence.story_show {
+    font-size: 40;
+}
 

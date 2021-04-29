@@ -71,8 +71,14 @@ class ChaptersController extends AdminAppController
             $bodyCss = '';
             if (isset($speak['body']->id)) {
                 $bodyId = $speak['body']->id;
-                $bodyWidth = $speak['body']->object_template->width;
-                $bodyHeight = $speak['body']->object_template->height;
+                if ($objectUsage == Configure::read('object_usage_key.story_show')) {
+                    $bodyWidth = round($speak['body']->object_template->width * 1.8);
+                    $bodyHeight = round($speak['body']->object_template->height * 1.8);
+                } else {
+                    $bodyWidth = $speak['body']->object_template->width;
+                    $bodyHeight = $speak['body']->object_template->height;
+                }
+
                 $bodyCss = $speak['body']->css;
 
                 if ($speak['badge_left']) {
@@ -98,8 +104,13 @@ class ChaptersController extends AdminAppController
             $faceCss = '';
             if (isset($speak['face']->id)) {
                 $faceId = $speak['face']->id;
-                $faceWidth = $speak['face']->object_template->width;
-                $faceHeight = $speak['face']->object_template->height;
+                if ($objectUsage == Configure::read('object_usage_key.story_show')) {
+                    $faceWidth = round($speak['face']->object_template->width * 1.8);
+                    $faceHeight = round($speak['face']->object_template->height * 1.8);
+                } else {
+                    $faceWidth = $speak['face']->object_template->width;
+                    $faceHeight = $speak['face']->object_template->height;
+                }
 
                 $faceRelLeft = ($bodyWidth - $faceWidth) / 2;
 

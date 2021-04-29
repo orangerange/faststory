@@ -210,7 +210,8 @@ return [
             'username' => null,
             'password' => null,
             'client' => null,
-            'tls' => null,
+            'secure' => 'ssl',
+            'tls' => false,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
@@ -227,7 +228,7 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
+            'from' => 'goforthandseekglory@yahoo.co.jp',
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
         ],

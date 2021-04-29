@@ -74,6 +74,7 @@ return array(
             '1'=>'発話',
             '2'=>'紹介',
             '3'=> 'アクション',
+            '4'=> '紙芝居',
         )
     ),
     Configure::write('object_usage_key',
@@ -81,21 +82,29 @@ return array(
             'speak'=>'1',
             'introduction'=>'2',
             'action'=>'3',
+            'story_show'=>'4',
         )
     ),
     Configure::write('object_layout',
         array(
             'speak' =>
                 array(
-                    'face' => 'top:12%;',
+                    'character_speak' => 'left:10%; width:100%; height:100%; position:absolute; overflow:hidden',
+                    'face' => 'top:8%;',
                     'body' => 'bottom:0%; left:0%;',
-//                    'speech' => 'top:10%; right:5%;',
                 ),
             'introduction' =>
                 array(
+                    'character_speak' => 'left:10%; width:100%; height:100%; position:absolute;',
                     'face' => 'top:12%;',
                     'body' => 'bottom:0%; left:0%;',
-//                    'speech' => 'bottom:10%; right:5%;',
+                ),
+            'action' =>
+                array(
+                    'character_speak' => 'left:30%; width:100%; height:100%; position:absolute;',
+                    'face' => 'top:12%;',
+                    'body' => 'bottom:0%; left:0%;',
+                    'right_arm' => 'top:40%; right:85%; transform:rotate(35deg);',
                 ),
         )
     ),
@@ -118,10 +127,12 @@ return array(
     define('OBJECT_TEMPLATE_FACE', 3),
     define('OBJECT_TEMPLATE_SPEECH', 4),
     define('OBJECT_TEMPLATE_BADGE', 6),
+    define('OBJECT_TEMPLATE_RIGHT_ARM', 12),
     Configure::write('object_character',
         array(
             OBJECT_TEMPLATE_BODY=>'body',
             OBJECT_TEMPLATE_FACE=>'face',
+            OBJECT_TEMPLATE_RIGHT_ARM=>'right_arm',
             OBJECT_TEMPLATE_SPEECH=>'speech',
         )
     ),
@@ -215,7 +226,6 @@ return array(
     define('VUE_PHRASE_SCRIPT_LAST', '
             } else {
             // 全フレーズ表示後のnextボタン押下
-            this.isEnd = true;
               this.isEnd = true;
               this.showPopUp();
             }
@@ -291,4 +301,42 @@ return array(
     })
 '),
 
+    define('VUE_MOVIE_SCRIPT_FIRST', '
+      var movies = new Vue({
+      el: "#movies",
+      delimiters: ["%%", "%%"],
+      data: {
+          num: 0,
+          phraseNum:0,
+          isEnd:false,
+      },
+      mounted() {
+          this.phraseNum = document.getElementById("phrase_num").value;
+          this.showMovie();
+      },
+      destroyed: function () {
+      },
+      methods: {
+        showMovie: function (e) {
+            if (this.num < this.phraseNum) {
+                var currentMovie = document.getElementById("js_movie_" + this.num);
+                this.num ++;
+                var nextMovie = document.getElementById("js_movie_" + this.num);
+                var movieTime = nextMovie.dataset.time * 1000;
+                if (currentMovie) {
+                    currentMovie.style.display = "none";
+                }
+                nextMovie.style.display = "block";
+                setTimeout(this.showMovie, movieTime);
+            '),
+
+    define('VUE_MOVIE_SCRIPT_LAST', '
+            } else {
+            // 全件表示後
+              this.isEnd = true;
+                }
+            },
+        },
+    })
+'),
 );

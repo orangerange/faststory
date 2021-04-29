@@ -246,15 +246,23 @@ $(function () {
         var object_no = $(this).closest('td').find('.object_no').val();
         var width = $(this).closest('td').find('.width').val();
         var height = $(this).closest('td').find('.height').val();
+        var background_image_url = $(this).closest('td').find('.background_image_url').val();
         var class_name = $(this).closest('td').find('.class_name').val();
 
         var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
         html_select = wholeReplace(html_select , 'object_' + object_id, class_name + ' object object_'  + object_no + '_' + object_id)
         var css_select = deleteSpace($(this).closest('td').find('style').html());
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
-        var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%; --object_width:calc(var(--phrase_object_width) * ' + width / 100 + '); --object_height:calc(var(--phrase_object_height) * ' + height / 100 + ');}';
+
+        var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%; --object_width:calc(var(--phrase_object_width) * ' + width / 100 + '); --object_height:calc(var(--phrase_object_height) * ' + height / 100 + ');';
+        if (background_image_url) {
+            css_add += 'background-image: url(' + background_image_url + ');background-size: cover;';
+        }
+        css_add += '}';
+
         var html_input = $('#phrases-'+phrase_no+'-html').val();
         var css_input = $('#phrases-'+phrase_no+'-css').val();
+
         var css_end_add = '/*.object_'  + object_no + '_' + object_id + '_end*/';
         var html = html_select + html_input;
         var css  = css_add + css_select + css_end_add + css_input ;

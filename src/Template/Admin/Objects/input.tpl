@@ -28,7 +28,7 @@
     </tr>
     <tr>
         <th>活用場面</th>
-        <td>{$this->Form->input('object_usage', ['multiple'=>'select', 'label'=>false, 'options'=>$this->Config->read('object_usage')])}</td>
+        <td>{$this->Form->input('object_usage', ['multiple'=>'select', 'label'=>false, 'options'=>$actions])}</td>
     </tr>
     <tr>
         <th>パーツ合成</th>

@@ -43,6 +43,7 @@ class ObjectsController extends AdminAppController
 		$this->loadModel('ObjectParts');
 		$this->loadModel('Characters');
 		$this->loadModel('CharacterParts');
+		$this->loadModel('Actions');
     }
 
 	public function index($templateId = null) {
@@ -63,6 +64,7 @@ class ObjectsController extends AdminAppController
 		$css = $this->Parts->find()->select('css')->where(['template_id'=>$templateId])->order(['id'=>'ASC']);
 		$partCategories = $this->PartCategories->findByTemplateId($templateId);
         $characters = $this->Characters->find('list')->where(['content_id'=>$template->content_id]);
+        $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
 		$parts = [];
 		$partsCss = [];
 		foreach($partCategories as $_key=>$_value) {
@@ -97,7 +99,7 @@ class ObjectsController extends AdminAppController
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'css', 'cssString'));
+		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'css', 'cssString', 'actions'));
 	}
 
 	public function edit($id) {
@@ -110,6 +112,7 @@ class ObjectsController extends AdminAppController
 		if (isset($object->content_id)) {
             $characters = $this->Characters->find('list')->where(['content_id' => $object->content_id]);
         }
+        $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
 		$templateId = $object->template_id;
 		$template = $this->ObjectTemplates->findById($templateId)->first();
 		$contents = $this->Contents->find('list');
@@ -148,7 +151,7 @@ class ObjectsController extends AdminAppController
 				$this->Flash->error(__('更新に失敗しました'));
 			}
 		}
-		$this->set(compact('templateId', 'template', 'contents', 'characters', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString'));
+		$this->set(compact('templateId', 'template', 'contents', 'characters', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString', 'actions'));
 
 		$this->set('editFlg', true);
 		$this->render('input');

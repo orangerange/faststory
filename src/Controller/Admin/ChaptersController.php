@@ -56,6 +56,7 @@ class ChaptersController extends AdminAppController
         $this->loadModel('Characters');
         $this->loadModel('Phrases');
         $this->loadModel('ObjectProducts');
+        $this->loadModel('Actions');
         $this->Phrases->setTable('admin_phrases');
         $this->loadComponent('Display',['template' => '/Chapters/display', 'movie_template' => '/Chapters/movie', 'is_admin' => true]);
     }
@@ -82,10 +83,12 @@ class ChaptersController extends AdminAppController
             if (!$content = $this->Contents->findById($contentId)->first()) {
                 throw new NotFoundException(NotFoundMessage);
             }
-            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $contentId])->order(['ObjectProducts.id' => 'ASC']);
+//            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $contentId])->order(['ObjectProducts.id' => 'ASC']);
+            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
             $contentName = $content['name'];
             $characters = $this->Characters->find('list')->where(['content_id' => $contentId]);
             $backgrounds = $this->Backgrounds->find('list');
+            $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
             $chapter = $this->Chapters->newEntity();
             if ($this->getRequest()->is('post')) {
                 $postData = $this->getRequest()->getData();
@@ -102,7 +105,7 @@ class ChaptersController extends AdminAppController
                     $this->Flash->error(__('新規登録に失敗しました'));
                 }
             }
-            $this->set(compact('chapterNo', 'characters', 'backgrounds', 'openFlg', 'contentId', 'contentName', 'objects', 'objectUsageArr', 'objectUsageStr'));
+            $this->set(compact('chapterNo', 'characters', 'backgrounds', 'openFlg', 'contentId', 'contentName', 'objects', 'objectUsageArr', 'objectUsageStr', 'actions'));
         } else {
 			throw new NotFoundException(NotFoundMessage);
 		}
@@ -132,12 +135,14 @@ class ChaptersController extends AdminAppController
                     }
                 }
             }
-            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $chapter->content_id])->order(['ObjectProducts.id' => 'ASC']);
+//            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $chapter->content_id])->order(['ObjectProducts.id' => 'ASC']);
+            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
             $chapterNo = $chapter['no'];
             $contentId = $chapter['content_id'];
             $contentName = $chapter['content']['name'];
             $characters = $this->Characters->find('list')->where(['content_id' => $chapter['content_id']]);
             $backgrounds = $this->Backgrounds->find('list');
+            $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
             $phraseNum = count($chapter['phrases']);
             $openFlg = array();
             for ($i = 0; $i < $phraseNum; $i++) {
@@ -170,7 +175,7 @@ class ChaptersController extends AdminAppController
                     $connection->rollback();
                 }
             }
-            $this->set(compact('id', 'openFlg', 'characters', 'backgrounds', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts', 'objectCount', 'objectUsageArr', 'objectUsageStr'));
+            $this->set(compact('id', 'openFlg', 'characters', 'backgrounds', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts', 'objectCount', 'objectUsageArr', 'objectUsageStr', 'actions'));
         } else {
             throw new NotFoundException(NotFoundMessage);
         }

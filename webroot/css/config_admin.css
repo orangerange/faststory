@@ -2,3 +2,9 @@
     --phrase_object_width: 290px;
     --phrase_object_height: 145px;
 }
+.speech,.sentence :not(textarea) {
+    font-size: 10;
+}
+.speech,.sentence.story_show :not(textarea) {
+    font-size: 8;
+}

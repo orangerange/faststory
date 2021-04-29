@@ -43,7 +43,7 @@
     {if $chapter->phrases[$i]->character_id && $chapter->phrases[$i]->html && $chapter->phrases[$i]->css}
         {assign var='checked' value='checked'}
     {/if}
-    {$this->Form->input('phrases.'|cat:$i|cat:'.object_usage', ['class'=>'object_usage', 'type'=>'select', 'label'=>false, 'options'=>$this->Config->read('object_usage')])}
+    {$this->Form->input('phrases.'|cat:$i|cat:'.object_usage', ['class'=>'object_usage', 'type'=>'select', 'label'=>false, 'options'=>$actions])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.character_object', ['class'=>'character_object','type'=>'checkbox', 'checked'=>$checked])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.html', ['type'=>'textarea', 'cols'=>50, 'class'=>'html'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.css', ['type'=>'textarea', 'cols'=>50, 'class'=>'css'])}

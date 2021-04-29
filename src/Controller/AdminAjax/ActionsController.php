@@ -24,7 +24,7 @@ use Cake\Http\Exception\NotFoundException;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class PartCategoriesController extends AdminAppController
+class ActionsController extends AdminAppController
 {
 
 	public function initialize()
@@ -39,10 +39,10 @@ class PartCategoriesController extends AdminAppController
 		$items = $this->request->getData('items');
 		$sortIds = explode(',', $items);
 		$sortNo = 1;
-		$category = $this->PartCategories->newEntity();
+		$action = $this->Actions->newEntity();
 		foreach($sortIds as $_id) {
-			$data = $this->PartCategories->patchEntity($category, array('id'=>$_id, 'sort_no'=>$sortNo));
-			$this->PartCategories->save($data);
+			$data = $this->Actions->patchEntity($action, array('id'=>$_id, 'sort_no'=>$sortNo));
+			$this->Actions->save($data);
 			$sortNo++;
 		}
 		$result = array('test'=>$data);
