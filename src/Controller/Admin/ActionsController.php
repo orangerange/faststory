@@ -36,7 +36,7 @@ class ActionsController extends AdminAppController
 
 	public function index() {
 
-		$actions = $this->Actions->find('all');
+		$actions = $this->Actions->find()->order(['sort_no' => 'ASC'])->all();
 		$this->set(compact('actions'));
 	}
 

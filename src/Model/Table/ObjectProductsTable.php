@@ -47,6 +47,9 @@ class ObjectProductsTable extends Table
         $this->hasMany('ObjectParts', [
             'foreignKey' => 'object_id'
         ]);
+        $this->hasMany('ActionLayouts', [
+            'foreignKey' => 'object_id'
+        ]);
     }
 
     /**
@@ -64,7 +67,7 @@ class ObjectProductsTable extends Table
 
     public function findById($id)
     {
-        return $this->find()->where(['ObjectProducts.id' => $id])->contain(['ObjectParts', 'ObjectTemplates'])->first();
+        return $this->find()->where(['ObjectProducts.id' => $id])->contain(['ObjectParts', 'ObjectTemplates', 'ActionLayouts'])->first();
     }
 
     public function findNameById($id)
@@ -72,43 +75,8 @@ class ObjectProductsTable extends Table
         return $this->find()->where(['ObjectProducts.id' => $id])->first()->name;
     }
 
-    public function findSpeak($character, $objectUsage)
+    public function findRankBadges($character)
     {
-        $face = $this->find()->where(
-            [
-                'ObjectProducts.character_id LIKE' => '%,' . $character['id'] . ',%',
-                'ObjectProducts.template_id' => OBJECT_TEMPLATE_FACE,
-                'ObjectProducts.object_usage LIKE' => '%,' . $objectUsage . ',%',
-            ]
-        )
-            ->contain(['ObjectTemplates'])
-            ->first();
-        $body = $this->find()->where(
-            [
-                'ObjectProducts.character_id LIKE' => '%,' . $character['id'] . ',%',
-                'ObjectProducts.template_id' => OBJECT_TEMPLATE_BODY,
-                'ObjectProducts.object_usage LIKE' => '%,' . $objectUsage . ',%',
-            ]
-        )
-            ->contain(['ObjectTemplates'])
-            ->first();
-        $rightArm = $this->find()->where(
-            [
-                'ObjectProducts.character_id LIKE' => '%,' . $character['id'] . ',%',
-                'ObjectProducts.template_id' => OBJECT_TEMPLATE_RIGHT_ARM,
-                'ObjectProducts.object_usage LIKE' => '%,' . $objectUsage . ',%',
-            ]
-        )
-            ->contain(['ObjectTemplates'])
-            ->first();
-        $speech = $this->find()->where(
-            [
-                'ObjectProducts.template_id' => OBJECT_TEMPLATE_SPEECH,
-                'ObjectProducts.object_usage LIKE' => '%,' . $objectUsage . ',%',
-            ]
-        )
-            ->contain(['ObjectTemplates'])
-            ->first();
         $badgeLeft = false;
         if (isset($character->rank->badge_left_id)) {
             $badgeLeft = $this->find()->where(
@@ -129,7 +97,7 @@ class ObjectProductsTable extends Table
                 ->contain(['ObjectTemplates'])
                 ->first();
         }
-        $result = array('face' => $face, 'body' => $body, 'right_arm' => $rightArm, 'speech'=>$speech, 'badge_left' => $badgeLeft, 'badge_right' => $badgeRight);
+        $result = array('badge_left' => $badgeLeft, 'badge_right' => $badgeRight);
 
         return $result;
     }
@@ -147,6 +115,7 @@ class ObjectProductsTable extends Table
                 $data['object_parts'] = $moldData['object_parts'];
             }
         }
+
         return $data;
     }
 
@@ -179,5 +148,26 @@ class ObjectProductsTable extends Table
         } elseif(!empty($options['picture_content_id']) && empty($options['picture_del'])) {
             $options['picture_content'] = $this->findPictureContentByID($options['picture_content_id']);
         }
+    }
+
+    public function unsetEmptyDatum($data) {
+        foreach ($data['object_parts'] as $_key => $_value) {
+            if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
+                unset($data['object_parts'][$_key]);
+            }
+        }
+        $actionLayouts = [];
+        $actionLayoutsNum = 0;
+        if (isset($data['action_layouts'] )) {
+            foreach ($data['action_layouts'] as $_key => $_value) {
+                if (isset($_value['action_id']) && $_value['action_id'] != '') {
+                    $actionLayouts[$actionLayoutsNum] = $_value;
+                    $actionLayoutsNum++;
+                }
+            }
+        }
+        $data['action_layouts'] = $actionLayouts;
+
+        return $data;
     }
 }

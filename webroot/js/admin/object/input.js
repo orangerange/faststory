@@ -9,35 +9,35 @@ $(function () {
     $('.html_input').val(html_sum);
 
     //作品変更によるキャラクタ選択肢の変更
-    $(document).on("change", ".content_id", function () {
-        var content_id = $(this).val();
-        $.ajax({
-            type: "POST",
-            datatype:'text',
-            // 処理をする Ajaxの URLを指定。自サーバ内であればドキュメントルートからのパスでも OK
-            url: "/admin_ajax/objects/get-characters",
-            // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
-            data: {
-                "content_id": content_id,
-            },
-
-            // 正常に処理が実行された場合は、1つ目のパラメータに取得した HTMLが返ってくる
-            success: function(data, status, xhr){
-                console.log(data);
-                $('.character_select').html(data);
-            },
-
-            // 正常に処理が行われなかった場合の処理
-            error: function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                // 返ってきたステータスコードなどをアラートで表示（デバッグ用）
-                alert('Error : ' + errorThrown + "\n" +
-                    XMLHttpRequest.status + "\n" +
-                    XMLHttpRequest.statusText + "\n" +
-                    textStatus );
-            }
-        });
-    });
+    // $(document).on("change", ".content_id", function () {
+    //     var content_id = $(this).val();
+    //     $.ajax({
+    //         type: "POST",
+    //         datatype:'text',
+    //         // 処理をする Ajaxの URLを指定。自サーバ内であればドキュメントルートからのパスでも OK
+    //         url: "/admin_ajax/objects/get-characters",
+    //         // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
+    //         data: {
+    //             "content_id": content_id,
+    //         },
+    //
+    //         // 正常に処理が実行された場合は、1つ目のパラメータに取得した HTMLが返ってくる
+    //         success: function(data, status, xhr){
+    //             console.log(data);
+    //             $('.character_select').html(data);
+    //         },
+    //
+    //         // 正常に処理が行われなかった場合の処理
+    //         error: function(XMLHttpRequest, textStatus, errorThrown)
+    //         {
+    //             // 返ってきたステータスコードなどをアラートで表示（デバッグ用）
+    //             alert('Error : ' + errorThrown + "\n" +
+    //                 XMLHttpRequest.status + "\n" +
+    //                 XMLHttpRequest.statusText + "\n" +
+    //                 textStatus );
+    //         }
+    //     });
+    // });
 
     //パーツ毎cssの変更
     $(document).on("change", ".parts_css", function () {
@@ -177,5 +177,44 @@ $(function () {
                 .replaceWith(html);
         var html_sum = $('.parts_sum').html().replace('　', '');
         $('.html_input').val(html_sum);
+    });
+
+    // アクション登録追加
+    var action_num = 0;
+    $(document).on('click', '.add_action', function () {
+        action_num --;
+        $.ajax({
+            type: "POST",
+            datatype:'text',
+            // 処理をする Ajaxの URLを指定。自サーバ内であればドキュメントルートからのパスでも OK
+            url: "/admin_ajax/objects/add-actions",
+            // CakePHP に送る値を指定（「:」の前が CakePHPで受け取る変数名。後ろがこの js内の変数名。）
+            data: {
+                "action_num": action_num,
+            },
+
+            // 正常に処理が実行された場合は、1つ目のパラメータに取得した HTMLが返ってくる
+            success: function(data, status, xhr){
+                console.log(data);
+                $('.action_layout_header').after(data);
+            },
+
+            // 正常に処理が行われなかった場合の処理
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                // 返ってきたステータスコードなどをアラートで表示（デバッグ用）
+                alert('Error : ' + errorThrown + "\n" +
+                    XMLHttpRequest.status + "\n" +
+                    XMLHttpRequest.statusText + "\n" +
+                    textStatus );
+            }
+        });
+    });
+    $(document).on('click', '.delete_action', function () {
+        if(!confirm('削除します。よろしいですか?')){
+            return false;
+        }else{
+            $(this).parents('tr').remove();
+        }
     });
 })

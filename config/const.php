@@ -128,6 +128,7 @@ return array(
     define('OBJECT_TEMPLATE_SPEECH', 4),
     define('OBJECT_TEMPLATE_BADGE', 6),
     define('OBJECT_TEMPLATE_RIGHT_ARM', 12),
+    define('OBJECT_TEMPLATE_CHARACTER_SPEECH', 15),
     Configure::write('object_character',
         array(
             OBJECT_TEMPLATE_BODY=>'body',

@@ -31,6 +31,7 @@ class ObjectsController extends AdminAppController
         parent::initialize();
 		$this->loadModel('ObjectProducts');
 		$this->loadModel('Characters');
+		$this->loadModel('Actions');
     }
 
     public function getCharacters() {
@@ -40,5 +41,15 @@ class ObjectsController extends AdminAppController
         $contentId = $this->request->getData('content_id');
         $characters = $this->Characters->find('list')->where(['content_id'=>$contentId]);
         $this->set(compact('characters'));
+    }
+
+    public function addActions() {
+        $this->request->allowMethod(['ajax']);
+        $this->viewBuilder()->setLayout(false);
+        $characters = $this->Characters->find('list');
+        $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
+
+        $actionNum = $this->request->getData('action_num');
+        $this->set(compact('actionNum', 'characters', 'actions'));
     }
 }

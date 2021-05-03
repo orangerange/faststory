@@ -36,6 +36,7 @@ class ObjectProduct extends Entity
 		'modified' => true,
 		'deleted' => true,
 		'object_parts' => true,
+		'action_layouts' => true,
 		'object_templates' => true,
 		'picture_content' => true,
 		'mime' => true,

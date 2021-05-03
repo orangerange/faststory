@@ -33,6 +33,8 @@ class ChaptersController extends AdminAppController
         parent::initialize();
 		$this->loadModel('ObjectProducts');
 		$this->loadModel('Characters');
+		$this->loadModel('ActionLayouts');
+		$this->loadModel('CharacterSpeakLayouts');
     }
 
     public function characterSpeak() {
@@ -42,97 +44,68 @@ class ChaptersController extends AdminAppController
 
         $phraseNo = $this->request->getData('phrase_no');
         $characterId = $this->request->getData('character_id');
-        $sentence = $this->request->getData('sentence');
-        $sentenceTranslate = $this->request->getData('sentence_translate');
         $character = $this->Characters->find()->where(['Characters.id' => $characterId])->contain(['Ranks'])->first();
         $objectUsage = $this->request->getData('object_usage');
-        $speak = $this->ObjectProducts->findSpeak($character, $objectUsage);
-        $html = false;
-        $css = false;
-        $badgeLeftHtml = false;
-        $badgeRightHtml = false;
-        $bodyWidth = 0;
-        $faceRelLeft = 0;
-        if (isset($speak['face']->id) || isset($speak['body']->id) || isset($speak['right_arm']->id) || isset($speak['speech']->id)) {
-            // html
-            $view = $this->createView();
-            $view->set(['rightArm'=>$speak['right_arm'], 'face'=>$speak['face'], 'body'=>$speak['body'], 'speech'=>$speak['speech'], 'sentence'=>$sentence, 'sentence_translate'=>$sentenceTranslate, 'character'=>$character, 'phraseNo'=>$phraseNo]);
-            $html = $view->render('AdminAjax/Chapters/character_speak_html');
-            // css
-            $rightArmCss = '';
-            if (isset($speak['right_arm']->id)) {
-                $rightArmId = $speak['right_arm']->id;
-                $rightArmWidth = $speak['right_arm']->object_template->width;
-                $rightArmHeight = $speak['right_arm']->object_template->height;
-                $rightArmCss = $speak['right_arm']->css;
-                $rightArmCss = AppUtility::addPreClassToCss($rightArmCss, '.right_arm.object_' . $rightArmId);
-                $rightArmCss = "/*.right_arm.object_{$rightArmId}_start*/" . $this->_makeBaseCss('.right_arm.object_' . $rightArmId, $rightArmWidth, $rightArmHeight, 'right_arm', $faceRelLeft, $objectUsage) . ' ' . $rightArmCss . "/*.right_arm.object_{$rightArmId}_end*/";
-            }
-            $bodyCss = '';
-            if (isset($speak['body']->id)) {
-                $bodyId = $speak['body']->id;
-                if ($objectUsage == Configure::read('object_usage_key.story_show')) {
-                    $bodyWidth = round($speak['body']->object_template->width * 1.8);
-                    $bodyHeight = round($speak['body']->object_template->height * 1.8);
+
+        $actionLayouts = $this->ActionLayouts->findSpeak($characterId, $objectUsage);
+
+        $htmlSum = '';
+        $cssSum = '';
+        $characterHtmlSum = '';
+        $characterCssSum = '';
+        $badgeLeftHtml = null;
+        $badgeRightHtml = null;
+        $speechActionLayout = null;
+        $noCharacterActionLayouts = [];
+        $objectClassNames = [];
+
+        foreach($actionLayouts as $actionLayout) {
+            if (!empty($actionLayout['no_character'])) {
+                if (is_null($actionLayout['character_id']) || $actionLayout['character_id'] == '') {
+                    if (!isset($noCharacterActionLayouts[$actionLayout['object_product']['template_id']])) {
+                        $noCharacterActionLayouts[$actionLayout['object_product']['template_id']] = $actionLayout;
+                    }
                 } else {
-                    $bodyWidth = $speak['body']->object_template->width;
-                    $bodyHeight = $speak['body']->object_template->height;
+                    $noCharacterActionLayouts[$actionLayout['object_product']['template_id']] = $actionLayout;
                 }
-
-                $bodyCss = $speak['body']->css;
-
-                if ($speak['badge_left']) {
-                    $badgeLeftCss = AppUtility::addPreClassToCss($speak['badge_left']->css, '.rank_badge_left');
-                    $bodyCss .= $badgeLeftCss;
-                    $badgeLeftHtml = $speak['badge_left']->html;
-                }
-                if ($speak['badge_right']) {
-                    $badgeRightCss = AppUtility::addPreClassToCss($speak['badge_right']->css, '.rank_badge_right');
-                    $bodyCss .= $badgeRightCss;
-                    $badgeRightHtml = $speak['badge_right']->html;
-                    // 階級章(右)が階級章(左)の鏡映しとなる場合
-                } elseif ($speak['badge_left']) {
-                    // 鑑写し指定
-                    $badgeRightCss = '.rank_badge_right{transform: scale(-1, 1)}';
-                    $badgeRightCss .= AppUtility::addPreClassToCss($speak['badge_left']->css, '.rank_badge_right');
-                    $bodyCss .= $badgeRightCss;
-                    $badgeRightHtml = $speak['badge_left']->html;
-                }
-                $bodyCss = AppUtility::addPreClassToCss($bodyCss, '.body.object_' . $bodyId);
-                $bodyCss = "/*.body.object_{$bodyId}_start*/" . $this->_makeBaseCss('.body.object_' . $bodyId, $bodyWidth, $bodyHeight, 'body', $faceRelLeft, $objectUsage) . ' ' . $bodyCss . "/*.body.object_{$bodyId}_end*/";
+            } else {
+                $objectClassNames[$actionLayout['object_product']['id']] = $actionLayout['object_product']['object_template']['class_name'];
+                $this->_addHtmlAndCss($characterHtmlSum, $characterCssSum, $htmlSum, $cssSum, $badgeLeftHtml, $badgeRightHtml,  $actionLayout, $character, $phraseNo);
             }
-            $faceCss = '';
-            if (isset($speak['face']->id)) {
-                $faceId = $speak['face']->id;
-                if ($objectUsage == Configure::read('object_usage_key.story_show')) {
-                    $faceWidth = round($speak['face']->object_template->width * 1.8);
-                    $faceHeight = round($speak['face']->object_template->height * 1.8);
-                } else {
-                    $faceWidth = $speak['face']->object_template->width;
-                    $faceHeight = $speak['face']->object_template->height;
-                }
-
-                $faceRelLeft = ($bodyWidth - $faceWidth) / 2;
-
-                $faceCss = $speak['face']->css;
-                $faceCss = AppUtility::addPreClassToCss($faceCss, '.face.object_' . $faceId);
-                $faceCss = "/*.face.object_{$faceId}_start*/" . $this->_makeBaseCss('.face.object_' . $faceId, $faceWidth, $faceHeight, 'face', $faceRelLeft, $objectUsage) . ' ' . $faceCss . "/*.face.object_{$faceId}_end*/";
-            }
-            $speechCss = '';
-            if (isset($speak['speech']->id)) {
-                $speechId = $speak['speech']->id;
-                $speechWidth = $speak['speech']->object_template->width;
-                $speechHeight = $speak['speech']->object_template->height;
-                $speechCss = $speak['speech']->css;
-                $speechCss = AppUtility::addPreClassToCss($speechCss, '.speech.object_' . $speechId);
-                $speechCss = "/*.speech.object_{$speechId}_start*/" . $this->_makeBaseCss('.speech.object_' . $speechId, $speechWidth, $speechHeight, 'speech', $faceRelLeft, $objectUsage) . ' ' . $speechCss . "/*.speech.object_{$speechId}_end*/";
-            }
-            $objectUsageArr = array_flip(Configure::read('object_usage_key'));
-            $objectUsageName = $objectUsageArr[$objectUsage];
-            $css = '.character_speak_' . $phraseNo . '{' . Configure::read("object_layout.{$objectUsageName}.character_speak") .'}';
-            $css = "/*.character_speak_{$phraseNo}_start*/" . $css . $rightArmCss . $faceCss . $bodyCss . "/*.character_speak_{$phraseNo}_end*/" . $speechCss;
         }
-        $result = ['html' => $html, 'css' => $css, 'badge_left_html' => $badgeLeftHtml, 'badge_right_html' => $badgeRightHtml];
+
+        // キャラクター関係なく共通(※キャラクターIDの定義ある場合のみ限定)部分のHTML・CSSを生成
+        foreach ($noCharacterActionLayouts as $templateId => $actionLayout) {
+            $objectClassNames[$actionLayout['object_product']['id']] = $actionLayout['object_product']['object_template']['class_name'];
+            $this->_addHtmlAndCss($characterHtmlSum, $characterCssSum, $htmlSum, $cssSum, $badgeLeftHtml, $badgeRightHtml,  $actionLayout, $character, $phraseNo);
+        }
+
+        // html
+        $view = $this->createView();
+        $view->set(['characterHtmlSum' => $characterHtmlSum, 'htmlSum' => $htmlSum, 'phraseNo' => $phraseNo]);
+        $html = $view->render('AdminAjax/Chapters/character_speak_html');
+
+        if ($characterCssSum != '') {
+            $characterSpeakLayout = null;
+            $characterSpeakLayouts = $this->CharacterSpeakLayouts->findLayout($actionLayout['action_id']);
+            foreach ($characterSpeakLayouts as $layout) {
+                if (is_null($layout['character_id']) || $layout['character_id'] == '') {
+                    if (!isset($characterSpeakLayout)) {
+                        $characterSpeakLayout = $layout;
+                    }
+                } else {
+                    $characterSpeakLayout = $layout;
+                }
+            }
+            $characterCssSumHead = '.character_speak_' . $phraseNo . '{ width:100%; height:100%; position:absolute; ';
+            $characterCssSumHead .= isset($characterSpeakLayout['left_perc']) && $characterSpeakLayout['left_perc'] != '' ? 'left:' . $characterSpeakLayout['left_perc'] . '%; ' : 'right:' . $characterSpeakLayout['right_perc'] . '%; ';
+            $characterCssSumHead .= '} ';
+            $characterCssSum = $characterCssSumHead . $characterCssSum;
+        }
+
+        $css = $characterCssSum != '' ? "/*.character_speak_{$phraseNo}_start*/" . $characterCssSum . "/*.character_speak_{$phraseNo}_end*/"  . $cssSum: $cssSum;
+
+        $result = ['html' => $html, 'css' => $css, 'badge_left_html' => $badgeLeftHtml, 'badge_right_html' => $badgeRightHtml, 'object_class_names' => $objectClassNames];
 
         $this->response->getBody()->write(json_encode($result));
     }
@@ -151,20 +124,101 @@ class ChaptersController extends AdminAppController
         }
     }
 
-    private function _makeBaseCss($baseClass, $width, $height, $speakType, $faceRelLeft, $objectUsage) {
+//    private function _makeBaseCss($baseClass, $width, $height, $speakType, $faceRelLeft, $objectUsage) {
+//        $this->autoRender = false;
+//        $baseCss = $baseClass . '{ width:' . $width . '%;' . ' height:' . $height . '%; position:absolute;';
+//        $objectUsageArr = array_flip(Configure::read('object_usage_key'));
+//        $objectUsageName = $objectUsageArr[$objectUsage];
+//        switch ($speakType) {
+//            case 'face':
+//                $baseCss .= Configure::read("object_layout.{$objectUsageName}.face") . 'left:' . $faceRelLeft . '%;';
+//                break;
+//            default:
+//                $baseCss .= Configure::read("object_layout.{$objectUsageName}.{$speakType}");
+//                break;
+//        }
+//        $baseCss .= '}';
+//        return $baseCss;
+//    }
+
+    private function _makeObjectHtml($objectClassName, $objectId, $contentHtml) {
+        $objectHtml = '<div class="' . $objectClassName . ' ' . 'object_' . $objectId . '">';
+        $objectHtml .= $contentHtml;
+        $objectHtml .= '</div>';
+
+        return $objectHtml;
+    }
+
+    private function _makeBaseCss($baseClass, $width, $height, $left, $top, $right, $bottom) {
         $this->autoRender = false;
-        $baseCss = $baseClass . '{ width:' . $width . '%;' . ' height:' . $height . '%; position:absolute;';
-        $objectUsageArr = array_flip(Configure::read('object_usage_key'));
-        $objectUsageName = $objectUsageArr[$objectUsage];
-        switch ($speakType) {
-            case 'face':
-                $baseCss .= Configure::read("object_layout.{$objectUsageName}.face") . 'left:' . $faceRelLeft . '%;';
-                break;
-            default:
-                $baseCss .= Configure::read("object_layout.{$objectUsageName}.{$speakType}");
-                break;
-        }
+        $baseCss = $baseClass . '{ ' . 'width:' . $width . '%; ' . ' height:' . $height . '%; position:absolute;';
+        $baseCss .= isset($left) && $left != '' ? 'left:' . $left . '%; ' : 'right:' . $right . '%; ';
+        $baseCss .= isset($top) && $top != '' ? 'top:' . $top . '%; ' : 'bottom:' . $bottom . '%; ';
         $baseCss .= '}';
         return $baseCss;
+    }
+
+    private function _addHtmlAndCss(&$characterHtmlSum, &$characterCssSum, &$htmlSum, &$cssSum, &$badgeLeftHtml, &$badgeRightHtml, $actionLayout, $character, $phraseNo) {
+        $left = $actionLayout['left_perc'];
+        $top = $actionLayout['top_perc'];
+        $right = $actionLayout['right_perc'];
+        $bottom = $actionLayout['bottom_perc'];
+        $magnification = $actionLayout['magnification'];
+        $width = (int)$magnification * (int)$actionLayout['object_product']['object_template']['width'];
+        $height = (int)$magnification * (int)$actionLayout['object_product']['object_template']['height'];
+        $objectId = $actionLayout['object_product']['id'];
+        $objectClassName = $actionLayout['object_product']['object_template']['class_name'];
+
+        //html生成
+        $html = $this->_makeObjectHtml($objectClassName, $objectId, $actionLayout['object_product']['html']);
+        if (!empty($actionLayout['is_character'])) {
+            $characterHtmlSum .= $html;
+        } else {
+            $htmlSum .= $html;
+        }
+        //css生成
+        $css = $actionLayout['object_product']['css'];
+        if ($actionLayout['object_product']['template_id'] == OBJECT_TEMPLATE_BODY) {
+            //階級章調整
+            $rankBadges = $this->ObjectProducts->findRankBadges($character);
+            if ($rankBadges['badge_left']) {
+                $badgeLeftCss = AppUtility::addPreClassToCss($rankBadges['badge_left']->css, '.rank_badge_left');
+                $css .= $badgeLeftCss;
+                $badgeLeftHtml = $rankBadges['badge_left']->html;
+            }
+            if ($rankBadges['badge_right']) {
+                $badgeRightCss = AppUtility::addPreClassToCss($rankBadges['badge_right']->css, '.rank_badge_right');
+                $css .= $badgeRightCss;
+                $badgeRightHtml = $rankBadges['badge_right']->html;
+                // 階級章(右)が階級章(左)の鏡映しとなる場合
+            } elseif ($rankBadges['badge_left']) {
+                // 鑑写し指定
+                $badgeRightCss = '.rank_badge_right{transform: scale(-1, 1)}';
+                $badgeRightCss .= AppUtility::addPreClassToCss($rankBadges['badge_left']->css, '.rank_badge_right');
+                $css .= $badgeRightCss;
+                $badgeRightHtml = $rankBadges['badge_left']->html;
+            }
+        }
+        $css = AppUtility::addPreClassToCss($css, '.' . $objectClassName . '.object_' . $objectId);
+        $css = "/*." . $objectClassName . ".object_{$objectId}_start*/" . $this->_makeBaseCss('.' . $objectClassName . '.object_' . $objectId, $width, $height, $left, $top, $right, $bottom) . ' ' . $css . "/*." . $objectClassName .  ".object_{$objectId}_end*/";
+        if (!empty($actionLayout['is_character'])) {
+//            $characterSpeakLayout = null;
+//            $characterSpeakLayouts = $this->CharacterSpeakLayouts->findLayout($actionLayout['action_id']);
+//            foreach ($characterSpeakLayouts as $layout) {
+//                if (is_null($layout['character_id']) || $layout['character_id'] == '') {
+//                    if (!isset($characterSpeakLayout)) {
+//                        $characterSpeakLayout = $layout;
+//                    }
+//                } else {
+//                    $characterSpeakLayout = $layout;
+//                }
+//            }
+//            $characterCssSum = '.character_speak_' . $phraseNo . '{ width:100%; height:100%; position:absolute; ';
+//            $characterCssSum .= isset($characterSpeakLayout['left_perc']) && $characterSpeakLayout['left_perc'] != '' ? 'left:' . $characterSpeakLayout['left_perc'] . '%; ' : 'right:' . $characterSpeakLayout['right_perc'] . '%; ';
+//            $characterCssSum .= '}';
+            $characterCssSum .= $css;
+        } else {
+            $cssSum .= $css;
+        }
     }
 }

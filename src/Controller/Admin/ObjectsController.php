@@ -44,6 +44,7 @@ class ObjectsController extends AdminAppController
 		$this->loadModel('Characters');
 		$this->loadModel('CharacterParts');
 		$this->loadModel('Actions');
+		$this->loadModel('ActionLayouts');
     }
 
 	public function index($templateId = null) {
@@ -63,7 +64,8 @@ class ObjectsController extends AdminAppController
 		$contents = $this->Contents->find('list')->order(['id'=>'ASC']);
 		$css = $this->Parts->find()->select('css')->where(['template_id'=>$templateId])->order(['id'=>'ASC']);
 		$partCategories = $this->PartCategories->findByTemplateId($templateId);
-        $characters = $this->Characters->find('list')->where(['content_id'=>$template->content_id]);
+//        $characters = $this->Characters->find('list')->where(['content_id'=>$template->content_id]);
+        $characters = $this->Characters->find('list');
         $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
 		$parts = [];
 		$partsCss = [];
@@ -75,12 +77,8 @@ class ObjectsController extends AdminAppController
 		if($this->request->is('post')) {
 			$data = $this->request->getData();
 			$data['template_id'] = $templateId;
-			foreach ($data['object_parts'] as $_key => $_value) {
-				if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
-					unset($data['object_parts'][$_key]);
-				}
-			}
-
+			$data = $this->ObjectProducts->unsetEmptyDatum($data);
+            $actionLayoutCount = count($data['action_layouts']);
             // 画像登録
 //            if (!empty($data['picture']['tmp_name'])) {
 //                $file = new File($data['picture']['tmp_name']);
@@ -92,14 +90,14 @@ class ObjectsController extends AdminAppController
 //                $data['picture_content'] = $this->ObjectProducts->findPictureContentByID($data['picture_content_id']);
 //            }
 
-			$object = $this->ObjectProducts->newEntity($data, ['associated' => ['ObjectParts']]);
+			$object = $this->ObjectProducts->newEntity($data, ['associated' => ['ObjectParts', 'ActionLayouts']]);
 			if($this->ObjectProducts->save($object, $data)) {
 				$this->Flash->success(__('新規登録しました'));
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'css', 'cssString', 'actions'));
+		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'css', 'cssString', 'characters', 'actions', 'actionLayoutCount'));
 	}
 
 	public function edit($id) {
@@ -109,9 +107,8 @@ class ObjectsController extends AdminAppController
 		$object = $this->ObjectProducts->findById($id);
 		$partsSelected = $this->ObjectParts->findListByObjectId($id)->toArray();
 		$object = $this->ObjectProducts->moldGetData($object);
-		if (isset($object->content_id)) {
-            $characters = $this->Characters->find('list')->where(['content_id' => $object->content_id]);
-        }
+
+        $characters = $this->Characters->find('list');
         $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
 		$templateId = $object->template_id;
 		$template = $this->ObjectTemplates->findById($templateId)->first();
@@ -127,11 +124,7 @@ class ObjectsController extends AdminAppController
 		$cssString = json_encode($partsCss);
 		if ($this->request->is(['patch', 'post', 'put'])) {
 			$data = $this->request->getData();
-			foreach ($data['object_parts'] as $_key => $_value) {
-				if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
-					unset($data['object_parts'][$_key]);
-				}
-			}
+            $data = $this->ObjectProducts->unsetEmptyDatum($data);
             // 画像登録
 //            if (!empty($data['picture']['tmp_name'])) {
 //                $file = new File($data['picture']['tmp_name']);
@@ -143,8 +136,11 @@ class ObjectsController extends AdminAppController
 //                $data['picture_content'] = $this->ObjectProducts->findPictureContentByID($data['picture_content_id']);
 //            }
 
+            // アクションレイアウトPOST値に前のデータが残っているのを解消
+            unset($object['action_layouts']);
             $object = $this->ObjectProducts->patchEntity($object, $data);
 			$this->ObjectParts->deleteByObjectId($id);
+			$this->ActionLayouts->deleteByObjectId($id);
 			if ($this->ObjectProducts->save($object, $data)) {
 				$this->Flash->success(__('更新しました'));
 			} else {
@@ -188,7 +184,7 @@ class ObjectsController extends AdminAppController
                 $objectData['object_parts'][$characterPart->parts_category_no] ['parts_no'] = $characterPart->parts_no;
                 $objectData['object_parts'][$characterPart->parts_category_no] ['parts_css'] = $characterPart->parts_css;
             }
-            $object = $this->ObjectProducts->newEntity($objectData, ['associated' => ['ObjectParts']]);
+            $object = $this->ObjectProducts->newEntity($objectData, ['associated' => ['ObjectParts', 'ActionLayouts']]);
             $this->ObjectProducts->save($object);
             return $this->redirect(
                 ['controller' => 'objects', 'action' => 'edit', $object->id]

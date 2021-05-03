@@ -11,7 +11,7 @@
     {$this->Form->control('picture_content_id', ['class'=>'picture_content_id','type'=>'hidden', 'value'=>$object->id])}
 {/if}
 {$this->Form->control('mime', ['class'=>'mime','type'=>'hidden', 'value'=>$object->mime])}
-<table>
+<table class='object_table'>
     <tr>
         <th>作品</th>
         <td>{$this->Form->input('content_id',['class'=>'content_id', 'options'=>$contents, 'label'=>false, 'empty'=>'-'])}</td>
@@ -165,6 +165,15 @@
             画像削除{$this->Form->input('picture_del', ['class'=>'picture_del','type'=>'checkbox', 'label'=>false])}
         </td>
     </tr>
+    <tr class='action_layout_header'>
+        <th>アクションレイアウト</th>
+        <td>
+            <button class='add_action' type='button'>追加</button>
+        </td>
+    </tr>
+    {for $i=0 to count($object['action_layouts'])-1}
+        {$this->element('admin/chapter/_action_layout_input', ['i'=>$i])}
+    {/for}
 </table>
 {$this->Form->button('登録')}
 {$this->Form->end()}

@@ -56,12 +56,6 @@ $(function () {
         $(this).nextAll('.input').find('.css').val('');
         $(this).prevAll('.object_layout_input').html('');
     })
-    // 無意味だったので一旦コメントアウト
-    // $(document).on('change', '.js', function() {
-    //     var phrase_no = $(this).parents().children('.phrase_no').val();
-    //     var js ="$(document).on('click', '.object_animate_" + phrase_no + ", function() { " + $(this).val() + "})";
-    //     $(this).closest('div').prevAll('script').html(js);
-    // })
 
     $(document).on('click', '.character_object', function () {
         // 共通セレクタ定義
@@ -87,12 +81,6 @@ $(function () {
                 css_selector.val('');
                 html_show_selector.html('');
                 css_show_selector.find('style').html('');
-                // 各パーツのオブジェクトNoを取得
-                var character_class = '.character_' + character_id;
-                var usage_class = '.usage_' + object_usage;
-                var face_object_no = $('#js-popup').find('.object_no' + character_class + usage_class + '.default_face').val();
-                var body_object_no = $('#js-popup').find('.object_no' + character_class + usage_class + '.default_body').val();
-                var speech_object_no = $('#js-popup').find('.object_no' + usage_class + '.default_speech').val();
 
                 // html取得
                 $.ajax({
@@ -114,11 +102,15 @@ $(function () {
                     var badge_left_html = data.badge_left_html;
                     var badge_right_html = data.badge_right_html;
                     if (html && css) {
-                        // html調整
-                        html = wholeReplace(html , 'face object', 'face object_'  + face_object_no);
-                        html = wholeReplace(html , 'body object', 'body object_'  + body_object_no);
-                        html = wholeReplace(html , 'speech object', 'speech object_'  + speech_object_no);
-                        // html_selector.val(html);
+                        var object_class_names = data.object_class_names;
+                        $.each(object_class_names, function(index, value) {
+                            var object_no = $('#js-popup').find('.object_no_' + index).val();
+                            html = wholeReplace(html , value + ' object', value + ' object_'  + object_no);
+                            css = wholeReplace(css , '.' + value + '.object', '.' + value + '.object_'  + object_no);
+                            // オブジェクトNoのインクレメント
+                            object_no++;
+                            $('#js-popup').find('.object_no_' + index).val(object_no);
+                        })
                         html_show_selector.html(html);
                         // 文章置き換え
                         replace_sentence(object_usage, sentence, html_show_selector);
@@ -131,18 +123,8 @@ $(function () {
                         }
                         html_selector.val(html_show_selector.html());
                         // css調整
-                        css = wholeReplace(css , '.face.object', '.face.object_'  + face_object_no);
-                        css = wholeReplace(css , '.body.object', '.body.object_'  + body_object_no);
-                        css = wholeReplace(css , '.speech.object', '.speech.object_'  + speech_object_no);
                         css_selector.val(css);
                         css_show_selector.find('style').html(css);
-                        // オブジェクトNoのインクレメント
-                        face_object_no++;
-                        body_object_no++;
-                        speech_object_no++;
-                        $('#js-popup').find('.object_no' + character_class + usage_class + '.default_face').val(face_object_no);
-                        $('#js-popup').find('.object_no' + character_class + usage_class + '.default_body').val(body_object_no);
-                        $('#js-popup').find('.object_no' + character_class + '.default_speech').val(speech_object_no);
 
                         // CSSレイアウト更新(ajax)
                         $.ajax({

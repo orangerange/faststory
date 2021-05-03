@@ -4,6 +4,7 @@
 <h1>パーツ一覧({$template['name']})</h1>
 <div><a href='/admin/parts/input/{$templateId|escape}/'>新規登録</a></div>
 <div><a href='/admin/objects/input/{$templateId|escape}/'>オブジェクトを作成する</a></div>
+<div><a href='/admin/objects/index/{$templateId|escape}/'>オブジェクト一覧</a></div>
 <table>
     {assign var='partName' value=''}
         {foreach from=$parts item=part}
