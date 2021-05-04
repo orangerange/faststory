@@ -32,9 +32,7 @@
                         <div class='html_show'>
                             <div class='object_input' style='width:{$_value->object_template->width|escape}%; height:{$_value->object_template->height|escape}%;{if $_value->picture_content} background-image: url("/objects/picture/{$_value->id|escape}");background-size: cover;{/if}'>
                                 <div class='{$_value->object_template->class_name|escape} object_{$_value->id|escape}'>
-                                    {if !$_value->picture_content}
-                                        {$_value->html}
-                                    {/if}
+                                    {$_value->html}
                                 </div>
                             </div>
                         </div>

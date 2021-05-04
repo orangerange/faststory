@@ -161,6 +161,7 @@ return array(
           opacityA:{},
           opacityB:{},
           background_id:"",
+          currentMovie:false,
           isEnd:false,
       },
       mounted() {
@@ -320,15 +321,28 @@ return array(
       methods: {
         showMovie: function (e) {
             if (this.num < this.phraseNum) {
-                var currentMovie = document.getElementById("js_movie_" + this.num);
+                var currentMovieCheck = document.getElementById("js_movie_" + this.num);
+                if (currentMovieCheck) {
+                    this.currentMovie = currentMovieCheck;
+                }
                 this.num ++;
                 var nextMovie = document.getElementById("js_movie_" + this.num);
-                var movieTime = nextMovie.dataset.time * 1000;
-                if (currentMovie) {
-                    currentMovie.style.display = "none";
+                if (nextMovie) {
+                    if (this.currentMovie) {
+                        this.currentMovie.style.display = "none";
+                    }
+                    nextMovie.style.display = "block";
+                    var movieTime = nextMovie.dataset.time * 1000;
+                    setTimeout(this.showMovie, movieTime);
+                } else {
+                    var nextSentence = document.getElementById("js_sentence_" + this.num);
+                    if (nextSentence) {
+                        var sentence = nextSentence.dataset.sentence;
+                        var movieTime = nextSentence.dataset.time * 1000;
+                        var speech_sentence = this.currentMovie.getElementsByClassName("sentence")[0].innerHTML = sentence;
+                        setTimeout(this.showMovie, movieTime);
+                    }
                 }
-                nextMovie.style.display = "block";
-                setTimeout(this.showMovie, movieTime);
             '),
 
     define('VUE_MOVIE_SCRIPT_LAST', '
