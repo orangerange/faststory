@@ -69,9 +69,11 @@ class ObjectsController extends AdminAppController
         $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
 		$parts = [];
 		$partsCss = [];
+		$partsPicture = [];
 		foreach($partCategories as $_key=>$_value) {
 			$parts[$_value->id] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'html'])->where(['parts_category_no'=>$_value->id])->toArray();
 			$partsCss[$_value->id] = $this->Parts->find('list', ['keyField'=>'parts_no', 'valueField'=>'css'])->where(['parts_category_no'=>$_value->id])->all();
+            $partsPicture[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'id'])->where(['parts_category_no'=>$_value->id, 'picture_content IS NOT'=>NULL])->toArray();
 		}
 		$cssString = json_encode($partsCss);
 		if($this->request->is('post')) {
@@ -91,13 +93,13 @@ class ObjectsController extends AdminAppController
 //            }
 
 			$object = $this->ObjectProducts->newEntity($data, ['associated' => ['ObjectParts', 'ActionLayouts']]);
-			if($this->ObjectProducts->save($object, $data)) {
+			if ($this->ObjectProducts->save($object, $data)) {
 				$this->Flash->success(__('新規登録しました'));
 			} else {
 				$this->Flash->error(__('新規登録に失敗しました'));
 			}
 		}
-		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'css', 'cssString', 'characters', 'actions', 'actionLayoutCount'));
+		$this->set(compact('templateId', 'template', 'contents', 'object', 'partCategories', 'parts', 'css', 'cssString', 'characters', 'actions', 'actionLayoutCount', 'partsPicture'));
 	}
 
 	public function edit($id) {
@@ -120,6 +122,7 @@ class ObjectsController extends AdminAppController
 		foreach ($partCategories as $_key => $_value) {
 			$parts[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'html'])->where(['parts_category_no' => $_value->id])->toArray();
 			$partsCss[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'css'])->where(['parts_category_no' => $_value->id]);
+            $partsPicture[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'id'])->where(['parts_category_no'=>$_value->id, 'picture_content IS NOT'=>NULL])->toArray();
 		}
 		$cssString = json_encode($partsCss);
 		if ($this->request->is(['patch', 'post', 'put'])) {
@@ -147,7 +150,7 @@ class ObjectsController extends AdminAppController
 				$this->Flash->error(__('更新に失敗しました'));
 			}
 		}
-		$this->set(compact('templateId', 'template', 'contents', 'characters', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString', 'actions'));
+		$this->set(compact('templateId', 'template', 'contents', 'characters', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString', 'actions', 'partsPicture'));
 
 		$this->set('editFlg', true);
 		$this->render('input');

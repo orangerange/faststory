@@ -58,6 +58,7 @@
 .object_input {
     background-color:#ffffe0;
     position: relative;
+    overflow:hidden;
 }
 .scroll_x {
     display: block;

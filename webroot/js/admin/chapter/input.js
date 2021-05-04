@@ -238,7 +238,7 @@ $(function () {
 
         var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%; --object_width:calc(var(--phrase_object_width) * ' + width / 100 + '); --object_height:calc(var(--phrase_object_height) * ' + height / 100 + ');';
         if (background_image_url) {
-            css_add += 'background-image: url(' + background_image_url + ');background-size: cover;';
+            css_add += 'background-image: url(' + background_image_url + '); background-size: cover;';
         }
         css_add += '}';
 

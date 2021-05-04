@@ -115,8 +115,11 @@
                                                     <input type='hidden' class='parts_category_no' value={$_value->id|escape}>
                                                     <input type='hidden' class='parts_no' value={$_partsNo|escape}>
                                                     <input type='hidden' class='parts_class' value={$_value->class_name|escape}>
+                                                    {if $partsPicture[$_value->id][$_partsNo]}
+                                                        <input type='hidden' class='background_image_url' value='/parts/picture/{$partsPicture[$_value->id][$_partsNo]|escape}'>
+                                                    {/if}
                                                     <div class='phrase_object html_show'>
-                                                        <div class='{$template->class_name|escape} object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;'>
+                                                        <div class='{$template->class_name|escape} object_input' style='width:{$template->width|escape}%; height:{$template->height|escape}%;{if $partsPicture[$_value->id][$_partsNo]} background-image: url("/parts/picture/{$partsPicture[$_value->id][$_partsNo]|escape}");background-size: cover;{/if}'>
                                                             {$_html}
                                                         </div>
                                                     </div>

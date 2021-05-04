@@ -31,6 +31,8 @@ class Part extends Entity
 		'template_id' => true,
 		'html' => true,
 		'css' => true,
+        'picture_content' => true,
+        'mime' => true,
 		'parts_category_no' => true,
 		'parts_no' => true,
 		'created' => true,

@@ -113,9 +113,13 @@ $(function () {
     $(document).on('click', '.parts_box_select', function () {
         var parts_category_no = $(this).closest('td').find('.parts_category_no').val();
         var parts_no = $(this).closest('td').find('.parts_no').val();
+        var background_image_url = $(this).closest('td').find('.background_image_url').val();
         $('.parts_'+parts_category_no).val(parts_no);
         var html = $(this).closest('td').find('.object_input').html().replace('　', '');
         var css = css_obj[parts_category_no][parts_no];
+        if (background_image_url) {
+            css += 'background-image: url(' + background_image_url + ');background-size: cover;';
+        }
         $('.object_input_' + parts_category_no).html(html);
         $('.css_' + parts_category_no).find('style').html(css);
         $('.parts_css_'+ parts_category_no).val(css);

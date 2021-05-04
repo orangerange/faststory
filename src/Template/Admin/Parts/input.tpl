@@ -4,6 +4,9 @@
 <div><a href='/admin/parts/index/{$templateId|escape}/{$objectType|escape}'>パーツ一覧</a></div>
 <h1>パーツ{if $editFlg}個別編集{else}登録{/if}({$template['name']})</h1>
 <div>
+    {if $part->picture_content}
+        {$this->Form->control('picture_content_id', ['class'=>'picture_content_id','type'=>'hidden', 'value'=>$part->id])}
+    {/if}
     {$this->Form->create($part, [
         'enctype' => 'multipart/form-data']
         )
@@ -48,6 +51,13 @@
     <tr>
         <th>CSS</th>
         <td>{$this->Form->input('css', ['type'=>'textarea', 'label'=>false, 'class'=>'css_input'])}</td>
+    </tr>
+    <tr>
+        <th>画像</th>
+        <td>
+            {$this->Form->input('picture', ['type'=>'file', 'class'=>'picture', 'label'=>false])}
+            画像削除{$this->Form->input('picture_del', ['class'=>'picture_del','type'=>'checkbox', 'label'=>false])}
+        </td>
     </tr>
     <tr>
         <th></th>

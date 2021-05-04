@@ -119,7 +119,7 @@ class ObjectProductsTable extends Table
         return $data;
     }
 
-    public function findPictureCOntentById($id) {
+    public function findPictureContentById($id) {
         $result = $this->find()->where(['id' => $id])->first();
 
         return $result->get('picture_content');
@@ -146,7 +146,7 @@ class ObjectProductsTable extends Table
             $entity->set('picture_content', $pictureContent);
             $entity->set('mime', $mime);
         } elseif(!empty($options['picture_content_id']) && empty($options['picture_del'])) {
-            $options['picture_content'] = $this->findPictureContentByID($options['picture_content_id']);
+            $options['picture_content'] = $this->findPictureContentById($options['picture_content_id']);
         }
     }
 

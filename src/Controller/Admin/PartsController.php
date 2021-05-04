@@ -97,7 +97,7 @@ class PartsController extends AdminAppController
 			$data= $this->Parts->moldSetData($this->request->getData(), true);
 			$data['template_id'] = $templateId;
 			$part = $this->Parts->newEntity($data);
-			if($this->Parts->save($part)) {
+			if ($this->Parts->save($part, $data)) {
 				$this->Flash->success(__('新規登録しました'));
                 return $this->redirect(
                     ['controller' => 'Parts', 'action' => 'index', $templateId]
@@ -118,7 +118,7 @@ class PartsController extends AdminAppController
 			if ($this->request->is(['patch', 'post', 'put'])) {
 			$data= $this->Parts->moldSetData($this->request->getData());
 				$part = $this->Parts->patchEntity($part, $data);
-				if ($this->Parts->save($part)) {
+				if ($this->Parts->save($part, $data)) {
 					$this->Flash->success(__('更新しました'));
 				} else {
 					$this->Flash->error(__('更新に失敗しました'));
@@ -156,13 +156,13 @@ class PartsController extends AdminAppController
 				if ($this->request->is(['patch', 'post', 'put']) && !isset($baseCss)) {
 					$data = $this->Parts->moldGetData($this->request->getData());
 					$part = $this->Parts->patchEntity($part, $data);
-					if ($this->Parts->save($part)) {
+                    if ($this->Parts->save($part, $data)) {
 						$this->Flash->success(__('更新しました'));
 					} else {
 						$this->Flash->error(__('更新に失敗しました'));
 					}
 					return $this->redirect(
-					['controller' => 'Parts', 'action' => 'index', $templateId]
+					    ['controller' => 'Parts', 'action' => 'index', $templateId]
 					);
 				}
 			} else {

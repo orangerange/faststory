@@ -1,6 +1,9 @@
 {$this->Flash->render()}
 <h1>{$template->name|escape}オブジェクト一覧</h1>
 <div><a href='/admin/objects/input/{$template->id|escape}'>新規登録</a></div>
+<div><a href='/admin/part-categories/index/{$template->id|escape}'/>パーツカテゴリ一覧</a></div>
+<div><a href='/admin/parts/index/{$template->id|escape}'/>パーツ一覧</a></div>
+<div><a href='/admin/object-templates/index/{$template->id|escape}'/>テンプレート一覧</a></div>
 <div><a href='/admin/contents/index'>作品一覧</a></div>
 <table>
     <thead>

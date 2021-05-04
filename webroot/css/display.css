@@ -31,10 +31,10 @@
     width: 290px;
     height:145px;
     position:relative;
+    overflow:hidden;
 }
 .html_show.phrase_object_chapter_input {
     background: white;
-    overflow:hidden;
 }
 .thumbnail_html_show {
     border:solid 1px black;

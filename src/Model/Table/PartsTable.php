@@ -3,6 +3,10 @@ namespace App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
+use Cake\Filesystem\File;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
@@ -40,6 +44,47 @@ class PartsTable extends Table
 		$this->setDisplayField('css');
 		$this->addBehavior('Timestamp');
 	}
+
+    public function findPictureContentById($id) {
+        $result = $this->find()->where(['id' => $id])->first();
+
+        return $result->get('picture_content');
+    }
+
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    {
+        // 画像登録
+        if (!empty($options['picture']['tmp_name'])) {
+            $file = new File($options['picture']['tmp_name']);
+            $pictureContent = $file->read();
+            $mime = $file->mime();
+            $entity->set('picture_content', $pictureContent);
+            $entity->set('mime', $mime);
+        } elseif(!empty($options['picture_content_id']) && empty($options['picture_del'])) {
+            $options['picture_content'] = $this->findPictureContentById($options['picture_content_id']);
+        }
+    }
+
+    public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $id = $entity->get('id');
+        $pictureContent = $entity->get('picture_content');
+        if (isset($pictureContent)) {
+            $css = $entity->get('css');
+            $cssPicture = 'background-image: url(/parts/picture/' . $id . '); background-size: cover; ';
+            $pattern= "/^.*?{/";
+            // 背景画像に合わせたcssの上書き
+            if(strpos($css, $cssPicture) === false) {
+            if (preg_match_all($pattern, $css, $matches)) {
+                $cssHead = $matches[0][0];
+                    $css = str_replace($cssHead, $cssHead . $cssPicture, $css);
+                    $entity->set('css', $css);
+
+                    $this->save($entity);
+                }
+            }
+        }
+    }
 
 	public function findById($id) {
 		return $this->find()->where(['Parts.id' => $id])->first();

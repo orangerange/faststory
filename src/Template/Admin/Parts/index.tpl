@@ -34,6 +34,7 @@
                         </div>
                     </div>
                 {/if}
+                ID:{$part->id|escape}
                 <button class="slide">↕</button>
                 <button onClick="location.href='/admin/parts/input/{$templateId|escape}/{$part->parts_category_no|escape}/{$part->parts_no|escape}/'">複製</button>
                 <button onClick="location.href='/admin/parts/edit_copy/{$part->parts_category_no|escape}/{$part->parts_no|escape}/'">編集</button>
