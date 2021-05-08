@@ -16,6 +16,7 @@ use Cake\ORM\Entity;
  * @property int $top_perc
  * @property int $right_perc
  * @property int $bottom_perc
+ * @property int $rotate
  */
 class ActionLayout extends Entity
 {
@@ -40,6 +41,7 @@ class ActionLayout extends Entity
         'top_perc' => true,
         'right_perc' => true,
         'bottom_perc' => true,
+        'rotate' => true,
         'object_products' => true,
     ];
 }

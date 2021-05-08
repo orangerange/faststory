@@ -58,7 +58,6 @@
 .object_input {
     background-color:#ffffe0;
     position: relative;
-    overflow:hidden;
 }
 .scroll_x {
     display: block;
@@ -67,6 +66,9 @@
     width:500px;
 }
 .count {
+    font-weight:bold;
+}
+.movie_time_sum {
     font-weight:bold;
 }
 .count_display {

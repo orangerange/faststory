@@ -64,6 +64,9 @@
     {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>$smarty.const.PHRASE_MUX_NUM])}
     {$this->Form->control('object_usage_str', ['type'=>'hidden', 'id'=>'object_usage_str', 'value'=> $objectUsageStr])}
     <h1>{$contentName|escape}チャプター{if $editFlg}編集{else}登録{/if}({$chapterNo})</h1>
+    <div class="count_display">
+        ムービー合計時間:<span class="movie_time_sum">0</span>秒
+    </div>
     {$this->Form->create($chapter,['enctype' => 'multipart/form-data'])}
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}
 {*    {$this->Form->control('content_id', ['type'=>'hidden', 'value'=>$contentId])}*}

@@ -331,7 +331,7 @@ return array(
                     if (this.currentMovie) {
                         this.currentMovie.style.display = "none";
                     }
-                    nextMovie.style.display = "block";
+                    nextMovie.style.visibility = "visible";
                     var movieTime = nextMovie.dataset.time * 1000;
                     setTimeout(this.showMovie, movieTime);
                 } else {
@@ -339,7 +339,19 @@ return array(
                     if (nextSentence) {
                         var sentence = nextSentence.dataset.sentence;
                         var movieTime = nextSentence.dataset.time * 1000;
-                        var speech_sentence = this.currentMovie.getElementsByClassName("sentence")[0].innerHTML = sentence;
+                        var speech_div = this.currentMovie.getElementsByClassName("speech");
+                        if (speech_div[0]) {
+                            speech_div[0].style.display = "block";
+                            // ダジャレ(bタグあり)の場合、光らせる
+                            if (sentence.indexOf("<b>") != -1) {
+                                var speech_sentence = speech_div[0].firstChild;
+                                speech_sentence.style.background = "rgba(255,192,203,0.8)";
+                            }
+                        }
+                        var sentence_div = this.currentMovie.getElementsByClassName("sentence")
+                        if (sentence_div[0]) {
+                            sentence_div[0].innerHTML = sentence;
+                        }
                         setTimeout(this.showMovie, movieTime);
                     }
                 }

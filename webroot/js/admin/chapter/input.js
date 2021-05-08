@@ -1,4 +1,30 @@
 $(function () {
+    function calc_movie_time_sum(is_change = false, minus_num = 0, plus_num = 0) {
+        if  (is_change) {
+            var movie_time_sum = Number($('.movie_time_sum').html()) - minus_num + plus_num;
+        } else {
+            var movie_time_sum = 0;
+            var movie_times = $('.movie_time');
+            $.each(movie_times, function (index, movie_time_div) {
+                var movie_time = Number(movie_time_div.getAttribute('value'));
+                if (movie_time) {
+                    movie_time_sum = movie_time_sum + movie_time;
+                }
+            })
+        }
+        $('.movie_time_sum').html(movie_time_sum);
+    }
+    calc_movie_time_sum();
+    var minus_num = 0;
+    var plus_num = 0;
+    $('.movie_time').on('focus', function() {
+        //フォーカス時の値を取得
+        minus_num = Number($(this).val());
+    }).change(function() {
+        //選択時の値を取得
+        plus_num = Number($(this).val());
+        calc_movie_time_sum(true, minus_num, plus_num);
+    });
     $(document).on("change", ".color", function () {
         $(this).parent().prevAll('.html_show').css({
             'background-color': $(this).val()
@@ -77,10 +103,10 @@ $(function () {
                 character_object_check.prop('checked', false);
             } else {
                 // 値クリア
-                html_selector.val('');
-                css_selector.val('');
-                html_show_selector.html('');
-                css_show_selector.find('style').html('');
+                // html_selector.val('');
+                // css_selector.val('');
+                // html_show_selector.html('');
+                // css_show_selector.find('style').html('');
 
                 // html取得
                 $.ajax({
@@ -111,6 +137,10 @@ $(function () {
                             object_no++;
                             $('#js-popup').find('.object_no_' + index).val(object_no);
                         })
+                        var html_input = html_selector.val();
+                        var css_input = css_selector.val();
+                        html = html + html_input;
+                        css = css + css_input;
                         html_show_selector.html(html);
                         // 文章置き換え
                         replace_sentence(object_usage, sentence, html_show_selector);

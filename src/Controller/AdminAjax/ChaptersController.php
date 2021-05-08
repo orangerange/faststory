@@ -98,7 +98,12 @@ class ChaptersController extends AdminAppController
                 }
             }
             $characterCssSumHead = '.character_speak_' . $phraseNo . '{ width:100%; height:100%; position:absolute; ';
-            $characterCssSumHead .= isset($characterSpeakLayout['left_perc']) && $characterSpeakLayout['left_perc'] != '' ? 'left:' . $characterSpeakLayout['left_perc'] . '%; ' : 'right:' . $characterSpeakLayout['right_perc'] . '%; ';
+            if (isset($characterSpeakLayout['left_perc'])) {
+                $characterCssSumHead .= 'left:' . $characterSpeakLayout['left_perc'] . '%; ';
+            } elseif($characterSpeakLayout['right_perc']) {
+                $characterCssSumHead .= 'right:' . $characterSpeakLayout['right_perc'] . '%; ';
+            }
+//            $characterCssSumHead .= isset($characterSpeakLayout['left_perc']) && $characterSpeakLayout['left_perc'] != '' ? 'left:' . $characterSpeakLayout['left_perc'] . '%; ' : 'right:' . $characterSpeakLayout['right_perc'] . '%; ';
             $characterCssSumHead .= '} ';
             $characterCssSum = $characterCssSumHead . $characterCssSum;
         }
@@ -149,11 +154,25 @@ class ChaptersController extends AdminAppController
         return $objectHtml;
     }
 
-    private function _makeBaseCss($baseClass, $width, $height, $left, $top, $right, $bottom) {
+    private function _makeBaseCss($baseClass, $width, $height, $left, $top, $right, $bottom, $rotate) {
         $this->autoRender = false;
         $baseCss = $baseClass . '{ ' . 'width:' . $width . '%; ' . ' height:' . $height . '%; position:absolute;';
-        $baseCss .= isset($left) && $left != '' ? 'left:' . $left . '%; ' : 'right:' . $right . '%; ';
-        $baseCss .= isset($top) && $top != '' ? 'top:' . $top . '%; ' : 'bottom:' . $bottom . '%; ';
+
+        if (isset($left) && $left != '') {
+            $baseCss .= 'left:' . $left . '%; ';
+        } elseif(isset($right) && $right != '') {
+            $baseCss .= 'right:' . $right . '%; ';
+        }
+
+        if (isset($top) && $top != '') {
+            $baseCss .= 'top:' . $top . '%; ';
+        } elseif(isset($bottom) && $bottom != '') {
+            $baseCss .= 'bottom:' . $bottom . '%; ';
+        }
+        if (isset($rotate) && $rotate != '') {
+            $baseCss .= 'transform:rotate(' . $rotate . 'deg); ';
+        }
+
         $baseCss .= '}';
         return $baseCss;
     }
@@ -163,9 +182,13 @@ class ChaptersController extends AdminAppController
         $top = $actionLayout['top_perc'];
         $right = $actionLayout['right_perc'];
         $bottom = $actionLayout['bottom_perc'];
+        $rotate = $actionLayout['rotate'];
         $magnification = $actionLayout['magnification'];
-        $width = (int)$magnification * (int)$actionLayout['object_product']['object_template']['width'];
-        $height = (int)$magnification * (int)$actionLayout['object_product']['object_template']['height'];
+        if (!isset($magnification) || $magnification =='') {
+            $magnification == 1;
+        }
+        $width = (float)$magnification * (float)$actionLayout['object_product']['object_template']['width'];
+        $height = (float)$magnification * (float)$actionLayout['object_product']['object_template']['height'];
         $objectId = $actionLayout['object_product']['id'];
         $objectClassName = $actionLayout['object_product']['object_template']['class_name'];
 
@@ -200,22 +223,8 @@ class ChaptersController extends AdminAppController
             }
         }
         $css = AppUtility::addPreClassToCss($css, '.' . $objectClassName . '.object_' . $objectId);
-        $css = "/*." . $objectClassName . ".object_{$objectId}_start*/" . $this->_makeBaseCss('.' . $objectClassName . '.object_' . $objectId, $width, $height, $left, $top, $right, $bottom) . ' ' . $css . "/*." . $objectClassName .  ".object_{$objectId}_end*/";
+        $css = "/*." . $objectClassName . ".object_{$objectId}_start*/" . $this->_makeBaseCss('.' . $objectClassName . '.object_' . $objectId, $width, $height, $left, $top, $right, $bottom, $rotate) . ' ' . $css . "/*." . $objectClassName .  ".object_{$objectId}_end*/";
         if (!empty($actionLayout['is_character'])) {
-//            $characterSpeakLayout = null;
-//            $characterSpeakLayouts = $this->CharacterSpeakLayouts->findLayout($actionLayout['action_id']);
-//            foreach ($characterSpeakLayouts as $layout) {
-//                if (is_null($layout['character_id']) || $layout['character_id'] == '') {
-//                    if (!isset($characterSpeakLayout)) {
-//                        $characterSpeakLayout = $layout;
-//                    }
-//                } else {
-//                    $characterSpeakLayout = $layout;
-//                }
-//            }
-//            $characterCssSum = '.character_speak_' . $phraseNo . '{ width:100%; height:100%; position:absolute; ';
-//            $characterCssSum .= isset($characterSpeakLayout['left_perc']) && $characterSpeakLayout['left_perc'] != '' ? 'left:' . $characterSpeakLayout['left_perc'] . '%; ' : 'right:' . $characterSpeakLayout['right_perc'] . '%; ';
-//            $characterCssSum .= '}';
             $characterCssSum .= $css;
         } else {
             $cssSum .= $css;

@@ -151,9 +151,11 @@ class ObjectProductsTable extends Table
     }
 
     public function unsetEmptyDatum($data) {
-        foreach ($data['object_parts'] as $_key => $_value) {
-            if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
-                unset($data['object_parts'][$_key]);
+        if (isset($data['object_parts'])) {
+            foreach ($data['object_parts'] as $_key => $_value) {
+                if (!isset($_value['parts_no']) || $_value['parts_no'] == '') {
+                    unset($data['object_parts'][$_key]);
+                }
             }
         }
         $actionLayouts = [];

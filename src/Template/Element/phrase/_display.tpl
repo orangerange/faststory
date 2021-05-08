@@ -17,19 +17,19 @@
                         <b>{if $phrase->speaker_name}{$phrase->speaker_name|escape}{else}{$character->name|escape}{/if}</b>
                     </div>
                 {if $sentence}
-                    {$sentence|escape|nl2br}
+                    {$sentence|nl2br}
                 {else}
                     {if $phrase->sentence_translate}
                         <div style="color:{$character->foreign_color};">
                             {if $phrase->sentence_kana}
-                                <div class="kana">{$phrase->sentence_kana|escape|nl2br}</div>
+                                <div class="kana">{$phrase->sentence_kana|nl2br}</div>
                             {/if}
-                            <div class="foreign">{$phrase->sentence|escape|nl2br}</div>
+                            <div class="foreign">{$phrase->sentence|nl2br}</div>
                         </div>
-                        ({$phrase->sentence_translate})
+                        ({$phrase->sentence_translate|nl2br}})
                     {else}
                         <div>
-                            {$phrase->sentence|escape|nl2br}
+                            {$phrase->sentence|nl2br}
                         </div>
                     {/if}
                 {/if}

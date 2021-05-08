@@ -31,6 +31,9 @@
                 <td>
                     bottom:{$this->Form->input('action_layouts.'|cat:$i|cat:'.bottom_perc',['class'=>'bottom_perc', 'label'=>false, 'type'=>'text'])}
                 </td>
+                <td>
+                    rotate:{$this->Form->input('action_layouts.'|cat:$i|cat:'.rotate',['class'=>'rotate', 'label'=>false, 'type'=>'text'])}
+                </td>
             </tr>
         </table>
     </td>
