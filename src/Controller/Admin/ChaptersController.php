@@ -98,11 +98,20 @@ class ChaptersController extends AdminAppController
                 $postData['phrases'] = $result['datum'];
                 $openFlg = $result['open_flg'];
                 $chapter = $this->Chapters->patchEntity($chapter, $postData, ['associated' => ['Phrases']]);
-                if ($this->Chapters->save($chapter)) {
-                    $this->Flash->success(__('新規登録しました'));
-                    return $this->redirect(['controller' => 'chapters', 'action' => 'index', $contentId]);
-                } else {
-                    $this->Flash->error(__('新規登録に失敗しました'));
+                $connection = ConnectionManager::get('default');
+                // トランザクション開始
+                $connection->begin();
+                try {
+                    if ($this->Chapters->saveOrFail($chapter)) {
+                        $this->Flash->success(__('新規登録しました'));
+                        return $this->redirect(['controller' => 'chapters', 'action' => 'index', $contentId]);
+                    } else {
+                        $this->Flash->error(__('新規登録に失敗しました'));
+                    }
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                    // ロールバック
+                    $connection->rollback();
                 }
             }
             $this->set(compact('chapterNo', 'characters', 'backgrounds', 'openFlg', 'contentId', 'contentName', 'objects', 'objectUsageArr', 'objectUsageStr', 'actions'));
@@ -163,7 +172,7 @@ class ChaptersController extends AdminAppController
                 try {
                     //最初に、更新で消えるphrasesレコードをを全て物理削除
                     $this->Phrases->deleteByChapterId($id);
-                    if ($this->Chapters->save($chapter)) {
+                    if ($this->Chapters->saveOrFail($chapter)) {
                         $this->Flash->success(__('更新しました'));
                     } else {
                         $this->Flash->error(__('更新に失敗しました'));

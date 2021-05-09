@@ -46,6 +46,7 @@
 </div>
 <div>
     {$this->Html->script('admin/chapter/input.js', ['block'=>'script'])}
+    {$this->Html->script('admin/config.js', ['block'=>'script'])}
     {$this->Flash->render()}
     {if $editFlg}
         {$this->Form->create($chapter, ['method'=>'post', 'url'=>'/admin/chapters/delete', 'onSubmit'=>"return  deleteCheck()"])}
@@ -82,4 +83,3 @@
 {$this->Form->end()}
 <div><a href='/admin/chapters/index/{$contentId}'>一覧に戻る</a></div>
 </div>
-{$this->Html->script('config.js')}

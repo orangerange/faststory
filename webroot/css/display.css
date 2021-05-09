@@ -139,24 +139,34 @@
     z-index:50;
     /*text-align: center;*/
 }
-[class*='speech'][class*='object_'][class$='_47'] {
+[class*='speech'][class*='object_'][class$='_47'],[class*='speech'][class*='object_'][class$='_65'],[class*='speech'][class*='object_'][class$='_66'] {
     text-align: center;
 }
 .speech b:not(.name),.phrase div:not(.character-name) b  {
     color:red;
 }
-.speech_sentence.story_show {
-    position:absolute;
-    z-index:50;
-    color: midnightblue;
-    font-family: Arial, sans-serif;
-    background:rgba(248,248,255,0.8);
-    padding:1%;
+.speech_sentence.story_show,[class*='story_show_other']{
+     position:absolute;
+     z-index:50;
+     font-family: Arial, sans-serif;
+     background:rgba(248,248,255,0.8);
+     padding:1%;
+     display: inline-block;
+     transform: translate(-50%, 0%);
+     width:auto;
+     border-radius:20% / 10%;
+ }
+.speech_sentence.story_show{
     bottom:-10%;
-    display: inline-block;
-    transform: translate(-50%, 0%);
-    width:auto;
-    border-radius:20% / 10%;
+    color: midnightblue;
+}
+.speech_sentence.story_show_other1{
+    bottom:-10%;
+    color: green;
+}
+.speech_sentence.story_show_other2{
+    top:10%;
+    color: deeppink;
 }
 
 @media screen and (min-width: 768px) {
@@ -291,6 +301,7 @@
         border:solid 1px black;
         background-color:white;
         position:relative;
+        overflow:hidden;
     }
     .thumbnail_html_display {
         border:solid 1px black;

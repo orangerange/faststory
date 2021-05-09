@@ -119,7 +119,7 @@ return array(
 		)
 	),
 	define('INDEX_BODY_COLOR', 'lightblue'),
-	define('PHRASE_MUX_NUM', 50),
+	define('PHRASE_MUX_NUM', 100),
 	define('NotFoundMessage', '不正な遷移です'),
     define('FLG_OFF', 0),
     define('FLG_ON', 1),
@@ -338,19 +338,36 @@ return array(
                     var nextSentence = document.getElementById("js_sentence_" + this.num);
                     if (nextSentence) {
                         var sentence = nextSentence.dataset.sentence;
+                        var other_sentence_num = nextSentence.dataset.other_sentence_num;
                         var movieTime = nextSentence.dataset.time * 1000;
-                        var speech_div = this.currentMovie.getElementsByClassName("speech");
-                        if (speech_div[0]) {
-                            speech_div[0].style.display = "block";
+                        // 一旦全ての字幕を非表示
+                        var speech_div_all = this.currentMovie.getElementsByClassName("speech");
+                        for(var i = 0; i < speech_div_all.length; i++){
+                            speech_div_all[i].style.display = "none";
+                        }
+
+                        if (other_sentence_num) {
+                            var story_show = this.currentMovie.getElementsByClassName("story_show_other" + other_sentence_num);
+                        } else {
+                            var story_show = this.currentMovie.getElementsByClassName("story_show");
+                        }
+
+                        // 該当字幕を表示
+                        if (story_show) {
+                            var story_show_div = story_show[0];
+                            var speech_div = story_show_div.parentNode;
+                            speech_div.style.display = "block";
                             // ダジャレ(bタグあり)の場合、光らせる
+                            var speech_sentence = speech_div.firstChild;
                             if (sentence.indexOf("<b>") != -1) {
-                                var speech_sentence = speech_div[0].firstChild;
-                                speech_sentence.style.background = "rgba(255,192,203,0.8)";
+                                story_show_div.style.background = "rgba(255,192,203,0.8)";
+                            } else {
+                                story_show_div.style.background = "rgba(248,248,255,0.8)";
                             }
                         }
-                        var sentence_div = this.currentMovie.getElementsByClassName("sentence")
-                        if (sentence_div[0]) {
-                            sentence_div[0].innerHTML = sentence;
+                        var sentence_div = story_show_div.firstChild;
+                        if (sentence_div) {
+                            sentence_div.innerHTML = sentence;
                         }
                         setTimeout(this.showMovie, movieTime);
                     }

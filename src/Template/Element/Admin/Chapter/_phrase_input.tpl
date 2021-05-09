@@ -12,6 +12,7 @@
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence', ['type'=>'textarea', 'size'=>150, 'class'=>'sentence'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence_kana', ['type'=>'text', 'size'=>150, 'class'=>'sentence_kana'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.sentence_translate', ['type'=>'text', 'size'=>150, 'class'=>'sentence_translate'])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.other_sentence_num', ['type'=>'text', 'class'=>'other_sentence_num'])}
 
     {$this->Form->control('phrases.'|cat:$i|cat:'.picture', ['type'=>'file', 'class'=>'picture'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.picture_del', ['class'=>'picture_del','type'=>'checkbox'])}

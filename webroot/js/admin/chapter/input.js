@@ -98,10 +98,10 @@ $(function () {
             var sentence = $(this).closest('.checkbox').prevAll('.input').find('.sentence').val();
             var sentence_kana = $(this).closest('.checkbox').prevAll('.input').find('.sentence_kana').val();
             var sentence_translate = $(this).closest('.checkbox').prevAll('.input').find('.sentence_translate').val();
-            if (!character_id) {
-                alert('キャラクターを選択して下さい');
-                character_object_check.prop('checked', false);
-            } else {
+            // if (!character_id) {
+            //     alert('キャラクターを選択して下さい');
+            //     character_object_check.prop('checked', false);
+            // } else {
                 // 値クリア
                 // html_selector.val('');
                 // css_selector.val('');
@@ -183,7 +183,7 @@ $(function () {
                     console.log(status);
                     console.log(error);
                 });
-            }
+            // }
         } else {
             html_selector.val('');
             css_selector.val('');
