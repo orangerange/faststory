@@ -25,6 +25,7 @@ $(function () {
         plus_num = Number($(this).val());
         calc_movie_time_sum(true, minus_num, plus_num);
     });
+
     $(document).on("change", ".color", function () {
         $(this).parent().prevAll('.html_show').css({
             'background-color': $(this).val()
@@ -38,6 +39,19 @@ $(function () {
            $(this).parent().children('.phrase_control').slideDown();
         }
     })
+    $(document).on('click', '.phrase_start', function () {
+        if ($(this).prop('checked')) {
+            var first_phrase_num = parseInt($(this).parents('.checkbox').prevAll('.phrase_no').val()) + 1;
+            $('#first_phrase_num').val(first_phrase_num);
+        }
+    })
+    $(document).on('click', '.js_show_movie', function () {
+        var prefix = $('#prefix').val();
+        var chapter_no = $('#chapter-no').val();
+        var first_phrase_num = $('#first_phrase_num').val();
+        window.open('/admin/chapters/movie/' + prefix + '/' + chapter_no + '/' + first_phrase_num);
+    })
+
     $(document).on('change', '.html', function () {
         var html = deleteSpace($(this).val());
         $(this).parent().prevAll('.html_show').html(html);
@@ -197,14 +211,14 @@ $(function () {
         var phrase_num = $('#phrase_num').val();
         for (var i = phrase_num -2 ; i >= phrase_no; i--) {
             var j = i+1;
-            var columns = ['character_id', 'speaker_name', 'speaker_color', 'sentence', 'picture_before', 'dir_before', 'picture_delete', 'html', 'css', 'background_id', 'object_usage', 'character_object', 'movie_time', 'color'];
+            var columns = ['character_id', 'speaker_name', 'speaker_color', 'sentence', 'sentence_kana', 'sentence_translate', 'picture_del', 'html', 'css', 'js', 'background_id', 'object_usage', 'character_object', 'movie_time', 'color'];
             $.each(columns, function (index, value) {
                 $('*[name="phrases[' + j + ']['+ value +']"]').val($('*[name="phrases[' + i + ']['+ value +']"]').val());
                 $('*[name="phrases[' + i + ']['+ value +']"]').val('');
                 if (value == 'color') {
                     if ($('*[name="phrases[' + j + ']['+ value +']"]').val()) {
                         $('#html_show_' + j).css({
-                            'background-color': $('*[name="phrases[' + j + ']['+ value +']"]').val()
+                            'background-color': $('*[name="phrases[' + i + ']['+ value +']"]').val()
                         });
                         $('#html_show_' + i).css({
                             'background-color': ''

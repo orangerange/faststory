@@ -25,6 +25,7 @@
         {$this->Display->css($chapter['phrases'][$i]['css'])}
     </div>
     {$this->Display->adminAnimateJs($i, $chapter['phrases'][$i]['js'])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.phrase_start', ['class'=>'phrase_start','type'=>'checkbox'])}
     <div id='html_show_{$i|escape}' class='phrase_object_chapter_input html_show phrase_object_{$i+1|escape}' style='{if $chapter['phrases'][$i]['color']}background-color:{$chapter['phrases'][$i]['color']};{/if}{if $chapter['phrases'][$i]['picture_content']}background-image: url("/chapters/picture/{$chapter['phrases'][$i]['id']|escape}/1");background-size: cover;{/if}'>
         {$chapter['phrases'][$i]['html']}
     </div>

@@ -22,14 +22,14 @@
                     {if $phrase->sentence_translate}
                         <div style="color:{$character->foreign_color};">
                             {if $phrase->sentence_kana}
-                                <div class="kana">{$phrase->sentence_kana|nl2br}</div>
+                                <div class="kana">{$phrase->sentence_kana}</div>
                             {/if}
-                            <div class="foreign">{$phrase->sentence|nl2br}</div>
+                            <div class="foreign">{$phrase->sentence}</div>
                         </div>
-                        ({$phrase->sentence_translate|nl2br}})
+                        ({$phrase->sentence_translate}})
                     {else}
                         <div>
-                            {$phrase->sentence|nl2br}
+                            {$phrase->sentence}
                         </div>
                     {/if}
                 {/if}
