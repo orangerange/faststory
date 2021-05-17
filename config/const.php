@@ -119,7 +119,7 @@ return array(
 		)
 	),
 	define('INDEX_BODY_COLOR', 'lightblue'),
-	define('PHRASE_MUX_NUM', 100),
+	define('PHRASE_MUX_NUM', 200),
 	define('NotFoundMessage', '不正な遷移です'),
     define('FLG_OFF', 0),
     define('FLG_ON', 1),
@@ -310,11 +310,14 @@ return array(
       data: {
           num: 0,
           phraseNum:0,
+          timeBefore:0,
           isEnd:false,
       },
       mounted() {
+          this.num = document.getElementById("first_phrase_num").value - 1;
           this.phraseNum = document.getElementById("phrase_num").value;
-          this.showMovie();
+          this.timeBefore = document.getElementById("time_before").value;
+          setTimeout(this.showMovie, this.timeBefore * 1000);
       },
       destroyed: function () {
       },

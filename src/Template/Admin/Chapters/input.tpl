@@ -51,11 +51,16 @@
     {if $editFlg}
         {$this->Form->create($chapter, ['method'=>'post', 'url'=>'/admin/chapters/delete', 'onSubmit'=>"return  deleteCheck()"])}
         {$this->Form->control('content_id', ['type'=>'hidden', 'value'=>$contentId])}
+        {$this->Form->control('prefix', ['type'=>'hidden', 'value'=>$chapter->content->prefix])}
         {$this->Form->control('chapter_id', ['type'=>'hidden', 'value'=>$id])}
+        {$this->Form->control('chapter_no', ['type'=>'hidden', 'value'=>$chapter->no])}
         <button type='submit'>このチャプターを削除</button>
         {$this->Form->end()}
         <button type='button' onclick="window.open('/admin/chapters/display/{$chapter->content->prefix|escape}/{$chapter->no|escape}/')">公開側表示を確認</button>
-        <button type='button' onclick="window.open('/admin/chapters/movie/{$chapter->content->prefix|escape}/{$chapter->no|escape}/')">ムービーを表示</button>
+{*        <button type='button' onclick="window.open('/admin/chapters/movie/{$chapter->content->prefix|escape}/{$chapter->no|escape}/')">ムービーを表示</button>*}
+        <button type='button' class='js_show_movie'>ムービーを表示</button>
+        {$this->Form->control('has_no_story_show', ['class'=>'has_no_story_show','type'=>'checkbox'])}
+        {$this->Form->control('time_before',['size'=>50])}
         {$this->Form->create($chapter, ['method'=>'post', 'url'=>'/admin/chapters/front-copy', 'onSubmit'=>"return  frontCopyCheck()"])}
         {$this->Form->control('content_id', ['type'=>'hidden', 'value'=>$contentId])}
         {$this->Form->control('chapter_id', ['type'=>'hidden', 'value'=>$id])}
@@ -63,6 +68,7 @@
         {$this->Form->end()}
     {/if}
     {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>$smarty.const.PHRASE_MUX_NUM])}
+    {$this->Form->control('first_phrase_num', ['type'=>'hidden', 'id'=>'first_phrase_num', 'value'=>1])}
     {$this->Form->control('object_usage_str', ['type'=>'hidden', 'id'=>'object_usage_str', 'value'=> $objectUsageStr])}
     <h1>{$contentName|escape}チャプター{if $editFlg}編集{else}登録{/if}({$chapterNo})</h1>
     <div class="count_display">

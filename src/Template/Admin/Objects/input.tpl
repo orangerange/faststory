@@ -20,16 +20,16 @@
         <th>オブジェクト名</th>
         <td>{$this->Form->input('name', ['type'=>'text', 'label'=>false])}</td>
     </tr>
-    <tr>
-        <th>キャラクター</th>
-        <td class="character_select">
-            {$this->Form->input('character_id',['multiple' => 'select', 'class'=>'character_id', 'label'=>false, 'options'=>$characters])}
-        </td>
-    </tr>
-    <tr>
-        <th>活用場面</th>
-        <td>{$this->Form->input('object_usage', ['multiple'=>'select', 'label'=>false, 'options'=>$actions])}</td>
-    </tr>
+{*    <tr>*}
+{*        <th>キャラクター</th>*}
+{*        <td class="character_select">*}
+{*            {$this->Form->input('character_id',['multiple' => 'select', 'class'=>'character_id', 'label'=>false, 'options'=>$characters])}*}
+{*        </td>*}
+{*    </tr>*}
+{*    <tr>*}
+{*        <th>活用場面</th>*}
+{*        <td>{$this->Form->input('object_usage', ['multiple'=>'select', 'label'=>false, 'options'=>$actions])}</td>*}
+{*    </tr>*}
     <tr>
         <th>パーツ合成</th>
         <td>

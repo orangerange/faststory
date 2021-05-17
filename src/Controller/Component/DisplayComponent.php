@@ -23,7 +23,7 @@ class DisplayComponent extends Component
         $this->_isAdmin = $config['is_admin'];
     }
 
-    public function display($prefix = null, $no, $isMovie = false)
+    public function display($prefix = null, $no, $isMovie = false, $firstPhraseNum = 1, $hasNoStoryShow = false, $timeBefore = 0)
     {
         $Chapters = TableRegistry::getTableLocator()->get('Chapters');
         $Backgrounds = TableRegistry::getTableLocator()->get('Backgrounds');
@@ -59,12 +59,13 @@ class DisplayComponent extends Component
                 $firstBackground = $backgrounds[1];
                 $bodyColor = $firstBackground->get('body_color');
             }
-            $this->getController()->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'bodyColor', 'chapters', 'chapterCount'));
+            $this->getController()->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'bodyColor', 'chapters', 'chapterCount', 'hasNoStoryShow', 'timeBefore'));
             $this->getController()->set(['isAdmin' => $this->_isAdmin]);
         } else {
             throw new NotFoundException(NotFoundMessage);
         }
         if ($isMovie) {
+            $this->getController()->set(compact('firstPhraseNum'));
             $this->getController()->viewBuilder()->setLayout('movie');
             $this->getController()->render($this->_movieTemplate);
         } else {

@@ -1,5 +1,8 @@
 {* 元々読み込んでいたページめくり用jsファイルを、アニメーション用スクリプトを埋め込むために設定ファイル化(ヘルパー化)*}
 {$this->Html->script('config_movie.js', ['block'=>true])}
+{if $hasNoStoryShow}
+    {$this->Html->css('no_story_show', ['block'=>'css'])}
+{/if}
 {$this->Display->baseClassCss()}
 {foreach from=$chapter['phrases'] item=_phrase name=phraseLoop1}
     {if $_phrase->character->css && !$_phrase->character->id|in_array:$characterIds}
@@ -11,6 +14,8 @@
     {/if}
 {/foreach}
 {$this->Form->control('phrase_num', ['type'=>'hidden', 'id'=>'phrase_num', 'value'=>count($chapter['phrases'])])}
+{$this->Form->control('first_phrase_num', ['type'=>'hidden', 'id'=>'first_phrase_num', 'value'=>$firstPhraseNum])}
+{$this->Form->control('time_before', ['type'=>'hidden', 'id'=>'time_before', 'value'=>$timeBefore])}
 <div id="movies">
     {foreach from=$chapter['phrases'] item=_phrase name=phraseLoop2}
         {$this->element('phrase/_movie', ['character'=>$_phrase->character, 'phrase'=>$_phrase, 'noCharacterCssFlg' => true, 'i' => $smarty.foreach.phraseLoop2.iteration])}

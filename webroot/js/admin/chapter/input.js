@@ -49,7 +49,16 @@ $(function () {
         var prefix = $('#prefix').val();
         var chapter_no = $('#chapter-no').val();
         var first_phrase_num = $('#first_phrase_num').val();
-        window.open('/admin/chapters/movie/' + prefix + '/' + chapter_no + '/' + first_phrase_num);
+        var has_no_story_show = 0;
+        if ($('#has-no-story-show').prop("checked")) {
+            has_no_story_show = 1;
+        }
+        var movie_url = '/admin/chapters/movie/' + prefix + '/' + chapter_no + '/' + first_phrase_num + '/' + has_no_story_show;
+        var time_before = $('#time-before').val();
+        if (time_before) {
+            movie_url += '/' + time_before;
+        }
+        window.open(movie_url);
     })
 
     $(document).on('change', '.html', function () {

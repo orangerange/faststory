@@ -34,6 +34,22 @@
 .html_show.phrase_object_chapter_input {
     background: white;
 }
+.phrase_object_chapter_input_left {
+    position:absolute;
+    left:0%;
+    width:5%;
+    height:100%;
+    border-right:solid 0.5px black;
+    z-index:60;
+}
+.phrase_object_chapter_input_right {
+    position:absolute;
+    right:0%;
+    width:5%;
+    height:100%;
+    border-left:solid 0.5px black;
+    z-index:60;
+}
 .thumbnail_html_show {
     border:solid 1px black;
     width: 290px;

@@ -83,8 +83,8 @@ class ChaptersController extends AdminAppController
             if (!$content = $this->Contents->findById($contentId)->first()) {
                 throw new NotFoundException(NotFoundMessage);
             }
-//            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $contentId])->order(['ObjectProducts.id' => 'ASC']);
-            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
+//            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $contentId])->order(['ObjectProducts.template_id' => 'ASC', 'ObjectProducts.id' => 'ASC']);
+            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.template_id' => 'ASC', 'ObjectProducts.id' => 'ASC']);
             $contentName = $content['name'];
             $characters = $this->Characters->find('list')->where(['content_id' => $contentId]);
             $backgrounds = $this->Backgrounds->find('list');
@@ -144,8 +144,8 @@ class ChaptersController extends AdminAppController
                     }
                 }
             }
-//            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $chapter->content_id])->order(['ObjectProducts.id' => 'ASC']);
-            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.id' => 'ASC']);
+//            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $chapter->content_id])->order(['ObjectProducts.template_id' => 'ASC', 'ObjectProducts.id' => 'ASC']);
+            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.template_id' => 'ASC', 'ObjectProducts.id' => 'ASC']);
             $chapterNo = $chapter['no'];
             $contentId = $chapter['content_id'];
             $contentName = $chapter['content']['name'];
@@ -259,8 +259,8 @@ class ChaptersController extends AdminAppController
         $this->Display->display($prefix, $no);
     }
 
-    public function movie($prefix = null, $no) {
+    public function movie($prefix = null, $no = 1, $firstPhraseNo = 1, $hasNoStoryShow = false, $timeBefore = 0) {
         $this->viewBuilder()->setLayout('default');
-        $this->Display->display($prefix, $no, true);
+        $this->Display->display($prefix, $no, true, $firstPhraseNo, $hasNoStoryShow, $timeBefore);
     }
 }
