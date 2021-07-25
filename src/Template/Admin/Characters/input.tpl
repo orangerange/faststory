@@ -28,6 +28,10 @@
         <td>{$this->Form->input('name', ['type'=>'text', 'label'=>false])}</td>
     </tr>
     <tr>
+        <th>キャラクター名表示用</th>
+        <td>{$this->Form->input('name_display', ['type'=>'text', 'label'=>false])}</td>
+    </tr>
+    <tr>
         <th>キャラクター名表示色</th>
         <td>{$this->Form->input('name_color',['type'=>'color', 'label'=>false])}</td>
     </tr>
