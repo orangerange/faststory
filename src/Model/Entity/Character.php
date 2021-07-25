@@ -30,6 +30,7 @@ class Character extends Entity
         'organization_id' => true,
         'rank_id' => true,
         'name' => true,
+        'name_display' => true,
         'name_color' => true,
         'foreign_color' => true,
         'picture' => true,

@@ -14,6 +14,7 @@
  */
 namespace App\Controller\Admin;
 
+use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
@@ -174,4 +175,45 @@ class CharactersController extends AdminAppController
 		$this->render(false,false);
 	}
 
+    public function copyCharacter($characterId)
+    {
+        if (preg_match("/^[0-9]+$/", $characterId)) {
+            if (!$character = $this->Characters->findById($characterId)) {
+                throw new NotFoundException(NotFoundMessage);
+            }
+            $characterData = array(
+                'content_id' => $character->content_id,
+                'organization_id' => $character->organization_id,
+                'rank_id' => $character->rank_id,
+                'name' => $character->name,
+                'name_display' => $character->name_display,
+                'name_color' => $character->name_color,
+                'foreign_color' => $character->foreign_color,
+                'picture' => $character->picture,
+                'dir' => $character->dir,
+                'type' => $character->type,
+                'size' => $character->size,
+                'html' => $character->html,
+                'css' => $character->css,
+                'html_speak' => $character->html_speak,
+                'css_speak' => $character->css_speak,
+                'css_body' => $character->css_body,
+            );
+            $characterData['character_parts'] = array();
+            foreach ($character->character_parts as $characterPart) {
+                $characterData['character_parts'][$characterPart->parts_category_no] ['type'] = $characterPart->type;
+                $characterData['character_parts'][$characterPart->parts_category_no] ['parts_category_no'] = $characterPart->parts_category_no;
+                $characterData['character_parts'][$characterPart->parts_category_no] ['parts_no'] = $characterPart->parts_no;
+                $characterData['character_parts'][$characterPart->parts_category_no] ['parts_css'] = $characterPart->parts_css;
+            }
+            $character = $this->Characters->newEntity($characterData, ['associated' => ['CharacterParts']]);
+            $this->Characters->save($character);
+            return $this->redirect(
+                ['controller' => 'characters', 'action' => 'edit', $character->id]
+            );
+        } else {
+            throw new NotFoundException(NotFoundMessage);
+        }
+        $this->render(false,false);
+    }
 }

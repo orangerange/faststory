@@ -69,6 +69,9 @@
                     </th>
                     {if $character->id}
                         <th>
+                            <button type="button" onclick="window.open('/admin/characters/copy-character/{$character->id|escape}')">キャラクターを複製</button>
+                        </th>
+                        <th>
                             <button type="button" onclick="window.open('/admin/objects/copy-face/{$character->id|escape}')">オブジェクトとして複製</button>
                         </th>
                     {/if}
