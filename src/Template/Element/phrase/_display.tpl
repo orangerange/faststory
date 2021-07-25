@@ -14,7 +14,17 @@
             <div class="phrase">
                     <div class="{$nameClass}"
                          style="color:{if $phrase->speaker_name}{$phrase->speaker_color}{else}{$character->name_color}{/if}">
-                        <b>{if $phrase->speaker_name}{$phrase->speaker_name|escape}{else}{$character->name|escape}{/if}</b>
+                        <b>
+                            {if $phrase->speaker_name}
+                                {$phrase->speaker_name|escape}
+                            {else}
+                                {if $character->name_display}
+                                    {$character->name_display|escape}
+                                {else}
+                                    {$character->name|escape}
+                                {/if}
+                            {/if}
+                        </b>
                     </div>
                 {if $sentence}
                     {$sentence|nl2br}
