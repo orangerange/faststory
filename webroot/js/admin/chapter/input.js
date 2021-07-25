@@ -246,7 +246,13 @@ $(function () {
 
     $('.sentence').bind('keydown keyup keypress change',function() {
         var thisValueLength = $(this).val().length;
+        var movieTime = Math.ceil(thisValueLength / 6);
+        var movieTimeFast = Math.ceil(thisValueLength / 10);
         $(this).closest('.input').prevAll().find('.count').html(thisValueLength);
+        var minus_num = Number($(this).closest('.input').nextAll().find('.movie_time').val());
+        var plus_num = Number(movieTime);
+        calc_movie_time_sum(true, minus_num, plus_num);
+        $(this).closest('.input').nextAll().find('.movie_time').val(movieTime);
         // 発話フラグが立っている場合
         if ($(this).closest('.input').nextAll('.checkbox').find('.character_object').prop('checked')) {
             var sentence = $(this).val();
