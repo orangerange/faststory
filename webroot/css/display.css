@@ -29,6 +29,9 @@
     width: 290px;
     height:145px;
     position:relative;
+    /*overflow:hidden;*/
+}
+.phrase_object {
     overflow:hidden;
 }
 .html_show.phrase_object_chapter_input {
