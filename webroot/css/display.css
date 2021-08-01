@@ -31,11 +31,9 @@
     position:relative;
     /*overflow:hidden;*/
 }
-.phrase_object {
-    overflow:hidden;
-}
 .html_show.phrase_object_chapter_input {
     background: white;
+    overflow:hidden;
 }
 .phrase_object_chapter_input_left {
     position:absolute;

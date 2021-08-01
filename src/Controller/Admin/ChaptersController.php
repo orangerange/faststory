@@ -102,8 +102,9 @@ class ChaptersController extends AdminAppController
                 // トランザクション開始
                 $connection->begin();
                 try {
-                    if ($this->Chapters->saveOrFail($chapter)) {
+                    if ($result = $this->Chapters->saveOrFail($chapter)) {
                         $this->Flash->success(__('新規登録しました'));
+                        $connection->commit();
                         return $this->redirect(['controller' => 'chapters', 'action' => 'index', $contentId]);
                     } else {
                         $this->Flash->error(__('新規登録に失敗しました'));
@@ -174,10 +175,10 @@ class ChaptersController extends AdminAppController
                     $this->Phrases->deleteByChapterId($id);
                     if ($this->Chapters->saveOrFail($chapter)) {
                         $this->Flash->success(__('更新しました'));
+                        $connection->commit();
                     } else {
                         $this->Flash->error(__('更新に失敗しました'));
                     }
-                    $connection->commit();
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                     // ロールバック
