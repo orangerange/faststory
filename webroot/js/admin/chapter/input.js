@@ -93,12 +93,12 @@ $(function () {
           $(this).prevAll().find('textarea').val('');
           $(this).prevAll().find('select').val('');
           //イラストクリア
-          $(this).prevAll('.html_show').html('');
+          $(this).prevAll('.html_show').html('<div class="phrase_object_chapter_input_left"></div><div class="phrase_object_chapter_input_right"></div>');
           $(this).prevAll('.html_show').find('style').html('');
     })
     $(document).on('click', '.object_clear', function(){
           //イラストクリア
-          $(this).prevAll('.html_show').html('');
+         $(this).prevAll('.html_show').html('<div class="phrase_object_chapter_input_left"></div><div class="phrase_object_chapter_input_right"></div>');
           $(this).prevAll('.css_show').find('style').html('');
           //イラストhtml・cssクリア
         $(this).nextAll('.input').find('.html').val('');
@@ -162,7 +162,7 @@ $(function () {
                         })
                         var html_input = html_selector.val();
                         var css_input = css_selector.val();
-                        html = html + html_input;
+                        html = html + html_input + '<div class="phrase_object_chapter_input_left"></div><div class="phrase_object_chapter_input_right"></div>';
                         css = css + css_input;
                         html_show_selector.html(html);
                         // 文章置き換え
@@ -210,7 +210,7 @@ $(function () {
         } else {
             html_selector.val('');
             css_selector.val('');
-            html_show_selector.html('');
+            html_show_selector.html('<div class="phrase_object_chapter_input_left"></div><div class="phrase_object_chapter_input_right"></div>');
             css_show_selector.find('style').html('');
         }
     })
@@ -305,7 +305,7 @@ $(function () {
         var css_input = $('#phrases-'+phrase_no+'-css').val();
 
         var css_end_add = '/*.object_'  + object_no + '_' + object_id + '_end*/';
-        var html = html_select + html_input;
+        var html = html_select + html_input + '<div class="phrase_object_chapter_input_left"></div><div class="phrase_object_chapter_input_right"></div>';
         var css  = css_add + css_select + css_end_add + css_input ;
 
         $('#phrases-'+phrase_no+'-html').val(html);
