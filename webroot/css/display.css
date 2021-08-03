@@ -34,6 +34,8 @@
 .html_show.phrase_object_chapter_input {
     background: white;
     overflow:hidden;
+     border-left: solid 14.5px rgba(0, 0, 0, .3);
+     border-right: solid 14.5px rgba(0, 0, 0, .3);
 }
 .phrase_object_chapter_input_left {
     position:absolute;
