@@ -39,19 +39,14 @@ class PartsController extends AdminAppController
 	}
 
 	public function index($templateId=null) {
-		if (isset($templateId)) {
-			if (array_key_exists($templateId, Configure::read('object_template'))) {
-				$template = Configure::read('object_template')[$templateId];
-			}
-			else {
-				if (!$this->ObjectTemplates->exists(['id'=>$templateId])) {
-					throw new NotFoundException(NotFoundMessage);
-				}
-				$template = $this->ObjectTemplates->findById($templateId)->first();
-			}
-		} else {
-			throw new NotFoundException(NotFoundMessage);
-		}
+        if (isset($templateId)) {
+            if (!$this->ObjectTemplates->exists(['id' => $templateId])) {
+                throw new NotFoundException(NotFoundMessage);
+            }
+            $template = $this->ObjectTemplates->findById($templateId)->first();
+        } else {
+            throw new NotFoundException(NotFoundMessage);
+        }
 		$parts = $this->Parts->findByTemplateId($templateId);
 		$this->set(compact('template', 'templateId', 'parts', 'script'));
 	}
