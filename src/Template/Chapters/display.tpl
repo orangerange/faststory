@@ -3,6 +3,7 @@
 {*{$this->Html->script('config.js', ['block'=>true])}*}
 {$this->Html->script('copy_objects.js', ['block'=>true])}
 {$this->Display->baseClassCss()}
+{$this->Display->css('', 'character-image', 'object', 12.5, 25)}
 {assign var='characterIds' value=","|explode:""}
 {capture name="garbage"}{$characterIds|@array_pop}{/capture}
 {foreach from=$chapter['phrases'] item=_phrase name=phraseLoop1}

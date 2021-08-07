@@ -4,6 +4,7 @@
     {$this->Display->css($_css.css)}
 {/foreach}
 <div><a href='/admin/parts/index/0/{$config->object_type_key['face']}'>パーツ一覧</a></div>
+{$this->Display->css('', null, 'object', 25, 50)}
 <h1>キャラクター{if $editFlg}編集{else}登録{/if}</h1>
 {$this->Form->create($character,['enctype' => 'multipart/form-data'])}
 <table>
