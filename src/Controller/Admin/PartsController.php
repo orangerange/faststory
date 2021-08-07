@@ -60,11 +60,7 @@ class PartsController extends AdminAppController
 					throw new NotFoundException(NotFoundMessage);
 				}
 				$templateId = $part->template_id;
-				if (array_key_exists($templateId, Configure::read('object_template'))) {
-					$template = Configure::read('object_template')[$templateId];
-				} else {
-					$template = $this->ObjectTemplates->findById($templateId)->first();
-				}
+                $template = $this->ObjectTemplates->findById($templateId)->first();
 
 				$baseCss = $this->request->getData('base_css');
 				if (isset($baseCss)) {
@@ -138,11 +134,7 @@ class PartsController extends AdminAppController
 					throw new NotFoundException(NotFoundMessage);
 				}
 				$templateId = $part->template_id;
-				if (array_key_exists($templateId, Configure::read('object_template'))) {
-					$template = Configure::read('object_template')[$templateId];
-				} else {
-					$template = $this->ObjectTemplates->findById($templateId)->first();
-				}
+                $template = $this->ObjectTemplates->findById($templateId)->first();
 
 				$baseCss = $this->request->getData('base_css');
 				if (isset($baseCss)) {
