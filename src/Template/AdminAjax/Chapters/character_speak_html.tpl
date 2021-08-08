@@ -1,5 +1,5 @@
 {if $characterHtmlSum}
-<div class="character_speak_{$phraseNo}">
+<div class="character_speak_{$phraseNo}_{$characterId}">
     {$characterHtmlSum}
 </div>
 {/if}
