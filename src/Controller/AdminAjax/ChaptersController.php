@@ -94,7 +94,9 @@ class ChaptersController extends AdminAppController
                         $characterSpeakLayout = $layout;
                     }
                 } else {
-                    $characterSpeakLayout = $layout;
+                    if ($layout['character_id'] == $characterId) {
+                        $characterSpeakLayout = $layout;
+                    }
                 }
             }
             $characterCssSumHead = '.character_speak_' . $phraseNo . '{ width:100%; height:100%; position:absolute; ';
@@ -157,7 +159,7 @@ class ChaptersController extends AdminAppController
     private function _makeBaseCss($baseClass, $width, $height, $left, $top, $right, $bottom, $rotate) {
         $this->autoRender = false;
         $baseCss = $baseClass . '{ ' . 'width:' . $width . '%; ' . ' height:' . $height . '%; position:absolute;';
-
+        $baseCss .= '--object_width:calc(var(--phrase_object_width) * ' .  $width / 100 . '); --object_height:calc(var(--phrase_object_height) * ' . $height / 100 . ');';
         if (isset($left) && $left != '') {
             $baseCss .= 'left:' . $left . '%; ';
         } elseif(isset($right) && $right != '') {
