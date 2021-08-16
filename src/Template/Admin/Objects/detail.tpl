@@ -1,4 +1,5 @@
 <h1>オブジェクト詳細</h1>
+{$this->Display->css('', null, 'object', $object->object_template->width, $object->object_template->height)}
 <div class='css css_sum'>
     {$this->Display->css($object->css)}
 </div>
