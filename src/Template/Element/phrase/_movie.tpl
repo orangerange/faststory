@@ -1,4 +1,4 @@
-    {if $phrase->html && $phrase->css}
+    {if ($phrase->html && $phrase->css) || $phrase->picture_content}
         <div id='js_movie_{$i|escape}' class='movie movie_{$i|escape}' data-time="{$phrase->movie_time}" data-no="{$i}" style='{if $phrase->color}background-color:{$phrase->color};{/if}{if $phrase->picture_content}background-image: url("/chapters/picture/{$phrase->id|escape}/1");background-size: cover;{/if}{if $i != $firstPhraseNum}visibility:hidden{/if}'>
             {$phrase->html}
         </div>

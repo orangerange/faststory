@@ -110,7 +110,7 @@ class ChaptersController extends AdminAppController
             $characterCssSum = $characterCssSumHead . $characterCssSum;
         }
 
-        $css = $characterCssSum != '' ? "/*.character_speak_{$phraseNo}_{$characterId}_start*/" . $characterCssSum . "/*.character_speak_{$phraseNo}_{$characterId}_end*/"  . $cssSum: $cssSum;
+        $css = $characterCssSum != '' ? "/*.character_speak_{$phraseNo}_{$characterId}_start*/" . $characterCssSum . "/*.character_speak_{$phraseNo}_end*/"  . $cssSum: $cssSum;
 
         $result = ['html' => $html, 'css' => $css, 'badge_left_html' => $badgeLeftHtml, 'badge_right_html' => $badgeRightHtml, 'object_class_names' => $objectClassNames];
 
@@ -156,10 +156,12 @@ class ChaptersController extends AdminAppController
         return $objectHtml;
     }
 
-    private function _makeBaseCss($baseClass, $width, $height, $left, $top, $right, $bottom, $rotate) {
+    private function _makeBaseCss($baseClass, $width, $height, $left, $top, $right, $bottom, $rotate, $backgroundImg) {
         $this->autoRender = false;
         $baseCss = $baseClass . '{ ' . 'width:' . $width . '%; ' . ' height:' . $height . '%; position:absolute;';
         $baseCss .= '--object_width:calc(var(--phrase_object_width) * ' .  $width / 100 . '); --object_height:calc(var(--phrase_object_height) * ' . $height / 100 . ');';
+        if (isset($backgroundImg))
+        $baseCss .= 'background-image: url(' . $backgroundImg .'); background-size: cover;';
         if (isset($left) && $left != '') {
             $baseCss .= 'left:' . $left . '%; ';
         } elseif(isset($right) && $right != '') {
@@ -203,7 +205,7 @@ class ChaptersController extends AdminAppController
         }
         //css生成
         $css = $actionLayout['object_product']['css'];
-        if ($actionLayout['object_product']['template_id'] == OBJECT_TEMPLATE_BODY) {
+        if ($actionLayout['object_product']['template_id'] == OBJECT_TEMPLATE_BODY  || $actionLayout['object_product']['template_id'] == OBJECT_TEMPLATE_NOTEBOOK) {
             //階級章調整
             $rankBadges = $this->ObjectProducts->findRankBadges($character);
             if ($rankBadges['badge_left']) {
@@ -224,8 +226,12 @@ class ChaptersController extends AdminAppController
                 $badgeRightHtml = $rankBadges['badge_left']->html;
             }
         }
+        $backgroundImg = null;
+        if (!empty($actionLayout['object_product']['picture_content'])) {
+            $backgroundImg = '/objects/picture/' . $objectId;
+        }
         $css = AppUtility::addPreClassToCss($css, '.' . $objectClassName . '.object_' . $objectId);
-        $css = "/*." . $objectClassName . ".object_{$objectId}_start*/" . $this->_makeBaseCss('.' . $objectClassName . '.object_' . $objectId, $width, $height, $left, $top, $right, $bottom, $rotate) . ' ' . $css . "/*." . $objectClassName .  ".object_{$objectId}_end*/";
+        $css = "/*." . $objectClassName . ".object_{$objectId}_start*/" . $this->_makeBaseCss('.' . $objectClassName . '.object_' . $objectId, $width, $height, $left, $top, $right, $bottom, $rotate, $backgroundImg) . ' ' . $css . "/*." . $objectClassName .  ".object_{$objectId}_end*/";
         if (!empty($actionLayout['is_character'])) {
             $characterCssSum .= $css;
         } else {
