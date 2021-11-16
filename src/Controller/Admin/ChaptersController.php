@@ -163,16 +163,12 @@ class ChaptersController extends AdminAppController
                 $result = $this->Phrases->unsetEmptyDatum($postData['phrases']);
                 $postData['phrases'] = $result['datum'];
                 $openFlg = $result['open_flg'];
-                //更新処理により削除されるレコードのID
-                $deleteIds = $result['delete_ids'];
                 $chapter = $this->Chapters->patchEntity($chapter, $postData);
 
                 $connection = ConnectionManager::get('default');
                 // トランザクション開始
                 $connection->begin();
                 try {
-                    //最初に、更新で消えるphrasesレコードをを全て物理削除
-                    $this->Phrases->deleteByChapterId($id);
                     if ($this->Chapters->saveOrFail($chapter)) {
                         $this->Flash->success(__('更新しました'));
                         $connection->commit();

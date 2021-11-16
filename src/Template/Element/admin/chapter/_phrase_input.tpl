@@ -2,6 +2,7 @@
     <div class="phrase_num_show">{$i + 1}</div>
     <button class='insert' type='button'>挿入</button>
     {$this->Form->control('phrase_no',['type'=>'hidden', 'class'=>'phrase_no', 'value'=>$i])}
+    {$this->Form->control('phrases.'|cat:$i|cat:'.id',['type'=>'hidden'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.background_id',['options'=>$backgrounds, 'empty'=>'--', 'class' => 'background_id'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.character_id',['options'=>$characters, 'empty'=>'--', 'class' => 'character_id'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.speaker_name')}
