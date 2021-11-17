@@ -9,24 +9,23 @@ $(function () {
             data: {
             },
         }).done(function (data, status, jqXHR) {
-            // var html = data.html;
-            console.log(data);
-            // var popupOutside = document.getElementById("popup_outside");
-            // popupOutside.innerHTML = html;
-            // var popup = document.getElementById("js-popup");
-            // popup.classList.add("is-show");
-            //
-            // var blackBg = document.getElementById("js-black-bg");
-            // var closeBtn = document.getElementById("js-close-btn");
-            // closePopUp(blackBg);
-            // closePopUp(closeBtn);
-            // function closePopUp(elem) {
-            //     if (!elem)
-            //         return;
-            //     elem.addEventListener("click", function () {
-            //         popupOutside.innerHTML = '';
-            //     })
-            // }
+            var html = data.html;
+            var popupOutside = document.getElementById("popup_outside");
+            popupOutside.innerHTML = html;
+            var popup = document.getElementById("js-popup");
+            popup.classList.add("is-show");
+
+            var blackBg = document.getElementById("js-black-bg");
+            var closeBtn = document.getElementById("js-close-btn");
+            closePopUp(blackBg);
+            closePopUp(closeBtn);
+            function closePopUp(elem) {
+                if (!elem)
+                    return;
+                elem.addEventListener("click", function () {
+                    popupOutside.innerHTML = '';
+                })
+            }
         }).fail(function (jqXHR, status, error) {
             console.log(jqXHR);
             console.log(status);

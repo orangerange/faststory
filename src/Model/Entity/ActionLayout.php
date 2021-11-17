@@ -42,6 +42,8 @@ class ActionLayout extends Entity
         'right_perc' => true,
         'bottom_perc' => true,
         'rotate' => true,
+        'z_index' => true,
+        'is_reverse' => true,
         'object_products' => true,
     ];
 }

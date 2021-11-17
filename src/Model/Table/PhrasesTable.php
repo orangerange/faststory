@@ -2,10 +2,9 @@
 namespace App\Model\Table;
 
 use ArrayObject;
-use Cake\Filesystem\File;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
-use Cake\ORM\Query;
+use Cake\Filesystem\File;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -85,7 +84,7 @@ class PhrasesTable extends Table
 
 	public function isEmpty($data) {
 
-		return  empty($data['sentence']) && empty($data['picture']['tmp_name']) && empty($data['html']) && empty($data['css']) && empty($data['js'])&& empty($data['picture_content']) && empty($data['mime']);
+		return  empty($data['id']) && empty($data['sentence']) && empty($data['picture']['tmp_name']) && empty($data['html']) && empty($data['css']) && empty($data['js'])&& empty($data['picture_content']) && empty($data['mime']);
 	}
 
 	public function unsetEmptyDatum($datum) {

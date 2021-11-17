@@ -34,6 +34,13 @@
                 <td>
                     rotate:{$this->Form->input('action_layouts.'|cat:$i|cat:'.rotate',['class'=>'rotate', 'label'=>false, 'type'=>'text'])}
                 </td>
+                <td>
+                    z_index:{$this->Form->input('action_layouts.'|cat:$i|cat:'.z_index',['class'=>'z_index', 'label'=>false, 'type'=>'text'])}
+                </td>
+                <td>
+                    is_reverse:{$this->Form->input('action_layouts.'|cat:$i|cat:'.is_reverse',['class'=>'is_reverse', 'label'=>false, 'type'=>'checkbox'])}
+                </td>
+
             </tr>
         </table>
     </td>

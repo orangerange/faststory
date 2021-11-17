@@ -152,14 +152,24 @@ $(function () {
                     var badge_right_html = data.badge_right_html;
                     if (html && css) {
                         var object_class_names = data.object_class_names;
+                        var object_counts = {};
                         $.each(object_class_names, function(index, value) {
-                            var object_no = $('#js-popup').find('.object_no_' + index).val();
-                            html = wholeReplace(html , value + ' object', value + ' object_'  + object_no);
-                            css = wholeReplace(css , '.' + value + '.object', '.' + value + '.object_'  + object_no);
+                            var object_id = value.object_id;
+                            var class_name = value.class_name;
+                            if (!object_counts[object_id]) {
+                                object_counts[object_id] = 1;
+                            } else {
+                                object_counts[object_id] = Number(object_counts[object_id]) + 1;
+                            }
+                            var object_no = $('#js-popup').find('.object_no_' + object_id).val();
+                            var count = object_counts[object_id];if(class_name =='arm') {alert(count);}
+                            html = wholeReplace(html , class_name + ' object-'  + count, class_name + ' object_'  +  object_no);
+                            css = wholeReplace(css , '.' + class_name + '.object-'  + count, '.' + class_name + '.object_'  +  object_no);
                             // オブジェクトNoのインクレメント
                             object_no++;
-                            $('#js-popup').find('.object_no_' + index).val(object_no);
+                            $('#js-popup').find('.object_no_' + object_id).val(object_no);
                         })
+                        console.log(object_counts);
                         var html_input = html_selector.val();
                         var css_input = css_selector.val();
                         html = html + html_input;
@@ -221,7 +231,7 @@ $(function () {
         var phrase_num = $('#phrase_num').val();
         for (var i = phrase_num -2 ; i >= phrase_no; i--) {
             var j = i+1;
-            var columns = ['character_id', 'speaker_name', 'speaker_color', 'sentence', 'sentence_kana', 'sentence_translate', 'picture_del', 'html', 'css', 'js', 'background_id', 'object_usage', 'character_object', 'movie_time', 'color'];
+            var columns = ['id', 'character_id', 'speaker_name', 'speaker_color', 'sentence', 'sentence_kana', 'sentence_translate', 'picture_del', 'html', 'css', 'js', 'background_id', 'object_usage', 'character_object', 'movie_time', 'color'];
             $.each(columns, function (index, value) {
                 $('*[name="phrases[' + j + ']['+ value +']"]').val($('*[name="phrases[' + i + ']['+ value +']"]').val());
                 $('*[name="phrases[' + i + ']['+ value +']"]').val('');
@@ -231,7 +241,7 @@ $(function () {
                             'background-color': $('*[name="phrases[' + i + ']['+ value +']"]').val()
                         });
                         $('#html_show_' + i).css({
-                            'background-color': ''
+                            'background-color': 'white'
                         });
                     }
                 }

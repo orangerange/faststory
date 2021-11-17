@@ -26,6 +26,8 @@ use Cake\Http\Exception\NotFoundException;
  * This controller will render views from Template/Pages/
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
+ * @property \App\Model\Table\PartsTable $Parts
+ * @property \App\Model\Table\PartCategoriesTable $PartCategories
  */
 class PartsController extends AdminAppController
 {
@@ -126,7 +128,6 @@ class PartsController extends AdminAppController
 	}
 
 	public function editCopy($partsCategoryNo = null, $partsNo = null) {
-		$partCategories = $this->PartCategories->find('list', ['keyField'=>'id', 'valueField'=>'name'])->order(['sort_no'=>'ASC'])->all();
 		//複製時
 		if (isset($partsCategoryNo) && isset($partsNo)) {
 			if (preg_match("/^[0-9]+$/", $partsCategoryNo) && preg_match("/^[0-9]+$/", $partsNo)) {
@@ -135,7 +136,7 @@ class PartsController extends AdminAppController
 				}
 				$templateId = $part->template_id;
                 $template = $this->ObjectTemplates->findById($templateId)->first();
-
+                $partCategories = $this->PartCategories->findListByTemplateId($templateId);
 				$baseCss = $this->request->getData('base_css');
 				if (isset($baseCss)) {
 					$part->css = $baseCss;
