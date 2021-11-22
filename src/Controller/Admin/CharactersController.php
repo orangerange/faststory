@@ -139,7 +139,6 @@ class CharactersController extends AdminAppController
 //						$del_file->delete();
 //					}
 //				}
-				$this->CharacterParts->deleteByCharacterId($id);
 				if ($this->Characters->save($character)) {
 					$this->Flash->success(__('更新しました'));
 				} else {

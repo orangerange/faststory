@@ -156,6 +156,7 @@
                                                     'type'=>'textarea',
                                                     'label'=>false
                                             ])}
+                            {$this->Form->input('character_parts.'|cat:$_value->id|cat:'.id', ['class'=>'id','type'=>'hidden'])}
                             <input type='hidden' class='parts_category_no' value={$_value->id|escape}>
                             <button type='button' class='copy_character_parts'>複製</button>
                             <button type='button' class='edit_character_parts'>編集</button>

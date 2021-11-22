@@ -142,8 +142,6 @@ class ObjectsController extends AdminAppController
             // アクションレイアウトPOST値に前のデータが残っているのを解消
             unset($object['action_layouts']);
             $object = $this->ObjectProducts->patchEntity($object, $data);
-			$this->ObjectParts->deleteByObjectId($id);
-			$this->ActionLayouts->deleteByObjectId($id);
 			if ($this->ObjectProducts->save($object, $data)) {
 				$this->Flash->success(__('更新しました'));
 			} else {
