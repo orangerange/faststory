@@ -26,7 +26,7 @@ class AppUtility {
     public function createObjectLayoutByCss($css) {
         $layout = array();
         // 発話
-        $pattern = "/.character_speak_[0-9]+{.*?}/";
+        $pattern = "/.character_speak_[0-9]+_[0-9]+{.*?}/";
         if (!preg_match_all($pattern, $css, $matches)) {
 //            return false;
         }
