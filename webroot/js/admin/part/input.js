@@ -4,7 +4,10 @@ $(function () {
     })
 
     $(document).on('change', '.css_input', function () {
-        $('.css').children('style').html($(this).val().replace('　', ''));
+        $('.css').children('style').html($(this).val().replace('　', '') + $('.keyframe_input').val().replace('　', ''));
+    })
+    $(document).on('change', '.keyframe_input', function () {
+        $('.css').children('style').html($(this).val().replace('　', '') + $('.css_input').val().replace('　', ''));
     })
     $(document).on('change', '.parts_category_no', function () {
         var parts_category_no = $(this).val();

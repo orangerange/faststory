@@ -3,6 +3,7 @@ $(function () {
     $.each(category_ids, function (index, val) {
     });
     var css_obj = $.parseJSON($("#css-string").val());
+    var keyframe_obj = $.parseJSON($("#keyframe-string").val());
 
     //初期htmlの設定
     var html_sum = $('.parts_sum').html().replace('　', '');
@@ -40,15 +41,21 @@ $(function () {
     // });
 
     //パーツ毎cssの変更
-    $(document).on("change", ".parts_css", function () {
+    $(document).on("change", ".parts_css,.parts_keyframe", function () {
         var css_sum = '';
+        var keyframe_sum = '';
         $.each(category_ids, function (index, val) {
             if ($('.parts_css_' + val).val() != '') {
                 css_sum += $('.parts_css_' + val).val();
             }
+            if ($('.parts_keyframe_' + val).val() != '') {
+                keyframe_sum += $('.parts_keyframe_' + val).val();
+            }
         });
         $(".css_input")
                 .val(css_sum.replace("　", ""));
+        $(".keyframe_input")
+            .val(keyframe_sum.replace("　", ""));
         var css_sum_add_class = addPreClassToCss(
                 css_sum
                 .replace("　", ""),
@@ -57,6 +64,9 @@ $(function () {
         $(".css_sum")
                 .find("style")
                 .html(css_sum_add_class);
+        $(".keyframe_sum")
+            .find("style")
+            .html(keyframe_sum);
     });
 
     //合成html・cssの直接編集
@@ -116,17 +126,24 @@ $(function () {
         $('.parts_'+parts_category_no).val(parts_no);
         var html = $(this).closest('td').find('.object_input').html().replace('　', '');
         var css = css_obj[parts_category_no][parts_no];
+        var keyframe = keyframe_obj[parts_category_no][parts_no];
         $('.object_input_' + parts_category_no).html(html);
-        $('.css_' + parts_category_no).find('style').html(css);
+        $('.css_' + parts_category_no).find('style').html(css + keyframe);
         $('.parts_css_'+ parts_category_no).val(css);
+        $('.parts_keyframe_'+ parts_category_no).val(keyframe);
         //その時点における全体cssを取得
          var css_sum ='';
+         var keyframe_sum ='';
          $.each(category_ids, function (index, val) {
             if ($('.parts_css_' + val).val() != '') {
                 css_sum += $('.parts_css_' + val).val();
             }
+             if ($('.keyframe_css_' + val).val() != '') {
+                 keyframe_sum += $('.parts_keyframe_' + val).val();
+             }
         });
         $('.css_input').val(css_sum);
+        $('.keyframe_input').val(keyframe_sum);
         var css_sum_add_class = addPreClassToCss(
                 css_sum
                 .replace('　', ''),
@@ -135,6 +152,9 @@ $(function () {
         $('.css_sum')
                 .find('style')
                 .html(css_sum_add_class);
+        $('.keyframe_sum')
+            .find('style')
+            .html(keyframe_sum);
         var parts_class = $(this)
                 .closest('td')
                 .find('.parts_class')
@@ -153,17 +173,24 @@ $(function () {
         var parts_class = $(this).closest('td').find('.parts_class').val();
         var html = '<div class="' + parts_class + '"></div>';
         var css = '';
+        var keyframe = '';
         $('.object_input_' + parts_category_no).html(html);
         $('.css_' + parts_category_no).find('style').html(css);
         $('.parts_css_'+ parts_category_no).val(css);
-        //その時点における全体cssを取得
+        $('.parts_keyframe_'+ parts_category_no).val(keyframe);
+        //その時点における全体css,keyframeを取得
          var css_sum ='';
+         var keyframe_sum ='';
          $.each(category_ids, function (index, val) {
             if ($('.parts_css_' + val).val() != '') {
                 css_sum += $('.parts_css_' + val).val();
             }
+             if ($('.parts_keyframe_' + val).val() != '') {
+                 keyframe_sum += $('.parts_keyframe_' + val).val();
+             }
         });
         $('.css_input').val(css_sum);
+        $('.keyframe_input').val(keyframe_sum);
         var css_sum_add_class = addPreClassToCss(
                 css_sum
                 .replace('　', ''),

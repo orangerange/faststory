@@ -133,6 +133,7 @@ class PartsTable extends Table
 	public function moldSetData($data, $inputFlg=false) {
 		$data['html'] = str_replace('　', '', $data['html']);
 		$data['css'] = str_replace('　', '', $data['css']);
+		$data['keyframe'] = str_replace('　', '', $data['keyframe']);
 		if (isset($data['parts_category_no']) && $inputFlg) {
 			$data['parts_no'] = $this->findNextPartsNoByPartsCategoryNo($data['parts_category_no']);
 		}

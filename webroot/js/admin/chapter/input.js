@@ -303,12 +303,17 @@ $(function () {
 
         var html_select = deleteSpace($(this).closest('td').find('.object_input').html());
         html_select = wholeReplace(html_select , 'object_' + object_id, class_name + ' object object_'  + object_no + '_' + object_id)
-        var css_select = deleteSpace($(this).closest('td').find('style').html());
+        var css_select = deleteSpace($(this).closest('td').find('.css').find('style').html());
+        var keyframe_select = deleteSpace($(this).closest('td').find('.keyframe').find('style').html());
+        var no_keyframe = $(this).closest('td').find('.no_keyframe').prop('checked');
         css_select = wholeReplace(css_select , 'object_' + object_id, 'object_' + object_no + '_' + object_id);
 
         var css_add = '/*.object_'  + object_no + '_' + object_id + '_start*/' + '.object_'  + object_no + '_' + object_id + '{position:absolute; width:' + width + '%; height:' + height + '%; --object_width:calc(var(--phrase_object_width) * ' + width / 100 + '); --object_height:calc(var(--phrase_object_height) * ' + height / 100 + ');';
         if (background_image_url) {
             css_add += 'background-image: url(' + background_image_url + '); background-size: cover;';
+        }
+        if (!no_keyframe) {
+            css_add += keyframe_select;
         }
         css_add += '}';
 
@@ -357,6 +362,8 @@ $(function () {
             var phrase_no = $(this).parent().children('.phrase_no').val();
             var object_id = $(this).parent().children('.object_id').val();
             var object_no = $(this).parent().children('.object_no').val();
+            var character_id = $(this).parent().children('.character_id').val();
+            alert(character_id);
 
             var object_class = '';
             var speak_flg = false;
@@ -365,7 +372,7 @@ $(function () {
                 object_class = '.object_' + object_no + '_' + object_id;
             // それ以外(発話オブジェクト)
             } else {
-                object_class = '.character_speak_' + phrase_no;
+                object_class = '.character_speak_' + phrase_no + '_' + character_id;
                 speak_flg = true;
             }
             var html_show_id = '#html_show_' + phrase_no;

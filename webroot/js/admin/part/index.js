@@ -36,6 +36,29 @@ $(function() {
                 $(this)
                     .val()
                     .replace("　", "")
+                +
+                $(this)
+                    .closest("td")
+                    .find(".keyframe_input")
+                    .val()
+                    .replace("　", "")
+            );
+    });
+
+    $(document).on("change", ".keyframe_input", function() {
+        $(this)
+            .closest("td")
+            .find("style")
+            .html(
+                $(this)
+                    .val()
+                    .replace("　", "")
+                +
+                $(this)
+                    .closest("td")
+                    .find(".css_input")
+                    .val()
+                    .replace("　", "")
             );
     });
 });

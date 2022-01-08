@@ -62,7 +62,7 @@ class ObjectsController extends AdminAppController
 		}
 		$template = $this->ObjectTemplates->findById($templateId)->first();
 		$contents = $this->Contents->find('list')->order(['id'=>'ASC']);
-		$css = $this->Parts->find()->select('css')->where(['template_id'=>$templateId])->order(['id'=>'ASC']);
+		$css = $this->Parts->find()->select(['css', 'keyframe'])->where(['template_id'=>$templateId])->order(['id'=>'ASC']);
 		$partCategories = $this->PartCategories->findByTemplateId($templateId);
 //        $characters = $this->Characters->find('list')->where(['content_id'=>$template->content_id]);
         $characters = $this->Characters->find('list');
@@ -115,16 +115,19 @@ class ObjectsController extends AdminAppController
 		$templateId = $object->template_id;
 		$template = $this->ObjectTemplates->findById($templateId)->first();
 		$contents = $this->Contents->find('list');
-		$css = $this->Parts->find()->select('css')->where(['template_id' => $templateId])->order(['id' => 'ASC']);
+		$css = $this->Parts->find()->select(['css', 'keyframe'])->where(['template_id' => $templateId])->order(['id' => 'ASC']);
 		$partCategories = $this->PartCategories->findByTemplateId($templateId);
 		$parts = [];
 		$partsCss = [];
+		$partsKeyframe = [];
 		foreach ($partCategories as $_key => $_value) {
 			$parts[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'html'])->where(['parts_category_no' => $_value->id])->toArray();
 			$partsCss[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'css'])->where(['parts_category_no' => $_value->id]);
-            $partsPicture[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'id'])->where(['parts_category_no'=>$_value->id, 'picture_content IS NOT'=>NULL])->toArray();
+			$partsKeyframe[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'keyframe'])->where(['parts_category_no' => $_value->id]);
+			$partsPicture[$_value->id] = $this->Parts->find('list', ['keyField' => 'parts_no', 'valueField' => 'id'])->where(['parts_category_no'=>$_value->id, 'picture_content IS NOT'=>NULL])->toArray();
 		}
 		$cssString = json_encode($partsCss);
+		$keyframeString = json_encode($partsKeyframe);
 		if ($this->request->is(['patch', 'post', 'put'])) {
 			$data = $this->request->getData();
             $data = $this->ObjectProducts->unsetEmptyDatum($data);
@@ -148,7 +151,7 @@ class ObjectsController extends AdminAppController
 				$this->Flash->error(__('更新に失敗しました'));
 			}
 		}
-		$this->set(compact('templateId', 'template', 'contents', 'characters', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString', 'actions', 'partsPicture'));
+		$this->set(compact('templateId', 'template', 'contents', 'characters', 'object', 'partCategories', 'parts', 'partsSelected', 'css', 'cssString', 'keyframeString', 'actions', 'partsPicture'));
 
 		$this->set('editFlg', true);
 		$this->render('input');

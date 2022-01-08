@@ -30,5 +30,6 @@ class ObjectPart extends Entity
         'parts_category_no' => true,
         'parts_no' => true,
         'parts_css' => true,
+        'parts_keyframe' => true,
     ];
 }

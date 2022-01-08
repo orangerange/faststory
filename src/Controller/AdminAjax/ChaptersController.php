@@ -123,7 +123,7 @@ class ChaptersController extends AdminAppController
             $characterCssSum = $characterCssSumHead . $characterCssSum;
         }
 
-        $css = $characterCssSum != '' ? "/*.character_speak_{$phraseNo}_{$characterId}_start*/" . $characterCssSum . "/*.character_speak_{$phraseNo}_end*/"  . $cssSum: $cssSum;
+        $css = $characterCssSum != '' ? "/*.character_speak_{$phraseNo}_{$characterId}_start*/" . $characterCssSum . "/*.character_speak_{$phraseNo}_{$characterId}_end*/"  . $cssSum: $cssSum;
 
         $result = ['html' => $html, 'css' => $css, 'badge_left_html' => $badgeLeftHtml, 'badge_right_html' => $badgeRightHtml, 'object_class_names' => $objectClassNames];
 

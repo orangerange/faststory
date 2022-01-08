@@ -19,7 +19,7 @@
             <td>
                 <div class='css'>
                     {strip}
-                        {$this->Display->css($part->css)}
+                        {$this->Display->css($part->css|cat:$part->keyframe)}
                     {/strip}
                 </div>
                 {if $template['class_name'] == 'face'}
@@ -54,6 +54,8 @@
                     {$this->Form->input('html', ['type'=>'textarea', 'label'=>false, 'class'=>'html_input'])}
                     <span>CSS</span>
                     {$this->Form->input('css', ['type'=>'textarea', 'label'=>false, 'class'=>'css_input'])}
+                    <span>キーフレーム</span>
+                    {$this->Form->input('keyframe', ['type'=>'textarea', 'label'=>false, 'class'=>'keyframe_input'])}
                     {$this->Form->button('更新')}
                     {$this->Form->end()}
                 </div>

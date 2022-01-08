@@ -3,6 +3,7 @@
     <td>
         <table class="scroll_x">
             <tr>
+                {$this->Form->input('action_layouts.'|cat:$i|cat:'.id', ['class'=>'id','type'=>'hidden'])}
                 <th></th>
                 <td>
                     キャラクター:{$this->Form->input('action_layouts.'|cat:$i|cat:'.character_id',['class'=>'character_id', 'options'=>$characters, 'label'=>false, 'empty'=>'-'])}

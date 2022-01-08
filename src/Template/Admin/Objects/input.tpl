@@ -2,7 +2,7 @@
 {$this->Html->script('admin/object/input.js', ['block'=>'script'])}
 {$this->Display->css('', null, 'object', $template->width, $template->height)}
 {foreach from=$css item=_css}
-    {$this->Display->css($_css.css)}
+    {$this->Display->css($_css.css|cat:$_css.keyframe)}
 {/foreach}
 <div><a href='/admin/parts/index/{$templateId|escape}'>パーツ一覧</a></div>
 <h1>{$template->name|escape}オブジェクト{if $editFlg}編集{else}登録{/if}</h1>
@@ -44,8 +44,15 @@
                          CSS
                     </th>
                     <th>
+                        {$this->Form->input('keyframe', ['type'=>'textarea', 'label'=>false, 'class'=>'keyframe_input'])}
+                        キーフレーム
+                    </th>
+                    <th>
                         <div class='css css_sum'>
                             {$this->Display->css($object->css, '.parts_sum')}
+                        </div>
+                        <div class='keyframe keyframe_sum'>
+                            {$this->Display->css($object->keyframe)}
                         </div>
                         <div class="{$template->class_name|escape} phrase_object html_show">
                             <div class='object_input parts_sum' style='width:{$template->width|escape}%; height:{$template->height|escape}%;{if $object->picture_content}background-image: url("/objects/picture/{$object->id|escape}");background-size: cover;{/if}'>
@@ -85,6 +92,7 @@
             <table class='scroll_x'>
                 <tr>
                     {$this->Form->input('css_string', ['type'=>hidden, 'value'=>$cssString])}
+                    {$this->Form->input('keyframe_string', ['type'=>hidden, 'value'=>$keyframeString])}
                     {foreach from=$partCategories key=_key item=_value}
                         <td>
                             <div class="phrase_object html_show">
@@ -151,6 +159,13 @@
                                                     'class'=>'parts_css parts_css_'|cat:$_value->id,
                                                     'type'=>'textarea',
                                                     'label'=>false
+                                            ])}
+                            {$this->Form->input('object_parts.'|cat:$_value->id|cat:'.parts_keyframe',
+                                                [
+                                                'style'=>'width:100px',
+                                                'class'=>'parts_keyframe parts_keyframe_'|cat:$_value->id,
+                                                'type'=>'textarea',
+                                                'label'=>false
                                             ])}
                             {$this->Form->input('object_parts.'|cat:$_value->id|cat:'.id', ['class'=>'id','type'=>'hidden'])}
                             <input type='hidden' class='parts_category_no' value={$_value->id|escape}>

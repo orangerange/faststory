@@ -20,6 +20,9 @@
                         <div class='css css_object_{$_value->id|escape}'>
                             {$this->Display->css($_value->css, '.object_'|cat:$_value->id)}
                         </div>
+                        <div class='keyframe keyframe_object_{$_value->id|escape}'>
+                            {$this->Display->css($_value->keyframe)}
+                        </div>
                         <input type='hidden' class='object_id' value={$_value->id|escape}>
                         <input type='hidden' class='width' value='{$_value->object_template->width|escape}'>
                         <input type='hidden' class='height' value='{$_value->object_template->height|escape}'>
@@ -29,6 +32,8 @@
                         {/if}
                         <p>{$_value->name|escape}</p>
                         オブジェクト番号: <input type='text' class='object_no object_no_{$_value->id} {if $_value->character_id}{foreach from=","|explode:$_value->character_id item=_val}{if $_val}character_{$_val|escape} {/if}{/foreach}{/if}{if $_value->object_usage}{foreach from=","|explode:$_value->object_usage item=_val}{if $_val}usage_{$_val|escape} {/if}{/foreach}{/if}{if array_key_exists($_value->template_id, $this->Config->read('object_character'))}default_{$this->Config->read('object_character.'|cat:$_value->template_id)}{/if} ' value={$objectCount[$_value->id]+1|default:'1'}>
+                        </br>
+                        キーフレームを追加しない: <input type='checkbox' class='no_keyframe no_keyframe_{$_value->id}'>
                         <div class='html_show'>
                             <div class='object_input' style='width:{$_value->object_template->width|escape}%; height:{$_value->object_template->height|escape}%;{if $_value->picture_content} background-image: url("/objects/picture/{$_value->id|escape}");background-size: cover;{/if}'>
                                 <div class='{$_value->object_template->class_name|escape} object_{$_value->id|escape}'>

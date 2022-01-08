@@ -1,4 +1,7 @@
 
-[class*='speech'][class*='object_'][class$='_47'],[class*='speech'][class*='object_'][class$='_65'],[class*='speech'][class*='object_'][class$='_66'] {
+/*[class*='speech'][class*='object_'][class$='_47'],[class*='speech'][class*='object_'][class$='_65'],[class*='speech'][class*='object_'][class$='_66'] {*/
+/*     display: none !important;*/
+/* }*/
+.speech {
     display: none !important;
 }

@@ -32,6 +32,7 @@ class ObjectProduct extends Entity
 		'name' => true,
 		'html' => true,
 		'css' => true,
+		'keyframe' => true,
 		'created' => true,
 		'modified' => true,
 		'deleted' => true,

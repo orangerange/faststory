@@ -22,7 +22,7 @@
         <th>表示</th>
         <td>
             <div class='css'>
-                {$this->Display->css($part->css)}
+                {$this->Display->css($part->css|cat:$part->keyframe)}
             </div>
             {if $template['class_name'] == 'face'}
                 <div class='character_box html_show object_input'>
@@ -51,6 +51,10 @@
     <tr>
         <th>CSS</th>
         <td>{$this->Form->input('css', ['type'=>'textarea', 'label'=>false, 'class'=>'css_input'])}</td>
+    </tr>
+    <tr>
+        <th>キーフレーム</th>
+        <td>{$this->Form->input('keyframe', ['type'=>'textarea', 'label'=>false, 'class'=>'keyframe_input'])}</td>
     </tr>
     <tr>
         <th>画像</th>
