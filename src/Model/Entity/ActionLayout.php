@@ -33,6 +33,7 @@ class ActionLayout extends Entity
         'id' => true,
         'character_id' => true,
         'object_id' => true,
+        'object_template_id' => true,
         'action_id' => true,
         'is_character' => true,
         'no_character' => true,

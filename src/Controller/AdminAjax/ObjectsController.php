@@ -32,6 +32,7 @@ class ObjectsController extends AdminAppController
 		$this->loadModel('ObjectProducts');
 		$this->loadModel('Characters');
 		$this->loadModel('Actions');
+		$this->loadModel('ActionLayouts');
     }
 
     public function getCharacters() {
@@ -50,6 +51,23 @@ class ObjectsController extends AdminAppController
         $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
 
         $actionNum = $this->request->getData('action_num');
-        $this->set(compact('actionNum', 'characters', 'actions'));
+        $isTemplate = $this->request->getData('is_template');
+        if (!isset($isTemplate)) {
+            $isTemplate = false;
+        }
+        $this->set(compact('actionNum', 'characters', 'actions', 'isTemplate'));
+    }
+
+    public function getActionLayout() {
+        $this->autoRender = false;
+        $this->request->allowMethod(['ajax']);
+        $objectTemplateId = $this->request->getData('object_template_id');
+        $actionId = $this->request->getData('action_id');
+        $layout = $this->ActionLayouts->find()->where(['object_template_id' => $objectTemplateId, 'action_id' => $actionId])->first();
+        if (isset($layout)) {
+            echo json_encode($layout);
+        } else {
+            echo '';
+        }
     }
 }

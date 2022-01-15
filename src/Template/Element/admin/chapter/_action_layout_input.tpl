@@ -5,9 +5,11 @@
             <tr>
                 {$this->Form->input('action_layouts.'|cat:$i|cat:'.id', ['class'=>'id','type'=>'hidden'])}
                 <th></th>
-                <td>
-                    キャラクター:{$this->Form->input('action_layouts.'|cat:$i|cat:'.character_id',['class'=>'character_id', 'options'=>$characters, 'label'=>false, 'empty'=>'-'])}
-                </td>
+                {if !$isTemplate}
+                    <td>
+                        キャラクター:{$this->Form->input('action_layouts.'|cat:$i|cat:'.character_id',['class'=>'character_id', 'options'=>$characters, 'label'=>false, 'empty'=>'-'])}
+                    </td>
+                {/if}
                 <td>
                     アクション:{$this->Form->input('action_layouts.'|cat:$i|cat:'.action_id',['class'=>'action_id', 'options'=>$actions, 'label'=>false, 'empty'=>'-'])}
                 </td>

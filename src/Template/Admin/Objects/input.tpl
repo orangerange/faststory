@@ -10,6 +10,7 @@
 {if $object->picture_content}
     {$this->Form->control('picture_content_id', ['class'=>'picture_content_id','type'=>'hidden', 'value'=>$object->id])}
 {/if}
+{$this->Form->control('object_template_id', ['id'=>'object_template_id','type'=>'hidden', 'value'=>$template->id])}
 {$this->Form->control('mime', ['class'=>'mime','type'=>'hidden', 'value'=>$object->mime])}
 <table class='object_table'>
     <tr>

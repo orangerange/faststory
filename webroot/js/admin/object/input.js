@@ -126,7 +126,9 @@ $(function () {
         $('.parts_'+parts_category_no).val(parts_no);
         var html = $(this).closest('td').find('.object_input').html().replace('　', '');
         var css = css_obj[parts_category_no][parts_no];
-        var keyframe = keyframe_obj[parts_category_no][parts_no];
+        if (keyframe_obj && typeof(keyframe_obj) != 'undefined' && typeof(keyframe_obj[parts_category_no][parts_no]) != 'undefined') {
+            var keyframe = keyframe_obj[parts_category_no][parts_no];
+        }
         $('.object_input_' + parts_category_no).html(html);
         $('.css_' + parts_category_no).find('style').html(css + keyframe);
         $('.parts_css_'+ parts_category_no).val(css);
@@ -243,5 +245,42 @@ $(function () {
         }else{
             $(this).parents('tr').remove();
         }
+    });
+    // テンプレートのレイアウトを反映
+    $(document).on("change", ".action_id", function () {
+        var tr = $(this).closest('tr');
+        var action_id = $(this).val();
+        var object_template_id = $('#object_template_id').val();
+        $.ajax({
+            type: "POST",
+            datatype:'text',
+            url: "/admin_ajax/objects/get-action-layout",
+            data: {
+                "action_id": action_id,
+                "object_template_id": object_template_id,
+            },
+
+            // 正常に処理が実行された場合は、1つ目のパラメータに取得した HTMLが返ってくる
+            success: function(data, status, xhr) {
+                if (data) {
+                    layout = JSON.parse(data);
+                    alert(layout['is_character']);
+                    var columns = ['is_character', 'no_character', 'magnification', 'left_perc', 'top_perc', 'right_perc', 'bottom_perc', 'rotate', 'z_index', 'is_reverse'];
+                    $.each(columns, function(index, value){
+                        tr.find('.' + value).val(layout[value]);
+                    })
+                }
+            },
+
+            // 正常に処理が行われなかった場合の処理
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                // 返ってきたステータスコードなどをアラートで表示（デバッグ用）
+                alert('Error : ' + errorThrown + "\n" +
+                    XMLHttpRequest.status + "\n" +
+                    XMLHttpRequest.statusText + "\n" +
+                    textStatus );
+            }
+        });
     });
 })

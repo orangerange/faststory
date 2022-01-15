@@ -11,6 +11,17 @@
 {$this->Form->input('class_name', ['type'=>'text'])}
 {$this->Form->input('width', ['type'=>'text'])}
 {$this->Form->input('height', ['type'=>'text'])}
+<table>
+    <tr class='action_layout_header'>
+        <th>アクションレイアウト</th>
+        <td>
+            <button class='add_action' type='button'>追加</button>
+        </td>
+    </tr>
+    {for $i=0 to count($template['action_layouts'])-1}
+        {$this->element('admin/chapter/_action_layout_input', ['i'=>$i, 'isTemplate' => true])}
+    {/for}
+</table>
 {$this->Form->button('登録')}
 {$this->Form->end()}
 <div><a href='/admin/object-templates/index'>一覧に戻る</a></div>

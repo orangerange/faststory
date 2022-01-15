@@ -26,6 +26,16 @@ class Action extends Entity
         'id' => true,
         'name_en' => true,
         'name' => true,
+        'is_character' => true,
+        'no_character' => true,
+        'magnification' => true,
+        'left_perc' => true,
+        'top_perc' => true,
+        'right_perc' => true,
+        'bottom_perc' => true,
+        'rotate' => true,
+        'z_index' => true,
+        'is_reverse' => true,
         'sort_no' => true,
     ];
 }

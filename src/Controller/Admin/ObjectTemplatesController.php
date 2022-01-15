@@ -29,6 +29,12 @@ use Cake\Http\Exception\NotFoundException;
  */
 class ObjectTemplatesController extends AdminAppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('Actions');
+    }
+
 	public function index() {
 		$objectTemplates = $this->ObjectTemplates->find()
 //				->order('ObjectTemplates.sort_no')
@@ -38,9 +44,10 @@ class ObjectTemplatesController extends AdminAppController
 	}
 
 	public function input() {
-		$template = $this->ObjectTemplates->newEntity();
 		if ($this->request->is('post')) {
-			$template = $this->ObjectTemplates->patchEntity($template, $this->request->getData());
+            $data = $this->request->getData();
+            $data = $this->ObjectTemplates->unsetEmptyDatum($data);
+			$template = $this->ObjectTemplates->newEntity($data);
 			if ($this->ObjectTemplates->save($template)) {
 				$this->Flash->success(__('新規登録しました'));
 				$template = $this->ObjectTemplates->newEntity();
@@ -57,18 +64,22 @@ class ObjectTemplatesController extends AdminAppController
 			if(!$template = $this->ObjectTemplates->findById($id)->first()) {
 				throw new NotFoundException(NotFoundMessage);
 			}
+            $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
 			if($this->request->is(['patch', 'post', 'put'])) {
-				$template = $this->ObjectTemplates->patchEntity($template, $this->request->getData());
+                $data = $this->request->getData();
+                $data = $this->ObjectTemplates->unsetEmptyDatum($data);
+				$template = $this->ObjectTemplates->patchEntity($template, $data);
 				if ($this->ObjectTemplates->save($template)) {
 					$this->Flash->success(__('更新しました'));
 				} else {
 					$this->Flash->error(__('更新に失敗しました'));
 				}
 			}
-			$this->set(compact('template'));
+			$this->set(compact('template','actions'));
 		} else{
 			throw new NotFoundException(NotFoundMessage);
 		}
+		$this->set(compact('template'));
 		$this->set('editFlg', true);
 		$this->render('input');
 	}

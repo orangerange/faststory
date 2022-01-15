@@ -29,5 +29,6 @@ class ObjectTemplate extends Entity
         'name' => true,
         'width' => true,
         'height' => true,
+        'action_layouts' => true,
     ];
 }
