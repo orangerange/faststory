@@ -45,6 +45,18 @@
         <td>{$this->Form->input('parts_category_no',['options'=>$partCategories, 'label'=>false, 'empty'=>'-', 'class'=>'parts_category_no'])}</td>
     </tr>
     <tr>
+        <th>HTMLタグ追加</th>
+        <td>
+            <table>
+                <tr>
+                    <td>親クラス{$this->Form->input('parent_class', ['label' => false, 'class' => 'parent_class'])}</td>
+                    <td>追加クラス{$this->Form->input('added_class', ['label' => false, 'class' => 'added_class'])}</td>
+                    <td><button class="add_tag" type="button">追加</button></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
         <th>HTML</th>
         <td>{$this->Form->input('html', ['type'=>'textarea', 'label'=>false, 'class'=>'html_input'])}</td>
     </tr>

@@ -9,6 +9,7 @@ $(function () {
     $(document).on('change', '.keyframe_input', function () {
         $('.css').children('style').html($(this).val().replace('　', '') + $('.css_input').val().replace('　', ''));
     })
+    var base_class = '';
     $(document).on('change', '.parts_category_no', function () {
         var parts_category_no = $(this).val();
         if (parts_category_no) {
@@ -21,6 +22,7 @@ $(function () {
                 var html = result.html;
                 var css = result.css;
                 var z_index = result.z_index;
+                base_class = result.class;
                 $('.html_input').val(html);
                 $('.object_input').html(html);
                 $('.z_index').html(z_index);
@@ -29,5 +31,16 @@ $(function () {
             }).fail(function () {
             });
         }
+    })
+    // htmlタグの簡易追加
+    $(document).on('click', '.add_tag', function () {
+        var parent_class = $('.parent_class'). val();
+        if (!parent_class) {
+            parent_class = base_class;
+        }
+        var added_class = $('.added_class'). val();
+        var added_tag = '<div class="' + added_class + '"></div>';
+        $('.object_input').find('.' + parent_class).append(added_tag);
+        $('.html_input').val($('.object_input').html());
     })
 })

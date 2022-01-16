@@ -52,7 +52,7 @@ class PartsController extends AdminAppController
 		if (isset($preClass)) {
 			$css = AppUtility::addPreClassToCss($css, $preClass);
 		}
-		$result = array('html'=>$html, 'css'=>$css, 'z_index'=>$zIndex);
+		$result = array('html'=>$html, 'css'=>$css, 'z_index'=>$zIndex, 'class' => $class . '_' . $partsNo);
 		echo json_encode($result);
 	}
 }
