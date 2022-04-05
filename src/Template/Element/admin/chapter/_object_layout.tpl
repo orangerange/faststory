@@ -17,6 +17,7 @@
                             <input type="hidden" class="phrase_no" value={$i|escape}>
                             <input type="hidden" class="object_id" value={$_value['id']|escape}>
                             <input type="hidden" class="object_no" value={$_value['no']|escape}>
+                            <input type="hidden" class="character_id" value={$_value['character_id']|escape}>
                         </td>
                     {/foreach}
                 </tr>

@@ -46,7 +46,7 @@ class ChaptersController extends AdminAppController
         $characterId = $this->request->getData('character_id');
         $character = $this->Characters->find()->where(['Characters.id' => $characterId])->contain(['Ranks'])->first();
         $objectUsage = $this->request->getData('object_usage');
-
+        $isSp = $this->request->getData('is_sp');
         $actionLayouts = $this->ActionLayouts->findSpeak($characterId, $objectUsage);
 
         $htmlSum = '';
@@ -59,6 +59,7 @@ class ChaptersController extends AdminAppController
         $noCharacterActionLayouts = [];
         $objectClassNames = [];
         $objectCounts = [];
+        $htmlsEmbedded = [];
 
         foreach($actionLayouts as $actionLayout) {
             if (!empty($actionLayout['no_character'])) {
@@ -77,7 +78,7 @@ class ChaptersController extends AdminAppController
                 } else {
                     $objectCounts[$actionLayout['object_product']['id']] ++;
                 }
-                $this->_addHtmlAndCss($characterHtmlSum, $characterCssSum, $htmlSum, $cssSum, $badgeLeftHtml, $badgeRightHtml,  $actionLayout, $character, $objectCounts);
+                $this->_addHtmlAndCss($characterHtmlSum, $characterCssSum, $htmlSum, $cssSum, $badgeLeftHtml, $badgeRightHtml,  $actionLayout, $character, $objectCounts, $htmlsEmbedded);
             }
         }
 
@@ -90,7 +91,8 @@ class ChaptersController extends AdminAppController
             } else {
                 $objectCounts[$actionLayout['object_product']['id']] ++;
             }
-            $this->_addHtmlAndCss($characterHtmlSum, $characterCssSum, $htmlSum, $cssSum, $badgeLeftHtml, $badgeRightHtml,  $actionLayout, $character, $objectCounts);
+            $this->_addHtmlAndCss($characterHtmlSum, $characterCssSum, $htmlSum, $cssSum,
+                $badgeLeftHtml, $badgeRightHtml,  $actionLayout, $character, $objectCounts, $htmlsEmbedded);
         }
 
         // html
@@ -112,7 +114,9 @@ class ChaptersController extends AdminAppController
                     }
                 }
             }
-            $characterCssSumHead = '.character_speak_' . $phraseNo . '_' . $characterId . '{ width:100%; height:100%; position:absolute; ';
+            $characterCssSumHead = '.character_speak_' . $phraseNo . '_' . $characterId . '{';
+            $characterCssSumHead.= $isSp ? ' width:162%; height:46%;' : ' width:100%; height:100%;';
+            $characterCssSumHead.= ' position:absolute; ';
             if (isset($characterSpeakLayout['left_perc'])) {
                 $characterCssSumHead .= 'left:' . $characterSpeakLayout['left_perc'] . '%; ';
             } elseif($characterSpeakLayout['right_perc']) {
@@ -125,7 +129,7 @@ class ChaptersController extends AdminAppController
 
         $css = $characterCssSum != '' ? "/*.character_speak_{$phraseNo}_{$characterId}_start*/" . $characterCssSum . "/*.character_speak_{$phraseNo}_{$characterId}_end*/"  . $cssSum: $cssSum;
 
-        $result = ['html' => $html, 'css' => $css, 'badge_left_html' => $badgeLeftHtml, 'badge_right_html' => $badgeRightHtml, 'object_class_names' => $objectClassNames];
+        $result = ['html' => $html, 'css' => $css, 'badge_left_html' => $badgeLeftHtml, 'badge_right_html' => $badgeRightHtml, 'object_class_names' => $objectClassNames, 'htmls_embedded' => $htmlsEmbedded];
 
         $this->response->getBody()->write(json_encode($result));
     }
@@ -162,7 +166,6 @@ class ChaptersController extends AdminAppController
 //    }
 
     private function _makeObjectHtml($objectClassName, $objectId, $contentHtml, $count) {
-	    $count =
         $objectHtml = '<div class="' . $objectClassName . ' ' . 'object-' . $count . '_' . $objectId . '">';
         $objectHtml .= $contentHtml;
         $objectHtml .= '</div>';
@@ -170,41 +173,47 @@ class ChaptersController extends AdminAppController
         return $objectHtml;
     }
 
-    private function _makeBaseCss($baseClass, $width, $height, $left, $top, $right, $bottom, $rotate, $zIndex, $isReverse, $backgroundImg) {
+    private function _makeBaseCss($baseClass, $width, $height, $left, $top, $right, $bottom, $rotate, $zIndex, $isReverse, $backgroundImg)
+    {
         $this->autoRender = false;
-        $baseCss = $baseClass . '{ ' . 'width:' . $width . '%; ' . ' height:' . $height . '%; position:absolute;';
-        $baseCss .= '--object_width:calc(var(--phrase_object_width) * ' .  $width / 100 . '); --object_height:calc(var(--phrase_object_height) * ' . $height / 100 . ');';
-        if (isset($backgroundImg))
-        $baseCss .= 'background-image: url(' . $backgroundImg .'); background-size: cover;';
-        if (isset($left) && $left != '') {
-            $baseCss .= 'left:' . $left . '%; ';
-        } elseif(isset($right) && $right != '') {
-            $baseCss .= 'right:' . $right . '%; ';
-        }
-
-        if (isset($top) && $top != '') {
-            $baseCss .= 'top:' . $top . '%; ';
-        } elseif(isset($bottom) && $bottom != '') {
-            $baseCss .= 'bottom:' . $bottom . '%; ';
-        }
-        if (isset($rotate) && $rotate != '') {
-            if (!empty($isReverse)) {
-                $baseCss .= 'transform:rotate(' . $rotate . 'deg) scale(-1, 1); ';
-            } else {
-                $baseCss .= 'transform:rotate(' . $rotate . 'deg); ';
+        // // left right いずれも設定されていない場合は、「オブジェクト内への埋め込み」とみなし、width,heightは反映しない
+        $baseCss = '';
+        if ((isset($left) && $left != '') || (isset($right) && $right != '')) {
+            $baseCss .= $baseClass . '{ ' . 'width:' . $width . '%; ' . ' height:' . $height . '%; position:absolute;';
+            $baseCss .= '--object_width:calc(var(--phrase_object_width) * ' . $width / 100 . '); --object_height:calc(var(--phrase_object_height) * ' . $height / 100 . ');';
+            if (isset($backgroundImg))
+                $baseCss .= 'background-image: url(' . $backgroundImg . '); background-size: cover;';
+            if (isset($left) && $left != '') {
+                $baseCss .= 'left:' . $left . '%; ';
+            } elseif (isset($right) && $right != '') {
+                $baseCss .= 'right:' . $right . '%; ';
             }
-        } elseif ((!empty($isReverse))) {
-            $baseCss .= 'transform: scale(-1, 1); ';
-        }
-        if (isset($zIndex) && $zIndex != '') {
-            $baseCss .= 'z-index: ' . $zIndex . '; ';
+
+            if (isset($top) && $top != '') {
+                $baseCss .= 'top:' . $top . '%; ';
+            } elseif (isset($bottom) && $bottom != '') {
+                $baseCss .= 'bottom:' . $bottom . '%; ';
+            }
+            if (isset($rotate) && $rotate != '') {
+                if (!empty($isReverse)) {
+                    $baseCss .= 'transform:rotate(' . $rotate . 'deg) scale(-1, 1); ';
+                } else {
+                    $baseCss .= 'transform:rotate(' . $rotate . 'deg); ';
+                }
+            } elseif ((!empty($isReverse))) {
+                $baseCss .= 'transform: scale(-1, 1); ';
+            }
+            if (isset($zIndex) && $zIndex != '') {
+                $baseCss .= 'z-index: ' . $zIndex . '; ';
+            }
+
+            $baseCss .= '}';
         }
 
-        $baseCss .= '}';
         return $baseCss;
     }
 
-    private function _addHtmlAndCss(&$characterHtmlSum, &$characterCssSum, &$htmlSum, &$cssSum, &$badgeLeftHtml, &$badgeRightHtml, $actionLayout, $character, $objectCounts) {
+    private function _addHtmlAndCss(&$characterHtmlSum, &$characterCssSum, &$htmlSum, &$cssSum, &$badgeLeftHtml, &$badgeRightHtml, $actionLayout, $character, $objectCounts, &$htmlsEmbedded) {
         $left = $actionLayout['left_perc'];
         $top = $actionLayout['top_perc'];
         $right = $actionLayout['right_perc'];
@@ -224,10 +233,15 @@ class ChaptersController extends AdminAppController
         //html生成
         $count = $objectCounts[$objectId];
         $html = $this->_makeObjectHtml($objectClassName, $objectId, $actionLayout['object_product']['html'], $count);
-        if (!empty($actionLayout['is_character'])) {
-            $characterHtmlSum .= $html;
+        // left  right どちらも設定されていない場合は、埋め込みhtmlとみなす
+        if ((!isset($left) || $left == '') && (!isset($right) || $right == '')) {
+            $htmlsEmbedded[$objectClassName] = $html;
         } else {
-            $htmlSum .= $html;
+            if (!empty($actionLayout['is_character'])) {
+                $characterHtmlSum .= $html;
+            } else {
+                $htmlSum .= $html;
+            }
         }
         //css生成
         $css = $actionLayout['object_product']['css'];
@@ -256,7 +270,12 @@ class ChaptersController extends AdminAppController
         if (!empty($actionLayout['object_product']['picture_content'])) {
             $backgroundImg = '/objects/picture/' . $objectId;
         }
-        $css = AppUtility::addPreClassToCss($css, '.' . $objectClassName . '.object-' . $count . '_' . $objectId);
+        // left  right どちらも設定されていない場合は、埋め込みhtmlとみなす
+        if ((!isset($left) || $left == '') && (!isset($right) || $right == '')) {
+            $css = AppUtility::addPreClassToCss($css, '.' . $objectClassName);
+        } else {
+            $css = AppUtility::addPreClassToCss($css, '.' . $objectClassName . '.object-' . $count . '_' . $objectId);
+        }
         $css = "/*." . $objectClassName . ".object-{$count}_{$objectId}_start*/" . $this->_makeBaseCss('.' . $objectClassName . '.object-' . $count . '_' . $objectId, $width, $height, $left, $top, $right, $bottom, $rotate, $zIndex, $isReverse, $backgroundImg) . ' ' . $css . "/*." . $objectClassName .  ".object-{$count}_{$objectId}_end*/";
         if (!empty($actionLayout['is_character'])) {
             $characterCssSum .= $css;

@@ -1,4 +1,8 @@
 $(function () {
+    var is_sp = 0;
+    if ($('#is-sp').prop("checked")) {
+        is_sp = 1;
+    }
     function calc_movie_time_sum(is_change = false, minus_num = 0, plus_num = 0) {
         if  (is_change) {
             var movie_time_sum = Number($('.movie_time_sum').html()) - minus_num + plus_num;
@@ -43,6 +47,17 @@ $(function () {
         if ($(this).prop('checked')) {
             var first_phrase_num = parseInt($(this).parents('.checkbox').prevAll('.phrase_no').val()) + 1;
             $('#first_phrase_num').val(first_phrase_num);
+        }
+    })
+    $(document).on('click', '#is-sp', function () {
+        if ($(this).prop('checked')) {
+            $('.sp').show();
+            $('.pc').hide();
+            is_sp = 1;
+        } else {
+            $('.sp').hide();
+            $('.pc').show();
+            is_sp = 0;
         }
     })
     $(document).on('click', '.js_show_movie', function () {
@@ -141,6 +156,7 @@ $(function () {
                         "character_id": character_id,
                         "phrase_no": phrase_no,
                         "object_usage": object_usage,
+                        "is_sp": is_sp,
                         // "sentence": sentence,
                         // "sentence_kana": sentence_kana,
                         // "sentence_translate": sentence_translate,
@@ -150,9 +166,12 @@ $(function () {
                     var css = data.css;
                     var badge_left_html = data.badge_left_html;
                     var badge_right_html = data.badge_right_html;
+                    var htmls_embedded = data.htmls_embedded;
+                    console.log(htmls_embedded);
                     if (html && css) {
                         var object_class_names = data.object_class_names;
                         var object_counts = {};
+
                         $.each(object_class_names, function(index, value) {
                             var object_id = value.object_id;
                             var class_name = value.class_name;
@@ -162,7 +181,7 @@ $(function () {
                                 object_counts[object_id] = Number(object_counts[object_id]) + 1;
                             }
                             var object_no = $('#js-popup').find('.object_no_' + object_id).val();
-                            var count = object_counts[object_id];if(class_name =='arm') {alert(count);}
+                            var count = object_counts[object_id];
                             html = wholeReplace(html , class_name + ' object-'  + count, class_name + ' object_'  +  object_no);
                             css = wholeReplace(css , '.' + class_name + '.object-'  + count, '.' + class_name + '.object_'  +  object_no);
                             // オブジェクトNoのインクレメント
@@ -177,12 +196,18 @@ $(function () {
                         html_show_selector.html(html);
                         // 文章置き換え
                         replace_sentence(object_usage, sentence, html_show_selector);
+                        // 埋め込みhtml反映
+                        $.each(htmls_embedded, function(class_name, html) {
+                            html_show_selector.find('.' + class_name).not('[class*="object"]').replaceWith(html);
+                        })
                         // 階級章置き換え
                         if (badge_left_html) {
-                            html_show_selector.find('.rank_badge_left').html(badge_left_html);
+                            html_show_selector.find('.rank_badge_left').not('.replaced').html(badge_left_html);
+                            html_show_selector.find('.rank_badge_left').attr('class', 'rank_badge_left replaced');
                         }
                         if (badge_right_html) {
-                            html_show_selector.find('.rank_badge_right').html(badge_right_html);
+                            html_show_selector.find('.rank_badge_right').not('.replaced').html(badge_right_html);
+                            html_show_selector.find('.rank_badge_right').attr('class', 'rank_badge_right replaced');
                         }
                         html_selector.val(html_show_selector.html());
                         // css調整
@@ -298,6 +323,10 @@ $(function () {
         var object_no = $(this).closest('td').find('.object_no').val();
         var width = $(this).closest('td').find('.width').val();
         var height = $(this).closest('td').find('.height').val();
+        if (is_sp) {
+            width = Math.ceil(width * 29 / 18);
+            height = Math.ceil(height * 29 / 64);
+        }
         var background_image_url = $(this).closest('td').find('.background_image_url').val();
         var class_name = $(this).closest('td').find('.class_name').val();
 
@@ -312,10 +341,10 @@ $(function () {
         if (background_image_url) {
             css_add += 'background-image: url(' + background_image_url + '); background-size: cover;';
         }
+        css_add += '}';
         if (!no_keyframe) {
             css_add += keyframe_select;
         }
-        css_add += '}';
 
         var html_input = $('#phrases-'+phrase_no+'-html').val();
         var css_input = $('#phrases-'+phrase_no+'-css').val();
@@ -326,7 +355,7 @@ $(function () {
 
         $('#phrases-'+phrase_no+'-html').val(html);
         $('#phrases-'+phrase_no+'-css').val(css);
-        $('#html_show_'+phrase_no).html(html);
+        $('.html_show_'+phrase_no).html(html);
         $('#css_show_'+phrase_no).children('style').html(css);
         //オブジェクト数カウント
         object_no ++;
@@ -363,7 +392,6 @@ $(function () {
             var object_id = $(this).parent().children('.object_id').val();
             var object_no = $(this).parent().children('.object_no').val();
             var character_id = $(this).parent().children('.character_id').val();
-            alert(character_id);
 
             var object_class = '';
             var speak_flg = false;

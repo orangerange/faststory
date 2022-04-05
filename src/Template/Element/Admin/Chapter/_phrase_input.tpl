@@ -27,7 +27,10 @@
     </div>
     {$this->Display->adminAnimateJs($i, $chapter['phrases'][$i]['js'])}
     {$this->Form->control('phrases.'|cat:$i|cat:'.phrase_start', ['class'=>'phrase_start','type'=>'checkbox'])}
-    <div id='html_show_{$i|escape}' class='phrase_object phrase_object_chapter_input html_show phrase_object_{$i+1|escape}' style='{if $chapter['phrases'][$i]['color']}background-color:{$chapter['phrases'][$i]['color']};{/if}{if $chapter['phrases'][$i]['picture_content']}background-image: url("/chapters/picture/{$chapter['phrases'][$i]['id']|escape}/1");background-size: cover;{/if}'>
+    <div id="html_show_{$i|escape}" class='html_show_{$i|escape} phrase_object phrase_object_chapter_input pc html_show phrase_object_{$i+1|escape}' style='{if $chapter['phrases'][$i]['color']}background-color:{$chapter['phrases'][$i]['color']};{/if}{if $chapter['phrases'][$i]['picture_content']}background-image: url("/chapters/picture/{$chapter['phrases'][$i]['id']|escape}/1");background-size: cover;{/if}{if $chapter->is_sp}display:none;{/if}'>
+        {$chapter['phrases'][$i]['html']}
+    </div>
+    <div id="html_show_{$i|escape}" class='html_show_{$i|escape} phrase_object phrase_object_chapter_input sp html_show phrase_object_{$i+1|escape}' style='{if $chapter['phrases'][$i]['color']}background-color:{$chapter['phrases'][$i]['color']};{/if}{if $chapter['phrases'][$i]['picture_content']}background-image: url("/chapters/picture/{$chapter['phrases'][$i]['id']|escape}/1");background-size: cover;{/if}{if !$chapter->is_sp}display:none;{/if}'>
         {$chapter['phrases'][$i]['html']}
     </div>
     <div class='object_layout_input object_layout_input_{$i}'>

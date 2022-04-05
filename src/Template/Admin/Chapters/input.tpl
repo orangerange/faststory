@@ -80,6 +80,7 @@
         ムービー合計時間:<span class="movie_time_sum">0</span>秒
     </div>
     {$this->Form->create($chapter,['enctype' => 'multipart/form-data'])}
+    {$this->Form->control('is_sp', ['class'=>'is_sp','type'=>'checkbox'])}
     {$this->Form->control('title',['size'=>50, 'accesskey' => 'z'])}
 {*    {$this->Form->control('content_id', ['type'=>'hidden', 'value'=>$contentId])}*}
 {*    {$this->Form->control('chapter_id', ['type'=>'hidden', 'value'=>$id])}*}

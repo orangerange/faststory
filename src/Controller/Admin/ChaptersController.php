@@ -180,6 +180,7 @@ class ChaptersController extends AdminAppController
                     // ロールバック
                     $connection->rollback();
                 }
+                return $this->redirect(['controller' => 'chapters', 'action' => 'edit', $id]);
             }
             $this->set(compact('id', 'openFlg', 'characters', 'backgrounds', 'chapter', 'chapterNo', 'contentId', 'contentName', 'phraseNum', 'objects', 'layouts', 'objectCount', 'objectUsageArr', 'objectUsageStr', 'actions'));
         } else {
