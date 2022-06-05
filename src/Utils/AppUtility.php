@@ -10,7 +10,7 @@ use Cake\ORM\TableRegistry;
 class AppUtility {
 
 	public static function addPreClassToCss($css, $preClass = null) {
-		if (isset($preClass)) {
+		if (isset($preClass) && !empty($css)) {
 			$css = $preClass . ' ' . $css;
 			$arr = explode('}', $css);
 			array_pop($arr);
@@ -33,7 +33,17 @@ class AppUtility {
         $num = 1;
         foreach ($matches[0] as $_match) {
             $LayoutCss = $_match;
-            $layout[] = array('css'=>$LayoutCss, 'name'=>'発話オブジェクト(' . $num . ')', 'no'=>$num);
+            $pattern= "/^.character_speak_[0-9]+_[0-9]+/";
+            if (!preg_match($pattern, $LayoutCss, $idMatches)) {
+//	        return false;
+            }
+            $pattern = "/[0-9]+$/";
+            $extractedString = $idMatches[0];
+            if (!preg_match($pattern, $extractedString, $idMatches2)) {
+//	        return false;
+            }
+            $characterId = $idMatches2[0];
+            $layout[] = array('css'=>$LayoutCss, 'name'=>'発話オブジェクト(' . $num . ')', 'no'=>$num, 'character_id' => $characterId);
             $num++;
         }
         // それ以外
