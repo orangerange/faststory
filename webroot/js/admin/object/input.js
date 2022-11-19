@@ -264,7 +264,7 @@ $(function () {
             success: function(data, status, xhr) {
                 if (data) {
                     layout = JSON.parse(data);
-                    alert(layout['is_character']);
+
                     var columns = ['is_character', 'no_character', 'magnification', 'left_perc', 'top_perc', 'right_perc', 'bottom_perc', 'rotate', 'z_index', 'is_reverse'];
                     $.each(columns, function(index, value){
                         tr.find('.' + value).val(layout[value]);

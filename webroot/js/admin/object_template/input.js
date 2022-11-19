@@ -9,7 +9,7 @@ $(function () {
     });
     // アクション登録追加
     var action_num = 0;
-    $(document).on('click', '.add_action', function () {alert(action_num);
+    $(document).on('click', '.add_action', function () {
         action_num --;
         $.ajax({
             type: "POST",

@@ -29,13 +29,18 @@
     width: 290px;
     height:145px;
     position:relative;
-    /*overflow:hidden;*/
+    overflow:hidden;
 }
 .html_show.phrase_object_chapter_input {
     background: white;
     overflow:hidden;
-     border-left: solid 14.5px rgba(0, 0, 0, .3);
-     border-right: solid 14.5px rgba(0, 0, 0, .3);
+     /*border-left: solid 14.5px rgba(0, 0, 0, .3);*/
+     /*border-right: solid 14.5px rgba(0, 0, 0, .3);*/
+}
+.html_show.phrase_object_chapter_input.sp {
+    width:108px;
+    height:192px;
+    /*display:none;*/
 }
 .phrase_object_chapter_input_left {
     position:absolute;

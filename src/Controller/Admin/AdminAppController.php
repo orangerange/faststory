@@ -30,10 +30,10 @@ class AdminAppController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $adminIps = Configure::read('admin_ip_addresses');
-        $clientIp = $this->getRequest()->clientIP();
-        if (!in_array($clientIp, $adminIps)) {
-            throw new ForbiddenException();
-        }
+//        $adminIps = Configure::read('admin_ip_addresses');
+//        $clientIp = $this->getRequest()->clientIP();
+//        if (!in_array($clientIp, $adminIps)) {
+//            throw new ForbiddenException();
+//        }
 	}
 }

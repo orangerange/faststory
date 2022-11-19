@@ -12,6 +12,7 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App\Controller\Admin;
 
 use App\Controller\Admin\AdminAppController;
@@ -48,6 +49,7 @@ class ChaptersController extends AdminAppController
         'js',
         'picture',
     ];
+
     public function initialize()
     {
         parent::initialize();
@@ -58,7 +60,7 @@ class ChaptersController extends AdminAppController
         $this->loadModel('ObjectProducts');
         $this->loadModel('Actions');
         $this->Phrases->setTable('admin_phrases');
-        $this->loadComponent('Display',['template' => '/Chapters/display', 'movie_template' => '/Chapters/movie', 'is_admin' => true]);
+        $this->loadComponent('Display', ['template' => '/Chapters/display', 'movie_template' => '/Chapters/movie', 'is_admin' => true]);
     }
 
     public function index($contentId = null)
@@ -86,7 +88,15 @@ class ChaptersController extends AdminAppController
 //            $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->where(['ObjectProducts.content_id' => $contentId])->order(['ObjectProducts.template_id' => 'ASC', 'ObjectProducts.id' => 'ASC']);
             $objects = $this->ObjectProducts->find('all')->contain('ObjectTemplates')->order(['ObjectProducts.template_id' => 'ASC', 'ObjectProducts.id' => 'ASC']);
             $contentName = $content['name'];
-            $characters = $this->Characters->find('list')->where(['content_id' => $contentId]);
+            $characters = $this->Characters->find('list')->where(
+                [
+                    'or' =>
+                        [
+                            ['content_id' => $contentId],
+//                            ['content_id IS' => null]
+                        ]
+                ]
+            );
             $backgrounds = $this->Backgrounds->find('list');
             $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
             $chapter = $this->Chapters->newEntity();
@@ -117,8 +127,8 @@ class ChaptersController extends AdminAppController
             }
             $this->set(compact('chapterNo', 'characters', 'backgrounds', 'openFlg', 'contentId', 'contentName', 'objects', 'objectUsageArr', 'objectUsageStr', 'actions'));
         } else {
-			throw new NotFoundException(NotFoundMessage);
-		}
+            throw new NotFoundException(NotFoundMessage);
+        }
     }
 
     public function edit($id)
@@ -150,7 +160,16 @@ class ChaptersController extends AdminAppController
             $chapterNo = $chapter['no'];
             $contentId = $chapter['content_id'];
             $contentName = $chapter['content']['name'];
-            $characters = $this->Characters->find('list')->where(['content_id' => $chapter['content_id']]);
+//            $characters = $this->Characters->find('list')->where(['content_id' => $chapter['content_id']]);
+            $characters = $this->Characters->find('list')->where(
+                [
+                    'or' =>
+                        [
+                            ['content_id' => $chapter['content_id']],
+//                            ['content_id IS' => null]
+                        ]
+                ]
+            );
             $backgrounds = $this->Backgrounds->find('list');
             $actions = $this->Actions->find('list')->order(['sort_no' => 'ASC']);
             $phraseNum = count($chapter['phrases']);
@@ -235,10 +254,10 @@ class ChaptersController extends AdminAppController
         $connection->begin();
         try {
             // テーブル削除
-            $sql = 'DELETE FROM phrases WHERE chapter_id = ' .  (integer)$chapterId;
+            $sql = 'DELETE FROM phrases WHERE chapter_id = ' . (integer)$chapterId;
             $results = $connection->execute($sql);
             // テーブルコピー
-            $sql = 'INSERT INTO phrases (' . implode(',', $this->_displayColumns) . ') SELECT ' . implode(',', $this->_displayColumns) . ' FROM admin_phrases WHERE chapter_id = ' .  (integer)$chapterId;
+            $sql = 'INSERT INTO phrases (' . implode(',', $this->_displayColumns) . ') SELECT ' . implode(',', $this->_displayColumns) . ' FROM admin_phrases WHERE chapter_id = ' . (integer)$chapterId;
             $results = $connection->execute($sql);
             $connection->commit();
             $this->Flash->success(__('反映しました'));
@@ -252,12 +271,14 @@ class ChaptersController extends AdminAppController
     }
 
     // 管理側表示用メソッド
-    public function display($prefix = null, $no) {
+    public function display($prefix = null, $no)
+    {
         $this->viewBuilder()->setLayout('default');
         $this->Display->display($prefix, $no);
     }
 
-    public function movie($prefix = null, $no = 1, $firstPhraseNo = 1, $hasNoStoryShow = false, $timeBefore = 0) {
+    public function movie($prefix = null, $no = 1, $firstPhraseNo = 1, $hasNoStoryShow = false, $timeBefore = 0)
+    {
         $this->viewBuilder()->setLayout('default');
         $this->Display->display($prefix, $no, true, $firstPhraseNo, $hasNoStoryShow, $timeBefore);
     }
