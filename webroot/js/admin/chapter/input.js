@@ -256,7 +256,7 @@ $(function () {
         var phrase_num = $('#phrase_num').val();
         for (var i = phrase_num -2 ; i >= phrase_no; i--) {
             var j = i+1;
-            var columns = ['id', 'character_id', 'speaker_name', 'speaker_color', 'sentence', 'sentence_kana', 'sentence_translate', 'picture_del', 'html', 'css', 'js', 'background_id', 'object_usage', 'character_object', 'movie_time', 'color'];
+            var columns = ['character_id', 'speaker_name', 'speaker_color', 'sentence', 'sentence_kana', 'sentence_translate', 'picture_del', 'html', 'css', 'js', 'background_id', 'object_usage', 'character_object', 'movie_time', 'color'];
             $.each(columns, function (index, value) {
                 $('*[name="phrases[' + j + ']['+ value +']"]').val($('*[name="phrases[' + i + ']['+ value +']"]').val());
                 $('*[name="phrases[' + i + ']['+ value +']"]').val('');
