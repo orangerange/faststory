@@ -192,7 +192,11 @@
     top:10%;
     color: deeppink;
 }
-
+.phrases_novel {
+    top: 20px;
+    position:absolute;
+    left:150px;
+}
 @media screen and (min-width: 768px) {
     .header {
         height: 30px;

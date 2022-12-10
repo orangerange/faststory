@@ -282,4 +282,17 @@ class ChaptersController extends AdminAppController
         $this->viewBuilder()->setLayout('default');
         $this->Display->display($prefix, $no, true, $firstPhraseNo, $hasNoStoryShow, $timeBefore);
     }
+
+    public function novel($prefix = null, $no)
+    {
+        if (isset($prefix) && preg_match("/^[0-9]+$/", $no)) {
+            if (!$chapter = $this->Chapters->findByPrefixAndNo($prefix, $no)) {
+                throw new NotFoundException(NotFoundMessage);
+            }
+//        $this->set(compact($chapter));
+        $this->set('chapter', $chapter);
+        } else {
+            throw new NotFoundException(NotFoundMessage);
+        }
+    }
 }

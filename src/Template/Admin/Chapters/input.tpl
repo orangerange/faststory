@@ -64,6 +64,7 @@
         <button type='button' onclick="window.open('/admin/chapters/display/{$chapter->content->prefix|escape}/{$chapter->no|escape}/')">公開側表示を確認</button>
 {*        <button type='button' onclick="window.open('/admin/chapters/movie/{$chapter->content->prefix|escape}/{$chapter->no|escape}/')">ムービーを表示</button>*}
         <button type='button' class='js_show_movie'>ムービーを表示</button>
+        <button type='button' onclick="window.open('/admin/chapters/novel/{$chapter->content->prefix|escape}/{$chapter->no|escape}/')">小説化</button>
         {$this->Form->control('has_no_story_show', ['class'=>'has_no_story_show','type'=>'checkbox'])}
         {$this->Form->control('time_before',['size'=>50])}
         {$this->Form->create($chapter, ['method'=>'post', 'url'=>'/admin/chapters/front-copy', 'onSubmit'=>"return  frontCopyCheck()"])}

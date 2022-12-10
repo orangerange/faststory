@@ -32,10 +32,7 @@ class DisplayComponent extends Component
             if (!$chapter = $Chapters->findByPrefixAndNo($prefix, $no)) {
                 throw new NotFoundException(NotFoundMessage);
             }
-            // チャプタ一覧取得
-            $query = $Chapters->find('prefixAll', ['prefix' => $prefix]);
-            $chapters = $query->all();
-            $chapterCount = $query->count();
+
             // 背景の取り出し
             $chapterId = $chapter->get('id');
             // アニメーション用js及び背景の取り出し
@@ -59,7 +56,7 @@ class DisplayComponent extends Component
                 $firstBackground = $backgrounds[1];
                 $bodyColor = $firstBackground->get('body_color');
             }
-            $this->getController()->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'bodyColor', 'chapters', 'chapterCount', 'hasNoStoryShow', 'timeBefore'));
+            $this->getController()->set(compact('chapter', 'scripts', 'prefix', 'no', 'nextFlg', 'backgrounds', 'bodyColor', 'hasNoStoryShow', 'timeBefore'));
             $this->getController()->set(['isAdmin' => $this->_isAdmin]);
         } else {
             throw new NotFoundException(NotFoundMessage);
