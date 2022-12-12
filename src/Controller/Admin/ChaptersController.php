@@ -181,6 +181,7 @@ class ChaptersController extends AdminAppController
                 $postData = $this->getRequest()->getData();
                 $result = $this->Phrases->unsetEmptyDatum($postData['phrases']);
                 $postData['phrases'] = $result['datum'];
+                $deleteIds = $result['delete_ids'];
                 $openFlg = $result['open_flg'];
                 $chapter = $this->Chapters->patchEntity($chapter, $postData);
 
@@ -188,6 +189,8 @@ class ChaptersController extends AdminAppController
                 // トランザクション開始
                 $connection->begin();
                 try {
+                    // 不要データ削除
+                    $this->Phrases->deleteAll(['id IN' => $deleteIds]);
                     if ($this->Chapters->saveOrFail($chapter)) {
                         $this->Flash->success(__('更新しました'));
                         $connection->commit();
