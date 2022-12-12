@@ -190,7 +190,9 @@ class ChaptersController extends AdminAppController
                 $connection->begin();
                 try {
                     // 不要データ削除
-                    $this->Phrases->deleteAll(['id IN' => $deleteIds]);
+                    if (!empty($deleteIds)) {
+                        $this->Phrases->deleteAll(['id IN' => $deleteIds]);
+                    }
                     if ($this->Chapters->saveOrFail($chapter)) {
                         $this->Flash->success(__('更新しました'));
                         $connection->commit();
